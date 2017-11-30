@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\ItemTypeView.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -77,6 +78,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sources\ItemCategory.cs" />
+    <Compile Include="Sources\ItemType.cs" />
     <Compile Include="Inventory.cs">
       <DependentUpon>InventoryModel.tt</DependentUpon>
     </Compile>

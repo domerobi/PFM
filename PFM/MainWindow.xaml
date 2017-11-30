@@ -75,7 +75,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Új adat rögzítése" Margin="0,-2,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="#FFE5E5E5" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -84,21 +84,10 @@
                     <Label x:Name="labelSum" Content="Összeg:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Width="100"/>
                     <Label x:Name="labelDate" Content="Dátum:" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="100"/>
                     <Label x:Name="labelComment" Content="Megjegyzés:" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="100"/>
-                    <ComboBox x:Name="ddType" HorizontalAlignment="Left" Margin="115,14,0,0" VerticalAlignment="Top" Width="145">
-                        <ComboBoxItem Content="Kiadás" HorizontalAlignment="Left" Width="{Binding ElementName=ddType, Path=ActualWidth}" />
-                        <ComboBoxItem Content="Bevétel" HorizontalAlignment="Left" Width="{Binding ElementName=ddType, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Vagyontárgy" HorizontalAlignment="Left" Width="{Binding ElementName=ddType, Path=ActualWidth}"/>
-                    </ComboBox>
-                    <ComboBox x:Name="ddCategory" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Width="145">
-                        <ComboBoxItem Content="Lakhatás" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Utazás" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Hitel" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Étel" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Műszaki cikk" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Személyes" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Szórakozás" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}"/>
-                        <ComboBoxItem Content="Egyéb" HorizontalAlignment="Left" Width="{Binding ElementName=ddCategory, Path=ActualWidth}" />
-                    </ComboBox>
+                    <ComboBox DataContext="{Binding ItemTypeView}" x:Name="ddType" HorizontalAlignment="Left" Margin="115,14,0,0" VerticalAlignment="Top" Width="145" ItemsSource="{Binding Types}" />
+
+                    <ComboBox DataContext="{Binding ItemTypeView}" x:Name="ddCategory" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Width="145" ItemsSource="{Binding Categories}" />
+                 
                     <TextBox x:Name="tbSum" HorizontalAlignment="Left" Height="22" Margin="115,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" />
                     <DatePicker x:Name="dpDate" HorizontalAlignment="Left" Margin="115,108,0,0" VerticalAlignment="Top" Width="145" FirstDayOfWeek="Monday" Text="Válasszon dátumot" Height="24"/>
                     <Label Content="Ft" HorizontalAlignment="Left" Margin="242,78,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="1.833,0.423"/>
@@ -126,7 +115,7 @@
                     <DatePicker x:Name="endDatePicker" HorizontalAlignment="Left" Margin="98,43,0,0" VerticalAlignment="Top" Width="140"/>
                     <Label x:Name="endDateLabel" Content="Végső dátum:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="typeCBoxLabel" Content="Típus:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.607,-0.077"/>
-                    <Label x:Name="categoryCBoxLabel" Content="Kategória" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.579,-1.128"/>
+                    <Label x:Name="categoryCBoxLabel" Content="Kategória:" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.579,-1.128"/>
                     <ComboBox x:Name="typeCBox" HorizontalAlignment="Left" Margin="98,78,0,0" VerticalAlignment="Top" Width="140"/>
                     <ComboBox x:Name="categoryCBox" HorizontalAlignment="Left" Margin="98,114,0,0" VerticalAlignment="Top" Width="140"/>
                 </Grid>
