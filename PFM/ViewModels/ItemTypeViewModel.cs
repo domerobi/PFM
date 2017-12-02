@@ -4,13 +4,13 @@ using System.ComponentModel;
 
 namespace PFM
 {
-    class ItemTypeView : INotifyPropertyChanged
+    class ItemTypeViewModel : BaseViewModel
     {
         #region Attributes
 
         
         public IList<ItemType> Types { get; set; }
-        public ICollection<ItemCategory> Cagetogries { get; set; }
+        public IList<ItemCategory> Cagetogries { get; set; }
         private ItemType selectedItemType;
         private ItemCategory selectedItemCategory;
 
@@ -20,23 +20,21 @@ namespace PFM
         /// <summary>
         /// Constructor
         /// </summary>
-        public ItemTypeView()
+        public ItemTypeViewModel()
         {
             this.Types = new List<ItemType>()
             {
                 new ItemType()
                 {
                     Type = "Válassz típust...",
-                    Categories = new List<ItemCategory>()
-                    {
-                        new ItemCategory(){Name = "Válassz kategóriát..."}
-                    }
+                    Categories = new List<ItemCategory>(){new ItemCategory()}
                 },
                 new ItemType()
                 {
                     Type = "Bevétel",
                     Categories = new List<ItemCategory>()
                     {
+                        new ItemCategory(){Name = "Válassz kategóriát..."},
                         new ItemCategory(){Name = "Fizetés"},
                         new ItemCategory(){Name = "Nyugdíj"},
                         new ItemCategory(){Name = "Juttatás"},
@@ -49,6 +47,7 @@ namespace PFM
                     Type = "Kiadás",
                     Categories = new List<ItemCategory>()
                     {
+                        new ItemCategory(){Name = "Válassz kategóriát..."},
                         new ItemCategory(){Name = "Lakhatás"},
                         new ItemCategory(){Name = "Hitel"},
                         new ItemCategory(){Name = "Utazás"},
@@ -62,6 +61,7 @@ namespace PFM
             };
 
             this.SelectedItemType = this.Types[0];
+            this.selectedItemCategory = this.Types[0].Categories[0];
         }
 
         #endregion
@@ -77,9 +77,8 @@ namespace PFM
             set
             {
                 selectedItemType = value;
-                OnPropertyChanged("SelectedItemType");
                 this.Cagetogries = selectedItemType.Categories;
-                OnPropertyChanged("SelectedItemCategory");
+                SelectedItemCategory = this.Cagetogries[0];
             }
         }
 
@@ -97,7 +96,7 @@ namespace PFM
 
         #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string v) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(v));
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //private void OnPropertyChanged(string v) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(v));
     }
 }

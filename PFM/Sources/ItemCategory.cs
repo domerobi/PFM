@@ -3,7 +3,10 @@
     class ItemCategory
     {
         public string Name { get; set; }
-        
-        public ItemCategory itemCategory { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

@@ -6,6 +6,11 @@ namespace PFM
     {
         public string Type { get; set; }
 
-        public ICollection<ItemCategory> Categories { get; set; }
+        public IList<ItemCategory> Categories { get; set; }
+
+        public override string ToString()
+        {
+            return this.Type;
+        }
     }
 }

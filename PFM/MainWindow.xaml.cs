@@ -9,10 +9,7 @@ using System.Data;
 using System.Threading;
 using System.Globalization;
 using System.Windows.Markup;
-using System.Windows.Media;
 using System.Linq;
-using System.Data.Entity.Core.Objects;
-using System.IO;
 
 namespace PFM
 {
@@ -48,76 +45,76 @@ namespace PFM
                         XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
             InitializeComponent();
             // Set initial data for DataGrid
-            BindDataGrid();
+            //BindDataGrid();
 
-            PointLabel = chartPoint =>
-                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+            //PointLabel = chartPoint =>
+            //    string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
-            SeriesCollection = new SeriesCollection()
-            {
-                new LineSeries
-                {
-                    Title = "Series 1",
-                    Values = new ChartValues<double> { 4, 6, 5, 2 ,4 }
-                },
-                new LineSeries
-                {
-                    Title = "Series 2",
-                    Values = new ChartValues<double> { 6, 7, 3, 4 ,6 },
-                    PointGeometry = null
-                },
-                new LineSeries
-                {
-                    Title = "Series 3",
-                    Values = new ChartValues<double> { 4,2,7,2,7 },
-                    PointGeometry = DefaultGeometries.Square,
-                    PointGeometrySize = 15
-                }
-            };
+            //SeriesCollection = new SeriesCollection()
+            //{
+            //    new LineSeries
+            //    {
+            //        Title = "Series 1",
+            //        Values = new ChartValues<double> { 4, 6, 5, 2 ,4 }
+            //    },
+            //    new LineSeries
+            //    {
+            //        Title = "Series 2",
+            //        Values = new ChartValues<double> { 6, 7, 3, 4 ,6 },
+            //        PointGeometry = null
+            //    },
+            //    new LineSeries
+            //    {
+            //        Title = "Series 3",
+            //        Values = new ChartValues<double> { 4,2,7,2,7 },
+            //        PointGeometry = DefaultGeometries.Square,
+            //        PointGeometrySize = 15
+            //    }
+            //};
 
-            Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" };
-            YFormatter = value => value.ToString("C");
+            //Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" };
+            //YFormatter = value => value.ToString("C");
 
-            //modifying the series collection will animate and update the chart
-            /*SeriesCollection.Add(new LineSeries
-            {
-                Title = "Series 4",
-                Values = new ChartValues<double> { 5, 3, 2, 4 },
-                LineSmoothness = 0, //0: straight lines, 1: really smooth lines
-                PointGeometry = Geometry.Parse("m 25 70.36218 20 -28 -20 22 -8 -6 z"),
-                PointGeometrySize = 50,
-                PointForeground = Brushes.Gray
-            });*/
+            ////modifying the series collection will animate and update the chart
+            ///*SeriesCollection.Add(new LineSeries
+            //{
+            //    Title = "Series 4",
+            //    Values = new ChartValues<double> { 5, 3, 2, 4 },
+            //    LineSmoothness = 0, //0: straight lines, 1: really smooth lines
+            //    PointGeometry = Geometry.Parse("m 25 70.36218 20 -28 -20 22 -8 -6 z"),
+            //    PointGeometrySize = 50,
+            //    PointForeground = Brushes.Gray
+            //});*/
 
-            //modifying any series values will also animate and update the chart
-            //SeriesCollection[3].Values.Add(5d);
+            ////modifying any series values will also animate and update the chart
+            ////SeriesCollection[3].Values.Add(5d);
 
 
 
-            //BASIC plot
-            SeriesCollectionBasic = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title = "2015",
-                    Values = new ChartValues<double> { 10, 50, 39, 50 }
-                }
-            };
+            ////BASIC plot
+            //SeriesCollectionBasic = new SeriesCollection
+            //{
+            //    new ColumnSeries
+            //    {
+            //        Title = "2015",
+            //        Values = new ChartValues<double> { 10, 50, 39, 50 }
+            //    }
+            //};
 
-            //adding series will update and animate the chart automatically
-            SeriesCollectionBasic.Add(new ColumnSeries
-            {
-                Title = "2016",
-                Values = new ChartValues<double> { 11, 56, 42 }
-            });
+            ////adding series will update and animate the chart automatically
+            //SeriesCollectionBasic.Add(new ColumnSeries
+            //{
+            //    Title = "2016",
+            //    Values = new ChartValues<double> { 11, 56, 42 }
+            //});
 
-            //also adding values updates and animates the chart automatically
-            SeriesCollectionBasic[1].Values.Add(48d);
+            ////also adding values updates and animates the chart automatically
+            //SeriesCollectionBasic[1].Values.Add(48d);
 
-            LabelsBasic = new[] { "Maria", "Susan", "Charles", "Frida" };
-            Formatter = value => value.ToString("N");
+            //LabelsBasic = new[] { "Maria", "Susan", "Charles", "Frida" };
+            //Formatter = value => value.ToString("N");
 
-            DataContext = this;
+            DataContext = new MainViewModel(con);
         }
 
         #endregion
@@ -156,13 +153,12 @@ namespace PFM
             cmd.Parameters.AddWithValue("@date", Convert.ToDateTime(dpDate.Text));
             cmd.Parameters.AddWithValue("@comment", tbComment.Text.ToString());
 
-            MessageBox.Show(cmd.CommandText.ToString());
             cmd.ExecuteNonQuery();
 
 
 
             con.Close();
-            BindDataGrid();
+            //BindDataGrid();
 
 
 
@@ -174,33 +170,33 @@ namespace PFM
         /// <summary>
         /// Update DataGrid
         /// </summary>
-        private void BindDataGrid()
-        {
-            con.Open();
+        //private void BindDataGrid()
+        //{
+        //    con.Open();
 
-            PFMDBEntities dataEntities = new PFMDBEntities();
-            var query =
-                from item in dataEntities.Inventory
-                //where item.Category == "Utazás"
-                orderby item.Date descending
-                select new { item.Id, item.Date, item.Type, item.Category, item.Sum, item.Comment  };
+        //    PFMDBEntities dataEntities = new PFMDBEntities();
+        //    var query =
+        //        from item in dataEntities.Inventory
+        //        //where item.Category == "Utazás"
+        //        orderby item.Date descending
+        //        select new { item.Id, item.Date, item.Type, item.Category, item.Sum, item.Comment  };
 
-            dgInventory.ItemsSource = query.ToList();
+        //    dgInventory.ItemsSource = query.ToList();
 
 
-            //SqlCommand cmd = con.CreateCommand();
-            //cmd.CommandType = CommandType.Text;
-            //cmd.CommandText = "SELECT Id, Date, Type, Category, Sum, Comment FROM dbo.Inventory ORDER BY Date desc";
-            //cmd.Connection = con;
-            //SqlDataAdapter da = new SqlDataAdapter(cmd);
-            //DataTable dt = new DataTable("Inventory");
-            ////DataView view = dt.AsDataView();
-            ////view.RowFilter = "Category == Utazás";
+        //    //SqlCommand cmd = con.CreateCommand();
+        //    //cmd.CommandType = CommandType.Text;
+        //    //cmd.CommandText = "SELECT Id, Date, Type, Category, Sum, Comment FROM dbo.Inventory ORDER BY Date desc";
+        //    //cmd.Connection = con;
+        //    //SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //    //DataTable dt = new DataTable("Inventory");
+        //    ////DataView view = dt.AsDataView();
+        //    ////view.RowFilter = "Category == Utazás";
             
-            //dgInventory.ItemsSource = dt.DefaultView;
-            con.Close();
+        //    //dgInventory.ItemsSource = dt.DefaultView;
+        //    con.Close();
 
-        }
+        //}
     }
 
     #region Converter
