@@ -3,6 +3,9 @@ using System;
 
 namespace PFM
 {
+    /// <summary>
+    /// ViewModel for representing data on a chartesian chart
+    /// </summary>
     public class ChartesianChartViewModel
     {
         public Func<double, string> Formatter { get; set; }

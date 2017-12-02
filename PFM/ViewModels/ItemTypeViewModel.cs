@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 namespace PFM
 {
+    /// <summary>
+    /// ViewModel for representing item types and categories
+    /// </summary>
     class ItemTypeViewModel : BaseViewModel
     {
         #region Attributes
@@ -95,8 +98,6 @@ namespace PFM
         }
 
         #endregion
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-        //private void OnPropertyChanged(string v) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(v));
+        
     }
 }

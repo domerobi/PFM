@@ -4,13 +4,27 @@ using System.Data.SqlClient;
 
 namespace PFM
 {
+    /// <summary>
+    /// ViewModel which handles all ViewModels of the application
+    /// </summary>
     class MainViewModel : BaseViewModel
     {
+        #region ViewModels
+
         public ItemTypeViewModel ItemType { get; set; }
         public CategoryChartViewModel CategoryChart { get; set; }
         public ChartesianChartViewModel ColumnChart { get; set; }
         public ChartesianChartViewModel LineChart { get; set; }
         public InventoryViewModel DBInventory { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="con">Connection to the database</param>
         public MainViewModel(SqlConnection con)
         {
             this.ItemType = new ItemTypeViewModel();
@@ -98,6 +112,8 @@ namespace PFM
             };
             this.DBInventory = new InventoryViewModel(con);
         }
-        
+
+        #endregion
+
     }
 }

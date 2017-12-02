@@ -81,8 +81,8 @@
                     <TextBox x:Name="tbSum" HorizontalAlignment="Left" Height="22" Margin="115,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" />
                     <DatePicker x:Name="dpDate" HorizontalAlignment="Left" Margin="115,108,0,0" VerticalAlignment="Top" Width="145" FirstDayOfWeek="Monday" Text="Válasszon dátumot" Height="24"/>
                     <Label Content="Ft" HorizontalAlignment="Left" Margin="242,78,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="1.833,0.423"/>
-                    <Button x:Name="btnSubmit" Content="Adatok rögzítése" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top" Width="250" Height="36" Click="btnSubmit_Click"/>
                     <TextBox x:Name="tbComment" HorizontalAlignment="Left" Height="22" Margin="115,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" />
+                    <Button x:Name="btnSubmit" Content="Adatok rögzítése" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top" Width="250" Height="36" Click="btnSubmit_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabSearch" Header="Keresés" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,-2,0,0">
@@ -91,9 +91,9 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
-                    <DataGrid x:Name="dgInventory" ItemsSource="{Binding DBInventory.InventoryRecords}" HorizontalAlignment="Stretch"  Margin="0,0,0,0" VerticalAlignment="Stretch" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid x:Name="dgInventory" ItemsSource="{Binding DBInventory.InventoryRecords}" HorizontalAlignment="Stretch"  Margin="0" VerticalAlignment="Stretch" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="1*"  Binding="{Binding Date, StringFormat=\{0:yyyy.MM.dd\}}" Header="Dátum" />
+                            <DataGridTextColumn Width="1*" Binding="{Binding Date, StringFormat=\{0:yyyy.MM.dd\}}" Header="Dátum" />
                             <DataGridTextColumn Width="1*" Binding="{Binding Type}" Header="Típus"/>
                             <DataGridTextColumn Width="1*" Binding="{Binding Category}" Header="Kategória"/>
                             <DataGridTextColumn Width="1*" Binding="{Binding Sum, StringFormat={}{0:C0}}" Header="Összeg" ElementStyle="{StaticResource RightAligned}"/>

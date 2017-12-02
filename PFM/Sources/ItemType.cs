@@ -2,6 +2,9 @@
 
 namespace PFM
 {
+    /// <summary>
+    /// Type of the item, which stores its category list also
+    /// </summary>
     class ItemType
     {
         public string Type { get; set; }
