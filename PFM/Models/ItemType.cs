@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PFM
 {
@@ -9,7 +10,7 @@ namespace PFM
     {
         public string Type { get; set; }
 
-        public IList<ItemCategory> Categories { get; set; }
+        public IList<String> Categories { get; set; }
 
         public override string ToString()
         {

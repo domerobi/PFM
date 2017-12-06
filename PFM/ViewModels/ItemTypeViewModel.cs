@@ -11,11 +11,12 @@ namespace PFM
     {
         #region Attributes
 
-        
+        private Inventory Item;
         public IList<ItemType> Types { get; set; }
-        public IList<ItemCategory> Cagetogries { get; set; }
+        public IList<String> Categories { get; set; }
         private ItemType selectedItemType;
-        private ItemCategory selectedItemCategory;
+        private string selectedItemCategory;
+        
 
         #endregion
 
@@ -25,46 +26,47 @@ namespace PFM
         /// </summary>
         public ItemTypeViewModel()
         {
-            this.Types = new List<ItemType>()
+            Item = new Inventory();
+            Types = new List<ItemType>()
             {
                 new ItemType()
                 {
                     Type = "Válassz típust...",
-                    Categories = new List<ItemCategory>(){new ItemCategory()}
+                    Categories = new List<String>(){ "" }
                 },
                 new ItemType()
                 {
                     Type = "Bevétel",
-                    Categories = new List<ItemCategory>()
+                    Categories = new List<String>()
                     {
-                        new ItemCategory(){Name = "Válassz kategóriát..."},
-                        new ItemCategory(){Name = "Fizetés"},
-                        new ItemCategory(){Name = "Nyugdíj"},
-                        new ItemCategory(){Name = "Juttatás"},
-                        new ItemCategory(){Name = "Nyeremény"},
-                        new ItemCategory(){Name = "Egyéb"}
+                        "Válassz kategóriát...",
+                        "Fizetés",
+                        "Nyugdíj",
+                        "Juttatás",
+                        "Nyeremény",
+                        "Egyéb"
                     }
                 },
                 new ItemType()
                 {
                     Type = "Kiadás",
-                    Categories = new List<ItemCategory>()
+                    Categories = new List<String>()
                     {
-                        new ItemCategory(){Name = "Válassz kategóriát..."},
-                        new ItemCategory(){Name = "Lakhatás"},
-                        new ItemCategory(){Name = "Hitel"},
-                        new ItemCategory(){Name = "Utazás"},
-                        new ItemCategory(){Name = "Élelmiszer"},
-                        new ItemCategory(){Name = "Műszaki cikk"},
-                        new ItemCategory(){Name = "Személyes"},
-                        new ItemCategory(){Name = "Szórakozás"},
-                        new ItemCategory(){Name = "Egyéb"}
+                        "Válassz kategóriát...",
+                        "Lakhatás",
+                        "Hitel",
+                        "Utazás",
+                        "Élelmiszer",
+                        "Műszaki cikk",
+                        "Személyes",
+                        "Szórakozás",
+                        "Egyéb"
                     }
                 }
             };
 
-            this.SelectedItemType = this.Types[0];
-            this.selectedItemCategory = this.Types[0].Categories[0];
+            SelectedItemType = Types[0];
+            SelectedItemCategory = Types[0].Categories[0];
         }
 
         #endregion
@@ -80,12 +82,13 @@ namespace PFM
             set
             {
                 selectedItemType = value;
-                this.Cagetogries = selectedItemType.Categories;
-                SelectedItemCategory = this.Cagetogries[0];
+                Categories = selectedItemType.Categories;
+                SelectedItemCategory = selectedItemType.Categories[0];
+                Item.Type = selectedItemType.Type;
             }
         }
 
-        public ItemCategory SelectedItemCategory
+        public String SelectedItemCategory
         {
             get
             {
@@ -94,10 +97,45 @@ namespace PFM
             set
             {
                 selectedItemCategory = value;
+                Item.Category = selectedItemCategory;
+            }
+        }
+
+        public string Sum
+        {
+            get
+            {
+                return Item.Sum.ToString();
+            }
+            set
+            {
+                Item.Sum = Convert.ToInt32(value);
+            }
+        }
+        public string Date
+        {
+            get
+            {
+                return Item.Date.ToString();
+            }
+            set
+            {
+                Item.Date = Convert.ToDateTime(value);
+            }
+        }
+        public string comment
+        {
+            get
+            {
+                return Item.Comment;
+            }
+            set
+            {
+                Item.Comment = value;
             }
         }
 
         #endregion
-        
+
     }
 }

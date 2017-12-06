@@ -46,21 +46,21 @@
                     </Grid.ColumnDefinitions>
                     <lvc:CartesianChart x:Name="InExpColumnChart" Series="{Binding ColumnChart.SeriesCollection}" LegendLocation="Left" Grid.Row="0" Grid.Column="1">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Salesman" Labels="{Binding ColumnChart.Labels}"></lvc:Axis>
+                            <lvc:Axis Labels="{Binding ColumnChart.Labels}"></lvc:Axis>
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Sold Apps" LabelFormatter="{Binding ColumnChart.Formatter}"></lvc:Axis>
+                            <lvc:Axis LabelFormatter="{Binding ColumnChart.Formatter}"></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                     <lvc:CartesianChart x:Name="BalanceChart" Series="{Binding LineChart.SeriesCollection}" LegendLocation="Left" Grid.Row="1" Grid.Column="1">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Month" Labels="{Binding LineChart.Labels}"></lvc:Axis>
+                            <lvc:Axis Labels="{Binding LineChart.Labels}"></lvc:Axis>
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Sales" LabelFormatter="{Binding LineChart.Formatter}"></lvc:Axis>
+                            <lvc:Axis LabelFormatter="{Binding LineChart.Formatter}"></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-                    <lvc:PieChart x:Name="CategoryPieChart" Series="{Binding CategoryChart.PieSeries}" LegendLocation="Bottom" DataClick="Chart_OnDataClick" Hoverable="False" DataTooltip="{x:Null}" Grid.Row="1" Grid.Column="0">
+                    <lvc:PieChart x:Name="CategoryPieChart" Series="{Binding CategoryChart.PieSeries}" LegendLocation="Bottom" Hoverable="True" Grid.Row="1" Grid.Column="0">
                     </lvc:PieChart>
                 </Grid>
             </TabItem>
@@ -76,7 +76,7 @@
                     <Label x:Name="labelComment" Content="Megjegyzés:" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="100"/>
                     <ComboBox x:Name="ddType" HorizontalAlignment="Left" Margin="115,14,0,0" VerticalAlignment="Top" Width="145" ItemsSource="{Binding ItemType.Types}" SelectedItem="{Binding ItemType.SelectedItemType}"/>
 
-                    <ComboBox x:Name="ddCategory" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Width="145" ItemsSource="{Binding ItemType.Cagetogries}" SelectedItem="{Binding ItemType.SelectedItemCategory}"/>
+                    <ComboBox x:Name="ddCategory" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Width="145" ItemsSource="{Binding ItemType.Categories}" SelectedItem="{Binding ItemType.SelectedItemCategory}"/>
                  
                     <TextBox x:Name="tbSum" HorizontalAlignment="Left" Height="22" Margin="115,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" />
                     <DatePicker x:Name="dpDate" HorizontalAlignment="Left" Margin="115,108,0,0" VerticalAlignment="Top" Width="145" FirstDayOfWeek="Monday" Text="Válasszon dátumot" Height="24"/>
@@ -91,7 +91,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
-                    <DataGrid x:Name="dgInventory" ItemsSource="{Binding DBInventory.InventoryRecords}" HorizontalAlignment="Stretch"  Margin="0" VerticalAlignment="Stretch" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid x:Name="dgInventory" ItemsSource="{Binding DBInventory.InventoryRecords}" HorizontalAlignment="Stretch"  Margin="0" VerticalAlignment="Stretch" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="1*" Binding="{Binding Date, StringFormat=\{0:yyyy.MM.dd\}}" Header="Dátum" />
                             <DataGridTextColumn Width="1*" Binding="{Binding Type}" Header="Típus"/>

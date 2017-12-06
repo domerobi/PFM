@@ -1,6 +1,10 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
 using System.Data.SqlClient;
+using System.Windows;
+using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace PFM
 {
@@ -25,92 +29,128 @@ namespace PFM
         /// Constructor
         /// </summary>
         /// <param name="con">Connection to the database</param>
-        public MainViewModel(SqlConnection con)
+        public MainViewModel()
         {
+            this.DBInventory = new InventoryViewModel();
+
+            var pieChartQuery =
+                from item in this.DBInventory.InventoryRecords
+                where item.Type == "Kiadás" && item.Date >= DateTime.Now.AddMonths(-1)
+                group item by item.Category into l
+                select new { Category = l.Key, Total = l.Sum(records => records.Sum) };
+
+            SeriesCollection sc = new SeriesCollection();
+            foreach (var line in pieChartQuery)
+            {
+                PieSeries ps = new PieSeries
+                {
+                    Title = line.Category,
+                    Values = new ChartValues<int> { line.Total },
+                    DataLabels = true,
+                    LabelPoint = chartPoint =>
+                                        string.Format("{0:C0}",chartPoint.Y)
+                };
+                sc.Add(ps);
+                
+            }
+
             this.ItemType = new ItemTypeViewModel();
             this.CategoryChart = new CategoryChartViewModel
             {
-                PieSeries = new SeriesCollection
-                {
-                    new PieSeries
-                    {
-                        Title = "Maria",
-                        Values = new ChartValues<double>{3},
-                        DataLabels = true,
-                        LabelPoint =  chartPoint =>
-                                        string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation)
-                    },
-                    new PieSeries
-                    {
-                        Title = "Charles",
-                        Values = new ChartValues<double>{4},
-                        DataLabels = true,
-                        LabelPoint =  chartPoint =>
-                                        string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation)
-                    },
-                    new PieSeries
-                    {
-                        Title = "Frida",
-                        Values = new ChartValues<double>{6},
-                        DataLabels = true,
-                        LabelPoint =  chartPoint =>
-                                        string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation)
-                    },
-                    new PieSeries
-                    {
-                        Title = "Frederic",
-                        Values = new ChartValues<double>{2},
-                        DataLabels = true,
-                        LabelPoint =  chartPoint =>
-                                        string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation)
-                    }
-                }
+                PieSeries = sc
             };
+
+            //Incomes vs. Expenditures
+
+            var incomesMonthlyQuery =
+                from item in this.DBInventory.InventoryRecords
+                where item.Type == "Bevétel" && item.Date > DateTime.Now.AddMonths(-6)
+                group item by item.Date.Month into l
+                //orderby l.Key ascending
+                select new { Month = l.Key, TotalIncome = l.Sum(records => records.Sum)};
+
+            incomesMonthlyQuery = incomesMonthlyQuery.Reverse();
+
+            var expendituresMonthlyQuery =
+                from item in this.DBInventory.InventoryRecords
+                where item.Type == "Kiadás"
+                group item by item.Date.Month into l
+                //orderby l.Key ascending
+                select new { Month = l.Key, TotalExpenditure = l.Sum(records => records.Sum) };
+
+            expendituresMonthlyQuery = expendituresMonthlyQuery.Reverse();
+
+            SeriesCollection scIncomesExpenditures = new SeriesCollection();
+            ColumnSeries csIncomes = new ColumnSeries();
+            ColumnSeries csExpenditures = new ColumnSeries();
+            ChartValues<int> cvIncomes = new ChartValues<int>();
+            ChartValues<int> cvExpenditures = new ChartValues<int>();
+            foreach (var line in incomesMonthlyQuery)
+            {
+                cvIncomes.Add(line.TotalIncome);
+            }
+            foreach (var line in expendituresMonthlyQuery)
+            {
+                cvExpenditures.Add(line.TotalExpenditure);
+            }
+
             this.ColumnChart = new ChartesianChartViewModel
             {
                 SeriesCollection = new SeriesCollection
                 {
                     new ColumnSeries
                     {
-                        Title = "2015",
-                        Values = new ChartValues<double> { 10, 50, 39, 50 }
+                        Title = "Bevétel",
+                        Values = cvIncomes
                     },
                     new ColumnSeries
                     {
-                        Title = "2016",
-                        Values = new ChartValues<double> { 11, 56, 42, 46 }
+                        Title = "Kiadás",
+                        Values = cvExpenditures
                     }
                 },
-                Labels = new[] { "Maria", "Susan", "Charles", "Frida" },
-                Formatter = value => value.ToString("N")
+                Labels = new[] { DateTime.Now.AddMonths(-5).ToString("yyyy.MMMM"),
+                    DateTime.Now.AddMonths(-4).ToString("yyyy.MMMM"),
+                    DateTime.Now.AddMonths(-3).ToString("yyyy.MMMM"),
+                    DateTime.Now.AddMonths(-2).ToString("yyyy.MMMM"),
+                    DateTime.Now.AddMonths(-1).ToString("yyyy.MMMM"),
+                    DateTime.Now.ToString("yyyy.MMMM")},
+                Formatter = value => value.ToString("C0")
             };
+
+            //LineChart
+            var negativeSumQuery =
+                from item in this.DBInventory.InventoryRecords
+                where item.Type == "Kiadás"
+                select new { Id = item.Id, Date= item.Date, Sum = (item.Sum * -1), Type = item.Type, Category = item.Category, Comment = item.Comment};
+
+            var positiveSumQuery =
+                from item in this.DBInventory.InventoryRecords
+                where item.Type == "Bevétel"
+                select new { Id = item.Id, Date = item.Date, Sum = item.Sum, Type = item.Type, Category = item.Category, Comment = item.Comment };
+            
+            var resultSumQuery = (negativeSumQuery.Concat(positiveSumQuery)).OrderBy(x => x.Date);
+            int cumSum = 0;
+
+            int[] b = resultSumQuery.Select(x => (cumSum += x.Sum)).ToArray();
+            ChartValues<int> cv = new ChartValues<int>();
+            cv.AddRange(b);
+            string[] stringArray = new string[resultSumQuery.Count()];
+
             this.LineChart = new ChartesianChartViewModel
             {
                 SeriesCollection = new SeriesCollection()
                 {
                     new LineSeries
                     {
-                        Title = "Series 1",
-                        Values = new ChartValues<double> { 4, 6, 5, 2 ,4 }
-                    },
-                    new LineSeries
-                    {
-                        Title = "Series 2",
-                        Values = new ChartValues<double> { 6, 7, 3, 4 ,6 },
-                        PointGeometry = null
-                    },
-                    new LineSeries
-                    {
-                        Title = "Series 3",
-                        Values = new ChartValues<double> { 4,2,7,2,7 },
-                        PointGeometry = DefaultGeometries.Square,
-                        PointGeometrySize = 15
+                        Title = "Egyenleg",
+                        Values = cv
                     }
                 },
-                Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" },
-                Formatter = value => value.ToString("C")
+                Labels = stringArray,
+                Formatter = value => value.ToString("C0")
             };
-            this.DBInventory = new InventoryViewModel(con);
+            
         }
 
         #endregion

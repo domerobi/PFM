@@ -11,17 +11,26 @@ namespace PFM
     class InventoryViewModel : BaseViewModel
     {
         public List<Inventory> InventoryRecords { get;set; }
+        private SqlConnection Con { get; set; }
 
         #region Constructor
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="con">Connection to the database</param>
-        public InventoryViewModel(SqlConnection con)
+        public InventoryViewModel()
+        {
+            this.Con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=PFMDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            
+            // Get records from the database
+            ReadFromDB(Con);
+        }
+
+        #endregion
+        
+        public void ReadFromDB(SqlConnection con)
         {
             this.InventoryRecords = new List<Inventory>();
-            // Get records from the database
             con.Open();
             PFMDBEntities dataEntities = new PFMDBEntities();
             var query =
@@ -45,8 +54,5 @@ namespace PFM
 
             con.Close();
         }
-
-        #endregion
-        
     }
 }

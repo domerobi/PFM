@@ -89,22 +89,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sources\ItemCategory.cs" />
-    <Compile Include="Sources\ItemType.cs" />
-    <Compile Include="Inventory.cs">
+    <Compile Include="Models\ItemType.cs" />
+    <Compile Include="Models\Inventory.cs">
       <DependentUpon>InventoryModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="InventoryModel.Context.cs">
+    <Compile Include="Models\InventoryModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InventoryModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="InventoryModel.cs">
+    <Compile Include="Models\InventoryModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InventoryModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="InventoryModel.Designer.cs">
+    <Compile Include="Models\InventoryModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InventoryModel.edmx</DependentUpon>
@@ -132,15 +131,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="InventoryModel.edmx">
+    <EntityDeploy Include="Models\InventoryModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>InventoryModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="InventoryModel.edmx.diagram">
+    <None Include="Models\InventoryModel.edmx.diagram">
       <DependentUpon>InventoryModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\Inventory.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -151,12 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
-    <Content Include="InventoryModel.Context.tt">
+    <Content Include="Models\InventoryModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>InventoryModel.Context.cs</LastGenOutput>
       <DependentUpon>InventoryModel.edmx</DependentUpon>
     </Content>
-    <Content Include="InventoryModel.tt">
+    <Content Include="Models\InventoryModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>InventoryModel.edmx</DependentUpon>
       <LastGenOutput>InventoryModel.cs</LastGenOutput>
@@ -164,6 +162,10 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.0.0\build\netstandard1.4\Fody.targets" Condition="Exists('..\packages\Fody.2.0.0\build\netstandard1.4\Fody.targets')" />
