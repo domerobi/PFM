@@ -25,6 +25,9 @@
         <Style x:Key="RightAligned">
             <Setter Property="Control.HorizontalAlignment" Value="Right" />
         </Style>
+        <Style TargetType="Border">
+            <Setter Property="Padding" Value="3,3,3,3" />
+        </Style>
     </Window.Resources>
     <Grid x:Name="mainGrid" Margin="0,0,0,0">
         <Grid.RowDefinitions>
@@ -69,29 +72,24 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="labelType" Content="Adat típusa:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100"/>
-                    <Label x:Name="labelCategory" Content="Kategória:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="100"/>
-                    <Label x:Name="labelSum" Content="Összeg:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Width="100"/>
-                    <Label x:Name="labelDate" Content="Dátum:" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="100"/>
-                    <Label x:Name="labelComment" Content="Megjegyzés:" HorizontalAlignment="Left" Margin="10,137,0,0" VerticalAlignment="Top" Width="100"/>
-                    <ComboBox x:Name="ddType" HorizontalAlignment="Left" Margin="115,14,0,0" VerticalAlignment="Top" Width="145" ItemsSource="{Binding ItemType.Types}" SelectedItem="{Binding ItemType.SelectedItemType}"/>
-
-                    <ComboBox x:Name="ddCategory" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Width="145" ItemsSource="{Binding ItemType.Categories}" SelectedItem="{Binding ItemType.SelectedItemCategory}"/>
-                 
-                    <TextBox x:Name="tbSum" HorizontalAlignment="Left" Height="22" Margin="115,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" />
-                    <DatePicker x:Name="dpDate" HorizontalAlignment="Left" Margin="115,108,0,0" VerticalAlignment="Top" Width="145" FirstDayOfWeek="Monday" Text="Válasszon dátumot" Height="24"/>
-                    <Label Content="Ft" HorizontalAlignment="Left" Margin="242,78,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="1.833,0.423"/>
-                    <TextBox x:Name="tbComment" HorizontalAlignment="Left" Height="22" Margin="115,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" />
-                    <Button x:Name="btnSubmit" Content="Adatok rögzítése" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top" Width="250" Height="36" Click="btnSubmit_Click"/>
+                    
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabSearch" Header="Keresés" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,-2,0,0">
                 <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <DataGrid x:Name="dgInventory" ItemsSource="{Binding DBInventory.InventoryRecords}" HorizontalAlignment="Stretch"  Margin="0" VerticalAlignment="Stretch" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    
+                    <DataGrid x:Name="dgInventory" ItemsSource="{Binding DBInventory.InventoryRecords}" Margin="0,10,0,0" Grid.RowSpan="5" HorizontalAlignment="Stretch" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="1*" Binding="{Binding Date, StringFormat=\{0:yyyy.MM.dd\}}" Header="Dátum" />
                             <DataGridTextColumn Width="1*" Binding="{Binding Type}" Header="Típus"/>
@@ -100,14 +98,101 @@
                             <DataGridTextColumn Width="4*" Binding="{Binding Comment}" Header="Megjegyzés"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Label x:Name="startDateLabel" Content="Kezdő dátum:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <DatePicker x:Name="startDatePicker" HorizontalAlignment="Left" Margin="98,12,0,0" VerticalAlignment="Top" Width="140"/>
-                    <DatePicker x:Name="endDatePicker" HorizontalAlignment="Left" Margin="98,43,0,0" VerticalAlignment="Top" Width="140"/>
-                    <Label x:Name="endDateLabel" Content="Végső dátum:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="typeCBoxLabel" Content="Típus:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.607,-0.077"/>
-                    <Label x:Name="categoryCBoxLabel" Content="Kategória:" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.579,-1.128"/>
-                    <ComboBox x:Name="typeCBox" HorizontalAlignment="Left" Margin="98,78,0,0" VerticalAlignment="Top" Width="140"/>
-                    <ComboBox x:Name="categoryCBox" HorizontalAlignment="Left" Margin="98,114,0,0" VerticalAlignment="Top" Width="140"/>
+                    <GroupBox Header="Keresés" Grid.Column="1" Margin="10,10,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border>
+                                <Label x:Name="startDateLabel" Content="Kezdő dátum:" />
+                            </Border>
+                            <Border Grid.Column="1">
+                                <DatePicker x:Name="startDatePicker" Width="140" />    
+                            </Border>
+                            <Border Grid.Row="1">
+                                <Label x:Name="endDateLabel" Content="Végső dátum:" />
+                            </Border>
+                            <Border Grid.Row="1" Grid.Column="1">
+                                <DatePicker x:Name="endDatePicker" Width="140" />    
+                            </Border>
+                            <Border Grid.Row="2">
+                                <Label x:Name="typeCBoxLabel" Content="Típus:" />    
+                            </Border>
+                            <Border Grid.Row="2" Grid.Column="1">
+                                <ComboBox x:Name="typeCBox" Width="140" />    
+                            </Border>
+                            <Border Grid.Row="3">
+                                <Label x:Name="categoryCBoxLabel" Content="Kategória:" />    
+                            </Border>
+                            <Border Grid.Row="3" Grid.Column="1">
+                                <ComboBox x:Name="categoryCBox" Width="140" />    
+                            </Border>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Új tétel hozzáadása" Grid.Column="1" Grid.Row="1" Margin="10,10,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border>
+                                <Label x:Name="labelType" Content="Adat típusa:" />    
+                            </Border>
+                            <Border Grid.Column="1" Grid.ColumnSpan="2">
+                                <ComboBox x:Name="ddType" Width="140" ItemsSource="{Binding ItemType.Types}" SelectedItem="{Binding ItemType.SelectedItemType}"/>    
+                            </Border>
+                            <Border Grid.Row="1">
+                                <Label x:Name="labelCategory" Content="Kategória:" />    
+                            </Border>
+                            <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                                <ComboBox x:Name="ddCategory" Width="140" ItemsSource="{Binding ItemType.Categories}" SelectedItem="{Binding ItemType.SelectedItemCategory}"/>    
+                            </Border>
+                            <Border Grid.Row="2">
+                                <Label x:Name="labelSum" Content="Összeg:" />    
+                            </Border>
+                            <Border Grid.Row="2" Grid.Column="1" Padding="3,3,0,3">
+                                <TextBox x:Name="tbSum" Width="120" />    
+                            </Border>
+                            <Border Grid.Row="2" Grid.Column="2" Padding="0,3,0,0">
+                                <Label Content="Ft" />    
+                            </Border>
+                            <Border Grid.Row="3">
+                                <Label x:Name="labelDate" Content="Dátum:" />    
+                            </Border>
+                            <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+                                <DatePicker x:Name="dpDate" Width="140" FirstDayOfWeek="Monday" Text="Válasszon dátumot" />
+                            </Border>
+                            <Border Grid.Row="4">
+                                <Label x:Name="labelComment" Content="Megjegyzés:" />    
+                            </Border>
+                            <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
+                                <TextBox x:Name="tbComment" Width="140" />
+                            </Border>
+                            <Border Grid.Row="5" Grid.ColumnSpan="3">
+                                <Button x:Name="btnSubmit" Content="Adatok rögzítése" Click="btnSubmit_Click"/>    
+                            </Border>
+                            
+                            
+                        </Grid>
+                    </GroupBox>
+                    <Button x:Name="btnModify" Content="Tétel módosítása..." Grid.Row="2" Grid.Column="1" Margin="20,10,10,10"/>
+                    <Button x:Name="btnDelete" Content="Tétel törlése" Grid.Row="3" Grid.Column="1" Margin="20,10,10,10"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem" Margin="0,-2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
