@@ -9,9 +9,6 @@
 
 namespace PFM
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class Inventory
     {
         public int Id { get; set; }
@@ -20,5 +17,6 @@ namespace PFM
         public int Sum { get; set; }
         public System.DateTime Date { get; set; }
         public string Comment { get; set; }
+        
     }
 }

@@ -12,6 +12,10 @@ namespace PFM
 
         public IList<String> Categories { get; set; }
 
+        /// <summary>
+        /// Helps to convert an ItemType to a string value to show it on the screen
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return this.Type;
