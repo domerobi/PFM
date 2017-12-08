@@ -1,6 +1,8 @@
-﻿using System;
+﻿using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+
 
 namespace PFM
 {
@@ -11,13 +13,14 @@ namespace PFM
     {
         #region Attributes
 
-        private Inventory Item;
         public IList<ItemType> Types { get; set; }
         public IList<String> Categories { get; set; }
         private ItemType selectedItemType;
         private string selectedItemCategory;
+        public string ItemSum { get; set; }
+        public string ItemComment { get; set; }
+        public string ItemDate { get; set; }
         
-
         #endregion
 
         #region Constructor
@@ -26,7 +29,7 @@ namespace PFM
         /// </summary>
         public ItemTypeViewModel()
         {
-            Item = new Inventory();
+            // Set the possible values for types and categories
             Types = new List<ItemType>()
             {
                 new ItemType()
@@ -65,14 +68,18 @@ namespace PFM
                 }
             };
 
-            SelectedItemType = Types[0];
-            SelectedItemCategory = Types[0].Categories[0];
+            // Set each input field to default state
+            ClearFields();
+
         }
 
         #endregion
-
+        
         #region Getters and Setters
 
+        /// <summary>
+        /// Gets or sets the selected item type
+        /// </summary>
         public ItemType SelectedItemType
         {
             get
@@ -84,10 +91,12 @@ namespace PFM
                 selectedItemType = value;
                 Categories = selectedItemType.Categories;
                 SelectedItemCategory = selectedItemType.Categories[0];
-                Item.Type = selectedItemType.Type;
             }
         }
 
+        /// <summary>
+        /// Gets or sets the selected item category
+        /// </summary>
         public String SelectedItemCategory
         {
             get
@@ -97,42 +106,38 @@ namespace PFM
             set
             {
                 selectedItemCategory = value;
-                Item.Category = selectedItemCategory;
             }
         }
 
-        public string Sum
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Gets the values from input fields and create an inventory item from them
+        /// </summary>
+        /// <returns></returns>
+        public Inventory CreateItem()
         {
-            get
-            {
-                return Item.Sum.ToString();
-            }
-            set
-            {
-                Item.Sum = Convert.ToInt32(value);
-            }
+            Inventory Item = new Inventory();
+            Item.Type = SelectedItemType.ToString();
+            Item.Category = SelectedItemCategory;
+            Item.Sum = Convert.ToInt32(ItemSum);
+            Item.Date = Convert.ToDateTime(ItemDate);
+            Item.Comment = ItemComment;
+            return Item;
         }
-        public string Date
+
+        /// <summary>
+        /// Sets default value for each input field
+        /// </summary>
+        public void ClearFields()
         {
-            get
-            {
-                return Item.Date.ToString();
-            }
-            set
-            {
-                Item.Date = Convert.ToDateTime(value);
-            }
-        }
-        public string comment
-        {
-            get
-            {
-                return Item.Comment;
-            }
-            set
-            {
-                Item.Comment = value;
-            }
+            SelectedItemType = Types[0];
+            SelectedItemCategory = Types[0].Categories[0];
+            ItemSum = "";
+            ItemDate = DateTime.Today.ToString();
+            ItemComment = "";
         }
 
         #endregion

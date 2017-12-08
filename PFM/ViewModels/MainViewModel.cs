@@ -15,7 +15,6 @@ namespace PFM
     {
         #region ViewModels
 
-        public ItemTypeViewModel ItemType { get; set; }
         public CategoryChartViewModel CategoryChart { get; set; }
         public ChartesianChartViewModel ColumnChart { get; set; }
         public ChartesianChartViewModel LineChart { get; set; }
@@ -28,11 +27,12 @@ namespace PFM
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="con">Connection to the database</param>
         public MainViewModel()
         {
+            // Create new instance of InventoryViewModel
             this.DBInventory = new InventoryViewModel();
 
+            // Set up datas for pie chart
             var pieChartQuery =
                 from item in this.DBInventory.InventoryRecords
                 where item.Type == "Kiadás" && item.Date >= DateTime.Now.AddMonths(-1)
@@ -53,8 +53,8 @@ namespace PFM
                 sc.Add(ps);
                 
             }
-
-            this.ItemType = new ItemTypeViewModel();
+            
+            // Create new instance of CategoryChartViewModel
             this.CategoryChart = new CategoryChartViewModel
             {
                 PieSeries = sc
@@ -93,7 +93,8 @@ namespace PFM
             {
                 cvExpenditures.Add(line.TotalExpenditure);
             }
-
+            
+            // Create a new instance of ChartesianChartViewModel
             this.ColumnChart = new ChartesianChartViewModel
             {
                 SeriesCollection = new SeriesCollection
