@@ -22,12 +22,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
         <Style x:Key="RightAligned">
             <Setter Property="Control.HorizontalAlignment" Value="Right" />
         </Style>
+        
         <Style TargetType="Border">
             <Setter Property="Padding" Value="3,3,3,3" />
         </Style>
+        
     </Window.Resources>
     <Grid x:Name="mainGrid" Margin="0,0,0,0">
         <Grid.RowDefinitions>
@@ -155,19 +160,19 @@
                                 <Label x:Name="labelType" Content="Adat típusa:" />    
                             </Border>
                             <Border Grid.Column="1" Grid.ColumnSpan="2">
-                                <ComboBox x:Name="ddType" Width="140" ItemsSource="{Binding ItemType.Types}" SelectedItem="{Binding ItemType.SelectedItemType}"/>    
+                                <ComboBox x:Name="ddType" Width="140" ItemsSource="{Binding DBInventory.ItemType.Types}" SelectedItem="{Binding DBInventory.ItemType.SelectedItemType}"/>    
                             </Border>
                             <Border Grid.Row="1">
                                 <Label x:Name="labelCategory" Content="Kategória:" />    
                             </Border>
                             <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
-                                <ComboBox x:Name="ddCategory" Width="140" ItemsSource="{Binding ItemType.Categories}" SelectedItem="{Binding ItemType.SelectedItemCategory}"/>    
+                                <ComboBox x:Name="ddCategory" Width="140" ItemsSource="{Binding DBInventory.ItemType.Categories}" SelectedItem="{Binding DBInventory.ItemType.SelectedItemCategory}"/>    
                             </Border>
                             <Border Grid.Row="2">
                                 <Label x:Name="labelSum" Content="Összeg:" />    
                             </Border>
                             <Border Grid.Row="2" Grid.Column="1" Padding="3,3,0,3">
-                                <TextBox x:Name="tbSum" Width="120" />    
+                                <TextBox x:Name="tbSum" Width="120" Text="{Binding DBInventory.ItemType.ItemSum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </Border>
                             <Border Grid.Row="2" Grid.Column="2" Padding="0,3,0,0">
                                 <Label Content="Ft" />    
@@ -176,23 +181,23 @@
                                 <Label x:Name="labelDate" Content="Dátum:" />    
                             </Border>
                             <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-                                <DatePicker x:Name="dpDate" Width="140" FirstDayOfWeek="Monday" Text="Válasszon dátumot" />
+                                <DatePicker x:Name="dpDate" Width="140" FirstDayOfWeek="Monday" Text="{Binding DBInventory.ItemType.ItemDate, Mode=TwoWay}" />
                             </Border>
                             <Border Grid.Row="4">
                                 <Label x:Name="labelComment" Content="Megjegyzés:" />    
                             </Border>
                             <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
-                                <TextBox x:Name="tbComment" Width="140" />
+                                <TextBox x:Name="tbComment" Width="140" Text="{Binding DBInventory.ItemType.ItemComment, Mode=TwoWay}" />
                             </Border>
                             <Border Grid.Row="5" Grid.ColumnSpan="3">
-                                <Button x:Name="btnSubmit" Content="Adatok rögzítése" Click="btnSubmit_Click"/>    
+                                <Button x:Name="btnSubmit" Content="Adatok rögzítése" Command="{Binding DBInventory.AddCommand}" />
                             </Border>
                             
                             
                         </Grid>
                     </GroupBox>
                     <Button x:Name="btnModify" Content="Tétel módosítása..." Grid.Row="2" Grid.Column="1" Margin="20,10,10,10"/>
-                    <Button x:Name="btnDelete" Content="Tétel törlése" Grid.Row="3" Grid.Column="1" Margin="20,10,10,10"/>
+                    <Button x:Name="btnDelete" Content="Tétel törlése" Grid.Row="3" Grid.Column="1" Margin="20,0,10,10"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem" Margin="0,-2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
