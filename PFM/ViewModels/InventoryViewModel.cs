@@ -26,7 +26,9 @@ namespace PFM
         public ICommand ImportCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ResetCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
         public SqlConnection Con { get; set; }
+        public Inventory SelectedItem { get; set; }
 
         #endregion
 
@@ -50,10 +52,11 @@ namespace PFM
             ImportCommand = new ImportCommand(this);
             SearchCommand = new SearchCommand(this);
             ResetCommand = new ResetCommand(this);
+            DeleteCommand = new DeleteCommand(this);
         }
 
         #endregion
-
+        
         #region Methods
 
         /// <summary>
@@ -71,6 +74,13 @@ namespace PFM
         public bool CanImportItem()
         {
             return true;
+        }
+
+        public bool CanDeleteItem()
+        {
+            if (SelectedItem != null)
+                return true;
+            return false;
         }
 
         /// <summary>
@@ -130,6 +140,29 @@ namespace PFM
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "INSERT INTO dbo.Inventory (Type, Category, Sum, Date, Comment)" +
                               "VALUES(@type, @category, @sum, @date, @comment)";
+
+            cmd.Parameters.AddWithValue("@type", Item.Type);
+            cmd.Parameters.AddWithValue("@category", Item.Category);
+            cmd.Parameters.AddWithValue("@sum", Item.Sum);
+            cmd.Parameters.AddWithValue("@date", Item.Date);
+            cmd.Parameters.AddWithValue("@comment", Item.Comment);
+
+            // execute command
+            cmd.ExecuteNonQuery();
+
+            // close sql connection
+            Con.Close();
+        }
+
+        public void DeleteFromDB(Inventory Item)
+        {
+            Con.Open();
+
+            // build insert command
+            SqlCommand cmd = Con.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "DELETE FROM dbo.Inventory WHERE " +
+                              "Type=@type AND Category=@category AND Sum=@sum AND Date=@date AND Comment=@comment";
 
             cmd.Parameters.AddWithValue("@type", Item.Type);
             cmd.Parameters.AddWithValue("@category", Item.Category);
