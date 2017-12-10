@@ -5,16 +5,28 @@ namespace PFM
 {
     class ResetCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        private InventoryViewModel viewModel;
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested += value; }
+        }
+
+        public ResetCommand(InventoryViewModel vm)
+        {
+            viewModel = vm;
+        }
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            return viewModel.SearchItem.CanReset();
         }
 
         public void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            viewModel.SearchItem.Reset();
+            viewModel.ReadFromDB();
         }
     }
 }

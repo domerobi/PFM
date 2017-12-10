@@ -98,6 +98,14 @@ namespace PFM
             SelectedType = SearchTypes[0];
         }
 
+        public bool CanReset()
+        {
+            DateTime firstDayOfMonth = DateTime.Today.AddDays(-(DateTime.Today.Day - 1));
+            if (Convert.ToDateTime(StartDate) != firstDayOfMonth || Convert.ToDateTime(EndDate) != DateTime.Today || SelectedType != SearchTypes[0])
+                return true;
+            return false;
+        }
+
         public bool CanSearch()
         {
             if (Convert.ToDateTime(StartDate) <=  Convert.ToDateTime(EndDate))

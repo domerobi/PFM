@@ -25,6 +25,7 @@ namespace PFM
         public ICommand AddCommand { get; set; }
         public ICommand ImportCommand { get; set; }
         public ICommand SearchCommand { get; set; }
+        public ICommand ResetCommand { get; set; }
         public SqlConnection Con { get; set; }
 
         #endregion
@@ -42,12 +43,13 @@ namespace PFM
             SearchItem = new SearchViewModel();
 
             // Get records from the database
-            ReadFromDB(Con);
+            ReadFromDB();
 
             // set command
             AddCommand = new AddItemCommand(this);
             ImportCommand = new ImportCommand(this);
             SearchCommand = new SearchCommand(this);
+            ResetCommand = new ResetCommand(this);
         }
 
         #endregion
@@ -74,13 +76,12 @@ namespace PFM
         /// <summary>
         /// Initialize item collection from the database
         /// </summary>
-        /// <param name="con">database connection</param>
-        public void ReadFromDB(SqlConnection con)
+        public void ReadFromDB()
         {
             // create a new collection
             this.InventoryRecords = new ObservableCollection<Inventory>();
             // connect to the database
-            con.Open();
+            Con.Open();
             PFMDBEntities dataEntities = new PFMDBEntities();
             // get the filter values from search fields
             string type = SearchItem.SelectedType == SearchItem.SearchTypes[0] ? "" : SearchItem.SelectedType.ToString();
@@ -113,7 +114,7 @@ namespace PFM
             SortInventoryByDate();
 
 
-            con.Close();
+            Con.Close();
         }
 
         /// <summary>

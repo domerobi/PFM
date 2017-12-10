@@ -30,7 +30,7 @@ namespace PFM
 
         public void Execute(object parameter)
         {
-            viewModel.ReadFromDB(viewModel.Con);
+            viewModel.ReadFromDB();
         }
     }
 }
