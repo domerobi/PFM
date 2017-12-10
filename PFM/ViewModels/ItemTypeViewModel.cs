@@ -59,8 +59,11 @@ namespace PFM
                         "Lakhatás",
                         "Hitel",
                         "Utazás",
-                        "Élelmiszer",
+                        "Háztartás",
+                        "Étkezés",
                         "Műszaki cikk",
+                        "Bútor",
+                        "Ruha",
                         "Személyes",
                         "Szórakozás",
                         "Egyéb"

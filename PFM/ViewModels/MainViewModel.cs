@@ -35,7 +35,7 @@ namespace PFM
             // Set up datas for pie chart
             var pieChartQuery =
                 from item in this.DBInventory.InventoryRecords
-                where item.Type == "Kiadás" && item.Date >= DateTime.Now.AddMonths(-1)
+                where item.Type == "Kiadás" && item.Date.Month == DateTime.Now.AddMonths(-1).Month
                 group item by item.Category into l
                 select new { Category = l.Key, Total = l.Sum(records => records.Sum) };
 
@@ -64,7 +64,7 @@ namespace PFM
 
             var incomesMonthlyQuery =
                 from item in this.DBInventory.InventoryRecords
-                where item.Type == "Bevétel" && item.Date > DateTime.Now.AddMonths(-6)
+                where item.Type == "Bevétel" && item.Date.Month > DateTime.Now.AddMonths(-6).Month
                 group item by item.Date.Month into l
                 //orderby l.Key ascending
                 select new { Month = l.Key, TotalIncome = l.Sum(records => records.Sum)};
@@ -73,7 +73,7 @@ namespace PFM
 
             var expendituresMonthlyQuery =
                 from item in this.DBInventory.InventoryRecords
-                where item.Type == "Kiadás"
+                where item.Type == "Kiadás" && item.Date.Month > DateTime.Now.AddMonths(-6).Month
                 group item by item.Date.Month into l
                 //orderby l.Key ascending
                 select new { Month = l.Key, TotalExpenditure = l.Sum(records => records.Sum) };
@@ -132,8 +132,13 @@ namespace PFM
             
             var resultSumQuery = (negativeSumQuery.Concat(positiveSumQuery)).OrderBy(x => x.Date);
             int cumSum = 0;
+            int actualBalance;
 
             int[] b = resultSumQuery.Select(x => (cumSum += x.Sum)).ToArray();
+            if (b.Length == 0)
+                actualBalance = 0;
+            else
+                actualBalance = b.Last();
             ChartValues<int> cv = new ChartValues<int>();
             cv.AddRange(b);
             string[] stringArray = new string[resultSumQuery.Count()];
@@ -149,9 +154,12 @@ namespace PFM
                     }
                 },
                 Labels = stringArray,
-                Formatter = value => value.ToString("C0")
+                Formatter = value => value.ToString("C0"),
+                ActualBalance = actualBalance.ToString("C0")
             };
-            
+
+
+
         }
 
         #endregion

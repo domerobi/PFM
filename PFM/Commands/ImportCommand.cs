@@ -3,23 +3,22 @@ using System.Windows.Input;
 
 namespace PFM
 {
-    class AddItemCommand : ICommand
+    class ImportCommand : ICommand
     {
-        // The parent viewmodel, which holds the data we need
-        private InventoryViewModel viewModel;
-
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        
+        // The parent viewmodel, which holds the data we need
+        private InventoryViewModel viewModel;
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="vm">parent viewmodel</param>
-        public AddItemCommand(InventoryViewModel vm)
+        public ImportCommand(InventoryViewModel vm)
         {
             viewModel = vm;
         }
@@ -31,7 +30,7 @@ namespace PFM
         /// <returns></returns>
         public bool CanExecute(object parameter)
         {
-            return viewModel.CanAddItem();
+            return viewModel.CanImportItem();
         }
 
         /// <summary>
@@ -40,15 +39,18 @@ namespace PFM
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            Inventory itemToAdd = viewModel.ItemType.CreateItem();
+            viewModel.ImportFromExcel();
             // Insert item to the collection
-            viewModel.InventoryRecords.Add(itemToAdd);
+            //viewModel.InventoryRecords.Add(viewModel.ItemType.CreateItem());
+
+            // Insert item to the database
+            
+            
+
             // Sort the collection, so the new element moves to its right place
             viewModel.SortInventoryByDate();
-            // Insert item to the database
-            viewModel.AddToDB(itemToAdd);
             // Set each input field to default state
-            viewModel.ItemType.ClearFields();
+            //viewModel.ItemType.ClearFields();
         }
     }
 }

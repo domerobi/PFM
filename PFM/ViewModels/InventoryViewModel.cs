@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -19,8 +21,11 @@ namespace PFM
 
         public ObservableCollection<Inventory> InventoryRecords { get;set; }
         public ItemTypeViewModel ItemType { get; set; }
+        public SearchViewModel SearchItem { get; set; }
         public ICommand AddCommand { get; set; }
-        private SqlConnection Con { get; set; }
+        public ICommand ImportCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
+        public SqlConnection Con { get; set; }
 
         #endregion
 
@@ -34,12 +39,15 @@ namespace PFM
             // Set connection to the database
             Con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=PFMDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             ItemType = new ItemTypeViewModel();
+            SearchItem = new SearchViewModel();
 
             // Get records from the database
             ReadFromDB(Con);
 
             // set command
             AddCommand = new AddItemCommand(this);
+            ImportCommand = new ImportCommand(this);
+            SearchCommand = new SearchCommand(this);
         }
 
         #endregion
@@ -58,6 +66,11 @@ namespace PFM
             return false;
         }
 
+        public bool CanImportItem()
+        {
+            return true;
+        }
+
         /// <summary>
         /// Initialize item collection from the database
         /// </summary>
@@ -69,10 +82,19 @@ namespace PFM
             // connect to the database
             con.Open();
             PFMDBEntities dataEntities = new PFMDBEntities();
+            // get the filter values from search fields
+            string type = SearchItem.SelectedType == SearchItem.SearchTypes[0] ? "" : SearchItem.SelectedType.ToString();
+            string category = SearchItem.SelectedCategory == SearchItem.SearchCategories[0] ? "" : SearchItem.SelectedCategory;
+            DateTime startDate = Convert.ToDateTime(SearchItem.StartDate);
+            DateTime endDate = Convert.ToDateTime(SearchItem.EndDate);
             // select all items by date
             var query =
                 from item in dataEntities.Inventory
-                orderby item.Date descending
+                where item.Date >= startDate
+                    && item.Date <= endDate
+                    && item.Type.Contains(type)
+                    && item.Category.Contains(category)
+                orderby item.Date, item.Type descending
                 select new { item.Id, item.Date, item.Type, item.Category, item.Sum, item.Comment };
             // Store the records in a collection
             foreach (var record in query)
@@ -87,24 +109,23 @@ namespace PFM
                     Comment = record.Comment
                 });
             }
-            
+
+            SortInventoryByDate();
+
+
             con.Close();
         }
 
         /// <summary>
-        /// Add currently created item to the database
+        /// Add an item to the database
         /// </summary>
-        public void AddToDB()
+        /// <param name="Item">Item to add</param>
+        public void AddToDB(Inventory Item)
         {
-            // create sql connection
-            SqlConnection con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=PFMDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            con.Open();
-
-            // create Inventory item to add
-            Inventory Item = ItemType.CreateItem();
-
+            Con.Open();
+            
             // build insert command
-            SqlCommand cmd = con.CreateCommand();
+            SqlCommand cmd = Con.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "INSERT INTO dbo.Inventory (Type, Category, Sum, Date, Comment)" +
                               "VALUES(@type, @category, @sum, @date, @comment)";
@@ -119,7 +140,54 @@ namespace PFM
             cmd.ExecuteNonQuery();
 
             // close sql connection
-            con.Close();
+            Con.Close();
+        }
+
+        public void ImportFromExcel()
+        {
+            OpenFileDialog openfile = new OpenFileDialog();
+            openfile.DefaultExt = ".xlsx";
+            openfile.Filter = "(.xlsx)|*.xlsx";
+            string filePath;
+            
+            var browsefile = openfile.ShowDialog();
+
+            if (browsefile == true)
+            {
+                filePath = openfile.FileName;
+
+                Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
+                //Static File From Base Path...........
+                //Microsoft.Office.Interop.Excel.Workbook excelBook = excelApp.Workbooks.Open(AppDomain.CurrentDomain.BaseDirectory + "TestExcel.xlsx", 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                //Dynamic File Using Uploader...........
+                Microsoft.Office.Interop.Excel.Workbook excelBook = excelApp.Workbooks.Open(filePath.ToString(), 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+                Microsoft.Office.Interop.Excel.Worksheet excelSheet = (Microsoft.Office.Interop.Excel.Worksheet)excelBook.Worksheets.get_Item(1); ;
+                Microsoft.Office.Interop.Excel.Range excelRange = excelSheet.UsedRange;
+
+                int rowCnt = 0;
+                int colCnt = 0;
+
+                for (rowCnt = 2; rowCnt <= excelRange.Rows.Count; rowCnt++)
+                {
+                    for (colCnt = 1; colCnt <= excelRange.Columns.Count; colCnt= colCnt+5)
+                    {
+                        Inventory inv = new Inventory();
+                        inv.Date = DateTime.FromOADate(((excelRange.Cells[rowCnt, colCnt] as Microsoft.Office.Interop.Excel.Range).Value2));
+                        inv.Type = (string)(excelRange.Cells[rowCnt, colCnt + 1] as Microsoft.Office.Interop.Excel.Range).Value2;
+                        inv.Category = (string)(excelRange.Cells[rowCnt, colCnt + 2] as Microsoft.Office.Interop.Excel.Range).Value2;
+                        inv.Sum = Convert.ToInt32((excelRange.Cells[rowCnt, colCnt + 3] as Microsoft.Office.Interop.Excel.Range).Value2);
+                        inv.Comment = (string)(excelRange.Cells[rowCnt, colCnt + 4] as Microsoft.Office.Interop.Excel.Range).Value2;
+                        this.InventoryRecords.Add(inv);
+
+                        // Add actual item to database
+                        AddToDB(inv);
+                    }
+                }
+
+
+                excelBook.Close(true, null, null);
+                excelApp.Quit();
+            }
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ namespace PFM
         public Func<double, string> Formatter { get; set; }
         public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
+        public string ActualBalance { get; set; }
         
     }
 }
