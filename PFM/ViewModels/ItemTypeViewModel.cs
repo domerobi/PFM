@@ -20,6 +20,7 @@ namespace PFM
         public string ItemSum { get; set; }
         public string ItemComment { get; set; }
         public string ItemDate { get; set; }
+        public int ItemID { get; set; }
         
         #endregion
 
@@ -123,6 +124,7 @@ namespace PFM
         public Inventory CreateItem()
         {
             Inventory Item = new Inventory();
+            Item.Id = ItemID;
             Item.Type = SelectedItemType.ToString();
             Item.Category = SelectedItemCategory;
             Item.Sum = Convert.ToInt32(ItemSum);

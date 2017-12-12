@@ -5,7 +5,7 @@ namespace PFM
 {
     class ResetCommand : ICommand
     {
-        private InventoryViewModel viewModel;
+        private MainViewModel viewModel;
 
         public event EventHandler CanExecuteChanged
         {
@@ -13,20 +13,24 @@ namespace PFM
             remove { CommandManager.RequerySuggested += value; }
         }
 
-        public ResetCommand(InventoryViewModel vm)
+        public ResetCommand(MainViewModel vm)
         {
             viewModel = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            return viewModel.SearchItem.CanReset();
+            return viewModel.DBInventory.SearchItem.CanReset();
         }
 
         public void Execute(object parameter)
         {
-            viewModel.SearchItem.Reset();
-            viewModel.ReadFromDB();
+            // reset search to default
+            viewModel.DBInventory.SearchItem.Reset();
+            // read data from DB
+            viewModel.DBInventory.ReadFromDB();
+            // update charts
+            viewModel.UpdateCharts();
         }
     }
 }

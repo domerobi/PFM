@@ -6,7 +6,7 @@ namespace PFM
     class AddItemCommand : ICommand
     {
         // The parent viewmodel, which holds the data we need
-        private InventoryViewModel viewModel;
+        private MainViewModel viewModel;
 
         public event EventHandler CanExecuteChanged
         {
@@ -19,7 +19,7 @@ namespace PFM
         /// Constructor
         /// </summary>
         /// <param name="vm">parent viewmodel</param>
-        public AddItemCommand(InventoryViewModel vm)
+        public AddItemCommand(MainViewModel vm)
         {
             viewModel = vm;
         }
@@ -31,7 +31,7 @@ namespace PFM
         /// <returns></returns>
         public bool CanExecute(object parameter)
         {
-            return viewModel.CanAddItem();
+            return viewModel.DBInventory.CanAddItem();
         }
 
         /// <summary>
@@ -40,15 +40,19 @@ namespace PFM
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            Inventory itemToAdd = viewModel.ItemType.CreateItem();
+            // generate new item id
+            viewModel.DBInventory.GetNextItemID();
+            Inventory itemToAdd = viewModel.DBInventory.ItemType.CreateItem();
             // Insert item to the collection
-            viewModel.InventoryRecords.Add(itemToAdd);
+            viewModel.DBInventory.InventoryRecords.Add(itemToAdd);
             // Sort the collection, so the new element moves to its right place
-            viewModel.SortInventoryByDate();
+            viewModel.DBInventory.SortInventoryByDate();
             // Insert item to the database
-            viewModel.AddToDB(itemToAdd);
+            viewModel.DBInventory.AddToDB(itemToAdd);
             // Set each input field to default state
-            viewModel.ItemType.ClearFields();
+            viewModel.DBInventory.ItemType.ClearFields();
+            // Update charts
+            viewModel.UpdateCharts();
         }
     }
 }

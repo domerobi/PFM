@@ -12,13 +12,13 @@ namespace PFM
         }
 
         // The parent viewmodel, which holds the data we need
-        private InventoryViewModel viewModel;
+        private MainViewModel viewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="vm">parent viewmodel</param>
-        public ImportCommand(InventoryViewModel vm)
+        public ImportCommand(MainViewModel vm)
         {
             viewModel = vm;
         }
@@ -30,7 +30,7 @@ namespace PFM
         /// <returns></returns>
         public bool CanExecute(object parameter)
         {
-            return viewModel.CanImportItem();
+            return viewModel.DBInventory.CanImportItem();
         }
 
         /// <summary>
@@ -39,18 +39,11 @@ namespace PFM
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            viewModel.ImportFromExcel();
-            // Insert item to the collection
-            //viewModel.InventoryRecords.Add(viewModel.ItemType.CreateItem());
-
-            // Insert item to the database
-            
-            
-
+            viewModel.DBInventory.ImportFromExcel();
             // Sort the collection, so the new element moves to its right place
-            viewModel.SortInventoryByDate();
-            // Set each input field to default state
-            //viewModel.ItemType.ClearFields();
+            viewModel.DBInventory.SortInventoryByDate();
+            // Update charts
+            viewModel.UpdateCharts();
         }
     }
 }

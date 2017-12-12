@@ -9,7 +9,6 @@ using System.Data;
 using System.Threading;
 using System.Globalization;
 using System.Windows.Markup;
-using System.Linq;
 
 namespace PFM
 {

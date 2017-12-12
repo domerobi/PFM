@@ -1,39 +1,32 @@
 ﻿using System;
 using System.Windows.Input;
+using PFM.Views;
 
 namespace PFM
 {
-    class SearchCommand : ICommand
+    class ModifyCommand : ICommand
     {
-        // The parent viewmodel, which holds the data we need
-        private MainViewModel viewModel;
-
+        private InventoryViewModel viewModel;
+        
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        #region Constructor
-
-        public SearchCommand(MainViewModel vm)
+        public ModifyCommand(InventoryViewModel vm)
         {
             viewModel = vm;
         }
 
-        #endregion
-
         public bool CanExecute(object parameter)
         {
-            return viewModel.DBInventory.SearchItem.CanSearch();
+            return viewModel.CanModifyItem();
         }
 
         public void Execute(object parameter)
         {
-            // read from DB with filters
-            viewModel.DBInventory.ReadFromDB();
-            // update charts
-            viewModel.UpdateCharts();
+            viewModel.OpenModifyItemDialog();
         }
     }
 }
