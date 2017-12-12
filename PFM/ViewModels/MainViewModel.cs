@@ -5,6 +5,7 @@ using System.Windows;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace PFM
 {
@@ -135,7 +136,7 @@ namespace PFM
             // Set up datas for pie chart
             var pieChartQuery =
                 from item in DBInventory.InventoryRecords
-                where item.Type == "Kiadás" && item.Date.Month == DateTime.Now.AddMonths(-1).Month
+                where item.Type == "Kiadás"
                 group item by item.Category into l
                 select new { Category = l.Key, Total = l.Sum(records => records.Sum) };
 
@@ -178,8 +179,16 @@ namespace PFM
 
             expendituresMonthlyQuery = expendituresMonthlyQuery.Reverse();
 
-            ChartValues<int> cvIncomes = new ChartValues<int>();
+            var allItemMonthly =
+                from item in DBInventory.InventoryRecords
+                group item by item.Date.Month into months
+                select new { Month = months.Key, Year = months.Select(records => records.Date.Year) };
+
+            allItemMonthly = allItemMonthly.Reverse();
+
+            ChartValues < int > cvIncomes = new ChartValues<int>();
             ChartValues<int> cvExpenditures = new ChartValues<int>();
+            string[] labels = new string[allItemMonthly.Count()];
             foreach (var line in incomesMonthlyQuery)
             {
                 cvIncomes.Add(line.TotalIncome);
@@ -187,6 +196,12 @@ namespace PFM
             foreach (var line in expendituresMonthlyQuery)
             {
                 cvExpenditures.Add(line.TotalExpenditure);
+            }
+            int i = 0;
+            foreach (var line in allItemMonthly)
+            {
+                labels[i] = DateTimeFormatInfo.CurrentInfo.GetMonthName(line.Month);
+                i++;
             }
             ColumnChart.SeriesCollection = new SeriesCollection
                 {
@@ -201,12 +216,13 @@ namespace PFM
                         Values = cvExpenditures
                     }
                 };
-            ColumnChart.Labels = new[] { DateTime.Now.AddMonths(-5).ToString("yyyy.MMMM"),
-                    DateTime.Now.AddMonths(-4).ToString("yyyy.MMMM"),
-                    DateTime.Now.AddMonths(-3).ToString("yyyy.MMMM"),
-                    DateTime.Now.AddMonths(-2).ToString("yyyy.MMMM"),
-                    DateTime.Now.AddMonths(-1).ToString("yyyy.MMMM"),
-                    DateTime.Now.ToString("yyyy.MMMM")};
+            ColumnChart.Labels = labels;
+                //new[] { DateTime.Now.AddMonths(-5).ToString("yyyy.MMMM"),
+                //    DateTime.Now.AddMonths(-4).ToString("yyyy.MMMM"),
+                //    DateTime.Now.AddMonths(-3).ToString("yyyy.MMMM"),
+                //    DateTime.Now.AddMonths(-2).ToString("yyyy.MMMM"),
+                //    DateTime.Now.AddMonths(-1).ToString("yyyy.MMMM"),
+                //    DateTime.Now.ToString("yyyy.MMMM")};
             ColumnChart.Formatter = value => value.ToString("C0");
         }
 
