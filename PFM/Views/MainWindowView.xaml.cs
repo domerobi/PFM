@@ -15,14 +15,14 @@ namespace PFM
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindowView : Window
     {
         #region Constructor
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainWindow()
+        public MainWindowView()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("hu-HU");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("hu-HU");

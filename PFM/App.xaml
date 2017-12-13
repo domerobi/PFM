@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns:local="clr-namespace:PFM" StartupUri="Views/MainWindow.xaml" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+<Application xmlns:local="clr-namespace:PFM" StartupUri="Views/MainWindowView.xaml" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     
 </Application>

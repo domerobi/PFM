@@ -13,9 +13,9 @@ namespace PFM
     {
         #region Attributes
 
-        public IList<ItemType> Types { get; set; }
+        public IList<ItemTypeModel> Types { get; set; }
         public IList<String> Categories { get; set; }
-        private ItemType selectedItemType;
+        private ItemTypeModel selectedItemType;
         private string selectedItemCategory;
         public string ItemSum { get; set; }
         public string ItemComment { get; set; }
@@ -31,14 +31,14 @@ namespace PFM
         public ItemTypeViewModel()
         {
             // Set the possible values for types and categories
-            Types = new List<ItemType>()
+            Types = new List<ItemTypeModel>()
             {
-                new ItemType()
+                new ItemTypeModel()
                 {
                     Type = "Válassz típust...",
                     Categories = new List<String>(){ "" }
                 },
-                new ItemType()
+                new ItemTypeModel()
                 {
                     Type = "Bevétel",
                     Categories = new List<String>()
@@ -51,7 +51,7 @@ namespace PFM
                         "Egyéb"
                     }
                 },
-                new ItemType()
+                new ItemTypeModel()
                 {
                     Type = "Kiadás",
                     Categories = new List<String>()
@@ -84,7 +84,7 @@ namespace PFM
         /// <summary>
         /// Gets or sets the selected item type
         /// </summary>
-        public ItemType SelectedItemType
+        public ItemTypeModel SelectedItemType
         {
             get
             {

@@ -6,7 +6,7 @@ namespace PFM
     /// <summary>
     /// Type of the item, which stores its category list also
     /// </summary>
-    class ItemType
+    class ItemTypeModel
     {
         public string Type { get; set; }
 

@@ -97,7 +97,7 @@
     <Compile Include="Views\ModifyItemView.xaml.cs">
       <DependentUpon>ModifyItemView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\MainWindow.xaml">
+    <Page Include="Views\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -105,7 +105,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ItemType.cs" />
+    <Compile Include="Models\ItemTypeModel.cs" />
     <Compile Include="Models\Inventory.cs">
       <DependentUpon>InventoryModel.tt</DependentUpon>
     </Compile>
@@ -124,8 +124,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InventoryModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Views\MainWindowView.xaml.cs">
+      <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ModifyItemView.xaml">

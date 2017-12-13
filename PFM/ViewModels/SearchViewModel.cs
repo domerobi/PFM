@@ -7,13 +7,13 @@ namespace PFM
     {
         #region Attributes
 
-        public IList<ItemType> SearchTypes { get; set; }
+        public IList<ItemTypeModel> SearchTypes { get; set; }
         public IList<String> SearchCategories { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string SelectedCategory { get; set; }
 
-        private ItemType selectedType;
+        private ItemTypeModel selectedType;
 
         #endregion
 
@@ -22,14 +22,14 @@ namespace PFM
         public SearchViewModel()
         {
             // Set the possible values for types and categories
-            SearchTypes = new List<ItemType>()
+            SearchTypes = new List<ItemTypeModel>()
             {
-                new ItemType()
+                new ItemTypeModel()
                 {
                     Type = "Összes",
                     Categories = new List<String>(){ "" }
                 },
-                new ItemType()
+                new ItemTypeModel()
                 {
                     Type = "Bevétel",
                     Categories = new List<String>()
@@ -42,7 +42,7 @@ namespace PFM
                         "Egyéb"
                     }
                 },
-                new ItemType()
+                new ItemTypeModel()
                 {
                     Type = "Kiadás",
                     Categories = new List<String>()
@@ -69,7 +69,7 @@ namespace PFM
 
         #region Getters and setters
 
-        public ItemType SelectedType
+        public ItemTypeModel SelectedType
         {
             get
             {
