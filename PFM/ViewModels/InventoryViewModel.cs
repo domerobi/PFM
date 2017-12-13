@@ -263,7 +263,7 @@ namespace PFM
             ModifyItem.SelectedItemType = ModifyItem.Types[indexOfType];
             ModifyItem.Categories = ModifyItem.SelectedItemType.Categories;
             ModifyItem.SelectedItemCategory = SelectedItem.Category;
-            ModifyItem.ItemSum = SelectedItem.Sum.ToString();
+            ModifyItem.ItemSum = SelectedItem.Sum < 0 ? (-1 * SelectedItem.Sum).ToString() : SelectedItem.Sum.ToString();
             ModifyItem.ItemDate = SelectedItem.Date.ToString();
             ModifyItem.ItemComment = SelectedItem.Comment;
             ModView = new ModifyItemView

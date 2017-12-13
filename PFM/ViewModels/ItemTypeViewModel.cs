@@ -127,7 +127,7 @@ namespace PFM
             Item.Id = ItemID;
             Item.Type = SelectedItemType.ToString();
             Item.Category = SelectedItemCategory;
-            Item.Sum = Convert.ToInt32(ItemSum);
+            Item.Sum = Item.Type == "Kiadás" ? Convert.ToInt32(ItemSum) * -1 : Convert.ToInt32(ItemSum);
             Item.Date = Convert.ToDateTime(ItemDate);
             Item.Comment = ItemComment;
             return Item;

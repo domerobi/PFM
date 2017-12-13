@@ -23,6 +23,9 @@ namespace PFM
 
         #endregion
 
+        public PFMDBEntities entities { get; set; }
+        public SqlConnection Con { get; set; }
+
         #region Constructor
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace PFM
         /// </summary>
         public MainViewModel()
         {
+            Con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=PFMDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             // Create new instance of InventoryViewModel
             DBInventory = new InventoryViewModel(this);
 
@@ -133,12 +137,16 @@ namespace PFM
 
         public void SetPieChart()
         {
+            Con.Open();
+            entities = new PFMDBEntities();
+            DateTime firstDayOfLastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-1).Month, 1);
+            DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
             // Set up datas for pie chart
             var pieChartQuery =
-                from item in DBInventory.InventoryRecords
-                where item.Type == "Kiadás"
+                from item in entities.Inventory
+                where item.Type == "Kiadás" && item.Date <= lastDayOfLastMonth && item.Date >= firstDayOfLastMonth
                 group item by item.Category into l
-                select new { Category = l.Key, Total = l.Sum(records => records.Sum) };
+                select new { Category = l.Key, Total = -l.Sum(records => records.Sum) };
 
             SeriesCollection sc = new SeriesCollection();
             foreach (var line in pieChartQuery)
@@ -155,51 +163,60 @@ namespace PFM
 
             }
             CategoryChart.PieSeries = sc;
+            Con.Close();
         }
 
         public void SetColumnChart()
         {
             //Incomes vs. Expenditures
 
-            var incomesMonthlyQuery =
-                from item in DBInventory.InventoryRecords
-                where item.Type == "Bevétel" && item.Date.Month > DateTime.Now.AddMonths(-6).Month
-                group item by item.Date.Month into l
-                //orderby l.Key ascending
-                select new { Month = l.Key, TotalIncome = l.Sum(records => records.Sum) };
+            //var incomesMonthlyQuery =
+            //    from item in DBInventory.InventoryRecords
+            //    where item.Type == "Bevétel" && item.Date.Month > DateTime.Now.AddMonths(-6).Month
+            //    group item by item.Date.Month into l
+            //    //orderby l.Key ascending
+            //    select new { Month = l.Key, TotalIncome = l.Sum(records => records.Sum), Outgo = l.Where(rec => rec.Type == "Kiadás").Sum(r => r.)};
 
-            incomesMonthlyQuery = incomesMonthlyQuery.Reverse();
+            //incomesMonthlyQuery = incomesMonthlyQuery.Reverse();
 
-            var expendituresMonthlyQuery =
-                from item in DBInventory.InventoryRecords
-                where item.Type == "Kiadás" && item.Date.Month > DateTime.Now.AddMonths(-6).Month
-                group item by item.Date.Month into l
-                //orderby l.Key ascending
-                select new { Month = l.Key, TotalExpenditure = l.Sum(records => records.Sum) };
+            //var expendituresMonthlyQuery =
+            //    from item in DBInventory.InventoryRecords
+            //    where item.Type == "Kiadás" && item.Date.Month > DateTime.Now.AddMonths(-6).Month
+            //    group item by item.Date.Month into l
+            //    //orderby l.Key ascending
+            //    select new { Month = l.Key, TotalExpenditure = l.Sum(records => records.Sum) };
 
-            expendituresMonthlyQuery = expendituresMonthlyQuery.Reverse();
+            //expendituresMonthlyQuery = expendituresMonthlyQuery.Reverse();
+            DateTime firstDayOfFirstMonth = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-3).Month, 1);
+            DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
+
+
+            Con.Open();
+            entities = new PFMDBEntities();
 
             var allItemMonthly =
-                from item in DBInventory.InventoryRecords
-                group item by item.Date.Month into months
-                select new { Month = months.Key, Year = months.Select(records => records.Date.Year) };
+                from item in entities.Inventory
+                where item.Date >= firstDayOfFirstMonth && item.Date <= lastDayOfLastMonth orderby item.Date descending
+                group item by item.Date.Month into l
+                select new { Month = l.Key, TotalIncome = l.Where(records => records.Type == "Bevétel").Sum(records => records.Sum), TotalExpenditure = -l.Where(records => records.Type == "Kiadás").Sum(records => records.Sum) };
 
-            allItemMonthly = allItemMonthly.Reverse();
-
+            
             ChartValues < int > cvIncomes = new ChartValues<int>();
             ChartValues<int> cvExpenditures = new ChartValues<int>();
             string[] labels = new string[allItemMonthly.Count()];
-            foreach (var line in incomesMonthlyQuery)
-            {
-                cvIncomes.Add(line.TotalIncome);
-            }
-            foreach (var line in expendituresMonthlyQuery)
-            {
-                cvExpenditures.Add(line.TotalExpenditure);
-            }
+            //foreach (var line in incomesMonthlyQuery)
+            //{
+            //    cvIncomes.Add(line.TotalIncome);
+            //}
+            //foreach (var line in expendituresMonthlyQuery)
+            //{
+            //    cvExpenditures.Add(line.TotalExpenditure);
+            //}
             int i = 0;
             foreach (var line in allItemMonthly)
             {
+                cvIncomes.Add(line.TotalIncome);
+                cvExpenditures.Add(line.TotalExpenditure);
                 labels[i] = DateTimeFormatInfo.CurrentInfo.GetMonthName(line.Month);
                 i++;
             }
@@ -224,21 +241,27 @@ namespace PFM
                 //    DateTime.Now.AddMonths(-1).ToString("yyyy.MMMM"),
                 //    DateTime.Now.ToString("yyyy.MMMM")};
             ColumnChart.Formatter = value => value.ToString("C0");
+            Con.Close();
         }
 
         public void SetLineChart()
         {
-            var negativeSumQuery =
-                from item in DBInventory.InventoryRecords
-                where item.Type == "Kiadás"
-                select new { Id = item.Id, Date = item.Date, Sum = (item.Sum * -1), Type = item.Type, Category = item.Category, Comment = item.Comment };
+            DateTime firstDayOfFirstMonth = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-3).Month, 1);
+            DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
 
-            var positiveSumQuery =
-                from item in DBInventory.InventoryRecords
-                where item.Type == "Bevétel"
+            Con.Open();
+            entities = new PFMDBEntities();
+            var getSumQuery =
+                from item in entities.Inventory
+                where item.Date >= firstDayOfFirstMonth && item.Date <= lastDayOfLastMonth orderby item.Date
                 select new { Id = item.Id, Date = item.Date, Sum = item.Sum, Type = item.Type, Category = item.Category, Comment = item.Comment };
 
-            var resultSumQuery = (negativeSumQuery.Concat(positiveSumQuery)).OrderBy(x => x.Date);
+            //var positiveSumQuery =
+            //    from item in entities.Inventory
+            //    where item.Type == "Bevétel" && item.Date >= firstDayOfFirstMonth && item.Date <= lastDayOfLastMonth
+            //    select new { Id = item.Id, Date = item.Date, Sum = item.Sum, Type = item.Type, Category = item.Category, Comment = item.Comment };
+
+            var resultSumQuery = getSumQuery.ToList();
             int cumSum = 0;
             int actualBalance;
 
@@ -262,6 +285,7 @@ namespace PFM
             LineChart.Labels = stringArray;
             LineChart.Formatter = value => value.ToString("C0");
             LineChart.ActualBalance = actualBalance.ToString("C0");
+            Con.Close();
         }
 
         public void UpdateCharts()
