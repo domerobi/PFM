@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:PFM"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainViewModel}"
-        Title="Személyi pénzügyek" WindowStartupLocation="CenterScreen" Width="1000" Height="600">
+        Title="Személyi pénzügyek" WindowStartupLocation="CenterScreen" Width="1037.437" Height="681.956">
     <Window.Resources>
         <local:TabSizeConverter x:Key="tabSizeConverter" />
         <Style TargetType="{x:Type TabItem}">
@@ -48,14 +48,17 @@
             <TabItem Header="Kimutatások" Margin="0,-2,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0">
                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <lvc:CartesianChart x:Name="InExpColumnChart" Series="{Binding ColumnChart.SeriesCollection, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Left" Grid.Row="0" Grid.Column="1" Padding="5" Margin="5">
+                    <Label Content="Féléves mérleg:" Grid.Column="1" FontWeight="Bold" FontSize="18"/>
+                    <lvc:CartesianChart x:Name="InExpColumnChart" Series="{Binding ColumnChart.SeriesCollection, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Left" Grid.Row="1" Grid.Column="1" Padding="5" Margin="5">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Labels="{Binding ColumnChart.Labels}"></lvc:Axis>
                         </lvc:CartesianChart.AxisX>
@@ -63,7 +66,8 @@
                             <lvc:Axis LabelFormatter="{Binding ColumnChart.Formatter}"></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-                    <lvc:CartesianChart x:Name="BalanceChart" Series="{Binding LineChart.SeriesCollection, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Left" Grid.Row="1" Grid.Column="1" Padding="5" Margin="5">
+                    <Label Content="Egyenleg változása:" Grid.Row="2" Grid.Column="1" FontWeight="Bold" FontSize="18"/>
+                    <lvc:CartesianChart x:Name="BalanceChart" Series="{Binding LineChart.SeriesCollection, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Left" Grid.Row="3" Grid.Column="1" Padding="5" Margin="5">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Labels="{Binding LineChart.Labels}"></lvc:Axis>
                         </lvc:CartesianChart.AxisX>
@@ -71,10 +75,11 @@
                             <lvc:Axis LabelFormatter="{Binding LineChart.Formatter}"></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-                    <lvc:PieChart x:Name="CategoryPieChart" Series="{Binding CategoryChart.PieSeries, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Bottom" Hoverable="True" Grid.Row="1" Grid.Column="0">
+                    <Label Content="Múlt havi kiadások kategóriánként:" Grid.Row="2" FontWeight="Bold" FontSize="18"/>
+                    <lvc:PieChart x:Name="CategoryPieChart" Series="{Binding CategoryChart.PieSeries, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Bottom" Hoverable="True" Grid.Row="3" Grid.Column="0">
                     </lvc:PieChart>
-                    <Label Content="Aktuális egyenleg:" HorizontalAlignment="Stretch" Margin="10,10,0,0" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" FontWeight="Bold" FontSize="18"/>
-                    <Label x:Name="labelActualBalance" Content="{Binding LineChart.ActualBalance, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Margin="50,50,0,0" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" FontSize="48" Foreground="LightGreen"/>
+                    <Label Content="Aktuális egyenleg:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" FontWeight="Bold" FontSize="18"/>
+                    <Label x:Name="labelActualBalance" Content="{Binding LineChart.ActualBalance, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Margin="50,0,0,0" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" FontSize="48" Foreground="LightGreen"/>
                     
                 </Grid>
             </TabItem>
