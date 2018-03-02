@@ -89,7 +89,7 @@ namespace PFM
 
         public void SetColumnChart()
         {
-            DateTime firstDayOfFirstMonth = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-6).Month, 1);
+            DateTime firstDayOfFirstMonth = DateTime.Today.AddDays(-(DateTime.Today.Day - 1)).AddMonths(-6);
             DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
 
 
@@ -134,7 +134,7 @@ namespace PFM
 
         public void SetLineChart()
         {
-            DateTime firstDayOfFirstMonth = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-6).Month, 1);
+            DateTime firstDayOfFirstMonth = DateTime.Today.AddDays(-(DateTime.Today.Day - 1)).AddMonths(-6);
             DateTime today = DateTime.Today;
 
             Con.Open();
