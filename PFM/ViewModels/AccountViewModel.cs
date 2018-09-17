@@ -11,7 +11,7 @@ namespace PFM
     {
         public Accounts CurrentAccount { get; set; }
         public Users CurrentUser { get; set; }
-        public ObservableCollection<Currency_View> Currencies { get; set; }
+        public ObservableCollection<ExchangeRate> Currencies { get; set; }
         
         public Action CloseAction { get; set; }
         public ICommand CreateAccount { get; set; }
@@ -25,15 +25,14 @@ namespace PFM
             CreateAccount = new CreateAccountCommand(this);
             using (var db = new DataModel())
             {
-                var currencies = db.Currency_View.ToList();
-                Currencies = db.Currency_View.Local;
-                Currencies.Add(new Currency_View() { Currency = "--" });
+                var currencies = db.ExchangeRate.ToList();
+                Currencies = db.ExchangeRate.Local;
             }
         }
 
         public bool CanCreate()
         {
-            if (String.IsNullOrEmpty(CurrentAccount.AccountName) || String.IsNullOrEmpty(CurrentAccount.Currency) || CurrentAccount.Currency == "--")
+            if (String.IsNullOrEmpty(CurrentAccount.AccountName) || String.IsNullOrEmpty(CurrentAccount.Currency))
                 return false;
             return true;
         }

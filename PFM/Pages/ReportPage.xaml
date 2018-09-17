@@ -132,7 +132,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem x:Name="tabSearch" 
-                         Header="Adatok kezelése" 
+                         Header="Tranzakciók kezelése" 
                          HorizontalAlignment="Stretch" 
                          VerticalAlignment="Stretch">
                     <Grid Background="#FFE5E5E5">

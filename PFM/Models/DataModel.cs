@@ -19,8 +19,7 @@ namespace PFM
         public virtual DbSet<Inventory> Inventory { get; set; }
         public virtual DbSet<Transactions> Transactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Currency_View> Currency_View { get; set; }
-
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Accounts>()
@@ -88,10 +87,6 @@ namespace PFM
                 .HasMany(e => e.Accounts)
                 .WithRequired(e => e.Users)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Currency_View>()
-                .Property(e => e.Currency)
-                .IsFixedLength();
         }
     }
 }

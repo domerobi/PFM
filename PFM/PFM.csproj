@@ -78,10 +78,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Migrations\201809171001489_InitialCreate.cs" />
+    <Compile Include="Migrations\201809171001489_InitialCreate.Designer.cs">
+      <DependentUpon>201809171001489_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809171058229_DeleteView.cs" />
+    <Compile Include="Migrations\201809171058229_DeleteView.Designer.cs">
+      <DependentUpon>201809171058229_DeleteView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Accounts.cs" />
     <Compile Include="Models\Categories.cs" />
     <Compile Include="Commands\CreateAccountCommand.cs" />
-    <Compile Include="Models\Currency_View.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\ExchangeRate.cs" />
     <Compile Include="Models\ExchangeRateHist.cs" />
@@ -215,6 +223,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201809171001489_InitialCreate.resx">
+      <DependentUpon>201809171001489_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809171058229_DeleteView.resx">
+      <DependentUpon>201809171058229_DeleteView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

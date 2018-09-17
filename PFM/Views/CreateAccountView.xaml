@@ -32,8 +32,16 @@
                  VerticalContentAlignment="Center" 
                  MinWidth="180" 
                  Width="186"
-                 Text="{Binding CurrentAccount.AccountName}"/>
-        <Label Content="Devizanem:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Padding="0" VerticalContentAlignment="Center" Height="18" Grid.Row="1"/>
+                 Text="{Binding CurrentAccount.AccountName, 
+                                UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Devizanem:" 
+               HorizontalAlignment="Left" 
+               VerticalAlignment="Top" 
+               Margin="10,10,0,0" 
+               Padding="0" 
+               VerticalContentAlignment="Center" 
+               Height="18" 
+               Grid.Row="1"/>
         <ComboBox x:Name="Currency" 
                   Grid.Column="1" 
                   Grid.Row="1" 
