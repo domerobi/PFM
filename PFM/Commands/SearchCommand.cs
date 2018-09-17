@@ -6,7 +6,7 @@ namespace PFM
     class SearchCommand : ICommand
     {
         // The parent viewmodel, which holds the data we need
-        private MainViewModel viewModel;
+        private ReportViewModel viewModel;
 
         public event EventHandler CanExecuteChanged
         {
@@ -16,7 +16,7 @@ namespace PFM
 
         #region Constructor
 
-        public SearchCommand(MainViewModel vm)
+        public SearchCommand(ReportViewModel vm)
         {
             viewModel = vm;
         }

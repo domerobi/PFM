@@ -17,7 +17,7 @@ namespace PFM
         #region Attributes
 
         public ObservableCollection<Inventory> InventoryRecords { get;set; }
-        public MainViewModel MainVM { get; set; }
+        public ReportViewModel ReportVM { get; set; }
         public ItemTypeViewModel ItemType { get; set; }
         public SearchViewModel SearchItem { get; set; }
         public ItemTypeViewModel ModifyItem { get; set; }
@@ -30,7 +30,7 @@ namespace PFM
         public ICommand UpdateCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public SqlConnection Con { get; set; }
+        public IDataBase DataBase { get; set; }
         public Inventory SelectedItem { get; set; }
         public ModifyItemView ModView { get; set; }
 
@@ -42,11 +42,11 @@ namespace PFM
         /// <summary>
         /// Constructor
         /// </summary>
-        public InventoryViewModel(MainViewModel mainVM)
+        public InventoryViewModel(ReportViewModel reportVM)
         {
             // Set connection to the database
-            Con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=PFMDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            MainVM = mainVM;
+            DataBase = new CloudDatabase();
+            ReportVM = reportVM;
             ItemType = new ItemTypeViewModel();
             SearchItem = new SearchViewModel();
             
@@ -54,13 +54,13 @@ namespace PFM
             ReadFromDB();
 
             // set command
-            AddCommand = new AddItemCommand(MainVM);
-            ImportCommand = new ImportCommand(MainVM);
-            SearchCommand = new SearchCommand(MainVM);
-            ResetCommand = new ResetCommand(MainVM);
-            DeleteCommand = new DeleteCommand(MainVM);
+            AddCommand = new AddItemCommand(ReportVM);
+            ImportCommand = new ImportCommand(ReportVM);
+            SearchCommand = new SearchCommand(ReportVM);
+            ResetCommand = new ResetCommand(ReportVM);
+            DeleteCommand = new DeleteCommand(ReportVM);
             ModifyCommand = new ModifyCommand(this);
-            UpdateCommand = new UpdateCommand(MainVM);
+            UpdateCommand = new UpdateCommand(ReportVM);
             CancelCommand = new CancelCommand(this);
         }
 
@@ -107,40 +107,42 @@ namespace PFM
             // create a new collection
             this.InventoryRecords = new ObservableCollection<Inventory>();
             // connect to the database
-            Con.Open();
-            PFMDBEntities dataEntities = new PFMDBEntities();
-            // get the filter values from search fields
-            string type = SearchItem.SelectedType == SearchItem.SearchTypes[0] ? "" : SearchItem.SelectedType.ToString();
-            string category = SearchItem.SelectedCategory == SearchItem.SearchCategories[0] ? "" : SearchItem.SelectedCategory;
-            DateTime startDate = Convert.ToDateTime(SearchItem.StartDate);
-            DateTime endDate = Convert.ToDateTime(SearchItem.EndDate);
-            // select all items by date
-            var query =
-                from item in dataEntities.Inventory
-                where item.Date >= startDate
-                    && item.Date <= endDate
-                    && item.Type.Contains(type)
-                    && item.Category.Contains(category)
-                orderby item.Date, item.Type descending
-                select new { item.Id, item.Date, item.Type, item.Category, item.Sum, item.Comment };
-            // Store the records in a collection
-            foreach (var record in query)
+            //DataBase.Open();
+            using (DataModel dataEntities = new DataModel())
             {
-                this.InventoryRecords.Add(new Inventory
+                // get the filter values from search fields
+                string type = SearchItem.SelectedType == SearchItem.SearchTypes[0] ? "" : SearchItem.SelectedType.ToString();
+                string category = SearchItem.SelectedCategory == SearchItem.SearchCategories[0] ? "" : SearchItem.SelectedCategory;
+                DateTime startDate = Convert.ToDateTime(SearchItem.StartDate);
+                DateTime endDate = Convert.ToDateTime(SearchItem.EndDate);
+                // select all items by date
+                var query =
+                    from item in dataEntities.Inventory
+                    where item.Date >= startDate
+                        && item.Date <= endDate
+                        && item.Type.Contains(type)
+                        && item.Category.Contains(category)
+                    orderby item.Date, item.Type descending
+                    select new { item.Id, item.Date, item.Type, item.Category, item.Sum, item.Comment };
+                // Store the records in a collection
+                foreach (var record in query)
                 {
-                    Id = record.Id,
-                    Type = record.Type,
-                    Category = record.Category,
-                    Sum = record.Sum,
-                    Date = record.Date,
-                    Comment = record.Comment
-                });
+                    this.InventoryRecords.Add(new Inventory
+                    {
+                        Id = record.Id,
+                        Type = record.Type,
+                        Category = record.Category,
+                        Sum = record.Sum,
+                        Date = record.Date,
+                        Comment = record.Comment
+                    });
+                }
             }
 
             SortInventoryByDate();
 
 
-            Con.Close();
+            //DataBase.Close();
         }
 
         /// <summary>
@@ -149,10 +151,10 @@ namespace PFM
         /// <param name="Item">Item to add</param>
         public void AddToDB(Inventory Item)
         {
-            Con.Open();
+            DataBase.Open();
             
             // build insert command
-            SqlCommand cmd = Con.CreateCommand();
+            SqlCommand cmd = DataBase.Connection.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "INSERT INTO dbo.Inventory (Type, Category, Sum, Date, Comment)" +
                               "VALUES(@type, @category, @sum, @date, @comment)";
@@ -167,15 +169,15 @@ namespace PFM
             cmd.ExecuteNonQuery();
 
             // close sql connection
-            Con.Close();
+            DataBase.Close();
         }
 
         public void DeleteFromDB(Inventory Item)
         {
-            Con.Open();
+            DataBase.Open();
 
             // build insert command
-            SqlCommand cmd = Con.CreateCommand();
+            SqlCommand cmd = DataBase.Connection.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "DELETE FROM dbo.Inventory WHERE " +
                               //"Type=@type AND Category=@category AND Sum=@sum AND Date=@date AND Comment=@comment";
@@ -191,20 +193,20 @@ namespace PFM
             cmd.ExecuteNonQuery();
 
             // close sql connection
-            Con.Close();
+            DataBase.Close();
         }
 
         public void GetNextItemID()
         {
-            Con.Open();
+            DataBase.Open();
 
             // build command for getting the next available id from database
-            SqlCommand cmd = Con.CreateCommand();
+            SqlCommand cmd = DataBase.Connection.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "SELECT IDENT_CURRENT ('dbo.Inventory')";
             this.ItemType.ItemID = Convert.ToInt32(cmd.ExecuteScalar()) + 1;
 
-            Con.Close();
+            DataBase.Close();
             
         }
 
@@ -275,9 +277,9 @@ namespace PFM
 
         public void UpdateItem(Inventory Item)
         {
-            Con.Open();
+            DataBase.Open();
 
-            SqlCommand cmd = Con.CreateCommand();
+            SqlCommand cmd = DataBase.Connection.CreateCommand();
             cmd.CommandText = "UPDATE dbo.Inventory SET " +
                               "Type=@type, Category=@category, Sum=@sum, Date=@date, Comment=@comment " +
                               "WHERE Id=@id"  ;
@@ -289,7 +291,7 @@ namespace PFM
             cmd.Parameters.AddWithValue("@id", Item.Id);
             cmd.ExecuteNonQuery();
 
-            Con.Close();
+            DataBase.Close();
         }
 
         /// <summary>

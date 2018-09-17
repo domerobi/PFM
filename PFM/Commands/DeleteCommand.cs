@@ -6,7 +6,7 @@ namespace PFM
 {
     class DeleteCommand : ICommand
     {
-        private MainViewModel viewModel;
+        private ReportViewModel viewModel;
 
         public event EventHandler CanExecuteChanged
         {
@@ -14,7 +14,7 @@ namespace PFM
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public DeleteCommand(MainViewModel vm)
+        public DeleteCommand(ReportViewModel vm)
         {
             viewModel = vm;
         }

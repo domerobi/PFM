@@ -7,226 +7,74 @@
         xmlns:local="clr-namespace:PFM"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainViewModel}"
-        Title="Személyi pénzügyek" WindowStartupLocation="CenterScreen" Width="1037.437" Height="681.956">
-    <Window.Resources>
-        <local:TabSizeConverter x:Key="tabSizeConverter" />
-        <Style TargetType="{x:Type TabItem}">
-            <Setter Property="Width">
-                <Setter.Value>
-                    <MultiBinding Converter="{StaticResource tabSizeConverter}">
-                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
-            AncestorType={x:Type TabControl}}" />
-                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor,
-            AncestorType={x:Type TabControl}}" Path="ActualWidth" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="GroupBox">
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
-        <Style x:Key="RightAligned">
-            <Setter Property="Control.HorizontalAlignment" Value="Right" />
-        </Style>
-        
-        <Style TargetType="Border">
-            <Setter Property="Padding" Value="3,3,3,3" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
-            <Setter Property="Padding" Value="5"/>
-        </Style>
-    </Window.Resources>
-    <Grid x:Name="mainGrid" Margin="0,0,0,0">
+        Title="Személyi pénzügyek" WindowStartupLocation="CenterScreen" Width="1533.687" Height="853.206">
+
+    <Grid x:Name="mainGrid" 
+          Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
+            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,-0.667,-0.333">
-            <TabItem Header="Kimutatások" Margin="0,-2,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0">
-                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid Grid.Column="0"
+              Background="CornflowerBlue">
+            <Border BorderBrush="Gray"
+                    BorderThickness="0 0 5 0"
+                    Margin="0"
+                    Padding="0">
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Féléves mérleg:" Grid.Column="1" FontWeight="Bold" FontSize="18"/>
-                    <lvc:CartesianChart x:Name="InExpColumnChart" Series="{Binding ColumnChart.SeriesCollection, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Left" Grid.Row="1" Grid.Column="1" Padding="5" Margin="5">
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding ColumnChart.Labels}"></lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis LabelFormatter="{Binding ColumnChart.Formatter}"></lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
-                    <Label Content="Egyenleg változása:" Grid.Row="2" Grid.Column="1" FontWeight="Bold" FontSize="18"/>
-                    <lvc:CartesianChart x:Name="BalanceChart" Series="{Binding LineChart.SeriesCollection, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Left" Grid.Row="3" Grid.Column="1" Padding="5" Margin="5">
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding LineChart.Labels}"></lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis LabelFormatter="{Binding LineChart.Formatter}"></lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
-                    <Label Content="Múlt havi kiadások kategóriánként:" Grid.Row="2" FontWeight="Bold" FontSize="18"/>
-                    <lvc:PieChart x:Name="CategoryPieChart" Series="{Binding CategoryChart.PieSeries, UpdateSourceTrigger=PropertyChanged}" LegendLocation="Bottom" Hoverable="True" Grid.Row="3" Grid.Column="0">
-                    </lvc:PieChart>
-                    <Label Content="Aktuális egyenleg:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Grid.Column="0" FontWeight="Bold" FontSize="18"/>
-                    <Label x:Name="labelActualBalance" Content="{Binding LineChart.ActualBalance, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Margin="50,0,0,0" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" FontSize="48" Foreground="LightGreen"/>
-                    
+                    <StackPanel Margin="0"
+                        Grid.Row="0">
+                        <Button Height="50" 
+                            Content="Kimutatások"
+                            FontSize="16"
+                            BorderBrush="Black"
+                            BorderThickness="0 2 0 2"
+                            Command="{Binding MenuCommand}"
+                            CommandParameter="Reports"
+                            />
+
+                        
+                        <!--<Button Height="50" 
+                            Content="Beállítások"
+                            FontSize="16"
+                            BorderBrush="Black"
+                            BorderThickness="0 0 0 2"
+                            Command="{Binding MenuCommand}"
+                            CommandParameter="Properties" />-->
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2"
+                            VerticalAlignment="Bottom">
+                        <Button Height="50" 
+                            Content="Kijelentkezés"
+                            FontSize="16"
+                            BorderBrush="Black"
+                            BorderThickness="0 2 0 0"
+                            Click="Logout" />
+                    </StackPanel>
                 </Grid>
-            </TabItem>
-            <!--<TabItem Header="Új adat rögzítése" Margin="0,-2,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Grid Background="#FFE5E5E5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    
-                </Grid>
-            </TabItem>-->
-            <TabItem x:Name="tabSearch" Header="Adatok kezelése" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,-2,0,0">
-                <Grid Background="#FFE5E5E5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    
-                    <DataGrid x:Name="dgInventory" ItemsSource="{Binding DBInventory.InventoryRecords}" SelectedItem="{Binding DBInventory.SelectedItem, Mode=TwoWay}"
-                              Margin="0,10,0,0" Grid.RowSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                              AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Width="1*" Binding="{Binding Date, StringFormat=\{0:yyyy.MM.dd\}}" Header="Dátum" />
-                            <DataGridTextColumn Width="1*" Binding="{Binding Type}" Header="Típus"/>
-                            <DataGridTextColumn Width="1*" Binding="{Binding Category}" Header="Kategória"/>
-                            <DataGridTextColumn Width="1*" Binding="{Binding Sum, StringFormat={}{0:C0}}" Header="Összeg" ElementStyle="{StaticResource RightAligned}"/>
-                            <DataGridTextColumn Width="4*" Binding="{Binding Comment}" Header="Megjegyzés"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <GroupBox Header="Keresés" Grid.Column="1" Margin="10,10,0,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Border>
-                                <Label x:Name="startDateLabel" Content="Kezdő dátum:" />
-                            </Border>
-                            <Border Grid.Column="1">
-                                <DatePicker x:Name="startDatePicker" Width="140" SelectedDate="{Binding DBInventory.SearchItem.StartDate}" />    
-                            </Border>
-                            <Border Grid.Row="1">
-                                <Label x:Name="endDateLabel" Content="Végső dátum:" />
-                            </Border>
-                            <Border Grid.Row="1" Grid.Column="1">
-                                <DatePicker x:Name="endDatePicker" Width="140" SelectedDate="{Binding DBInventory.SearchItem.EndDate}" />
-                            </Border>
-                            <Border Grid.Row="2">
-                                <Label x:Name="typeCBoxLabel" Content="Típus:" />    
-                            </Border>
-                            <Border Grid.Row="2" Grid.Column="1">
-                                <ComboBox x:Name="typeCBox" Width="140" ItemsSource="{Binding DBInventory.SearchItem.SearchTypes}" SelectedItem="{Binding DBInventory.SearchItem.SelectedType}" />
-                            </Border>
-                            <Border Grid.Row="3">
-                                <Label x:Name="categoryCBoxLabel" Content="Kategória:" />    
-                            </Border>
-                            <Border Grid.Row="3" Grid.Column="1">
-                                <ComboBox x:Name="categoryCBox" Width="140" ItemsSource="{Binding DBInventory.SearchItem.SearchCategories}" SelectedItem="{Binding DBInventory.SearchItem.SelectedCategory}" />
-                            </Border>
-                            <Border Grid.Row="4" Grid.ColumnSpan="2">
-                                <Button x:Name="searchButton" Content="Keresés" Command="{Binding DBInventory.SearchCommand}" />
-                            </Border>
-                            <Border Grid.Row="5" Grid.ColumnSpan="2">
-                                <Button x:Name="resetButton" Content="Visszaállítás" Command="{Binding DBInventory.ResetCommand}" />
-                            </Border>
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Header="Új tétel hozzáadása" Grid.Column="1" Grid.Row="1" Margin="10,10,0,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Border>
-                                <Label x:Name="labelType" Content="Adat típusa:" />    
-                            </Border>
-                            <Border Grid.Column="1" Grid.ColumnSpan="2">
-                                <ComboBox x:Name="ddType" Width="140" ItemsSource="{Binding DBInventory.ItemType.Types}" SelectedItem="{Binding DBInventory.ItemType.SelectedItemType}"/>    
-                            </Border>
-                            <Border Grid.Row="1">
-                                <Label x:Name="labelCategory" Content="Kategória:" />    
-                            </Border>
-                            <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
-                                <ComboBox x:Name="ddCategory" Width="140" ItemsSource="{Binding DBInventory.ItemType.Categories}" SelectedItem="{Binding DBInventory.ItemType.SelectedItemCategory}"/>    
-                            </Border>
-                            <Border Grid.Row="2">
-                                <Label x:Name="labelSum" Content="Összeg:" />    
-                            </Border>
-                            <Border Grid.Row="2" Grid.Column="1" Padding="3,3,0,3">
-                                <TextBox x:Name="tbSum" Width="120" HorizontalContentAlignment="Right" Text="{Binding DBInventory.ItemType.ItemSum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </Border>
-                            <Border Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Padding="0,3,0,0">
-                                <Label Content="Ft" />    
-                            </Border>
-                            <Border Grid.Row="3">
-                                <Label x:Name="labelDate" Content="Dátum:" />    
-                            </Border>
-                            <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-                                <DatePicker x:Name="dpDate" Width="140" FirstDayOfWeek="Monday" Text="{Binding DBInventory.ItemType.ItemDate, Mode=TwoWay}" />
-                            </Border>
-                            <Border Grid.Row="4">
-                                <Label x:Name="labelComment" Content="Megjegyzés:" />    
-                            </Border>
-                            <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
-                                <TextBox x:Name="tbComment" Width="140" Text="{Binding DBInventory.ItemType.ItemComment, Mode=TwoWay}" />
-                            </Border>
-                            <Border Grid.Row="5" Grid.ColumnSpan="3">
-                                <Button x:Name="btnSubmit" Content="Adatok rögzítése" Command="{Binding DBInventory.AddCommand}" />
-                            </Border>
-                            
-                            
-                        </Grid>
-                    </GroupBox>
-                    <Button x:Name="btnModify" Content="Tétel módosítása..." Grid.Row="2" Grid.Column="1" Margin="20,10,10,0" Command="{Binding DBInventory.ModifyCommand}"/>
-                    <Button x:Name="btnDelete" Content="Tétel törlése" Grid.Row="3" Grid.Column="1" Margin="20,10,10,0" Command="{Binding DBInventory.DeleteCommand}"/>
-                    <Button x:Name="btnImport" Content="Import..." Grid.Row="4" Grid.Column="1" Margin="20,10,10,10" Command="{Binding DBInventory.ImportCommand}"/>
-                </Grid>
-            </TabItem>
-            <!--<TabItem Header="TabItem" Margin="0,-2,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>-->
-        </TabControl>
+            </Border>
+
+        </Grid>
+        <Grid Grid.Column="1">
+            <Border Margin="0"
+                    Padding="0">
+                <Frame x:Name="MainFrame" 
+                       Content="{Binding ActualPage, Converter={local:PageConverter}}"
+                       Margin="0"
+                       Padding="0"
+                       ContentRendered="MainFrame_ContentRendered"/>
+            </Border>
+        </Grid>
+
 
     </Grid>
 

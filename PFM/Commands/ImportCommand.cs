@@ -12,13 +12,13 @@ namespace PFM
         }
 
         // The parent viewmodel, which holds the data we need
-        private MainViewModel viewModel;
+        private ReportViewModel viewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="vm">parent viewmodel</param>
-        public ImportCommand(MainViewModel vm)
+        public ImportCommand(ReportViewModel vm)
         {
             viewModel = vm;
         }

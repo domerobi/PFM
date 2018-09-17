@@ -5,11 +5,11 @@ namespace PFM
 {
     class UpdateCommand : ICommand
     {
-        private MainViewModel viewModel;
+        private ReportViewModel viewModel;
 
         public event EventHandler CanExecuteChanged;
 
-        public UpdateCommand(MainViewModel vm)
+        public UpdateCommand(ReportViewModel vm)
         {
             viewModel = vm;
         }

@@ -22,17 +22,23 @@ namespace PFM
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainWindowView()
+        public MainWindowView(int userid)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("hu-HU");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("hu-HU");
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(
-                        XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
             InitializeComponent();
-            DataContext = new MainViewModel();
+            DataContext = new MainViewModel(userid);
         }
 
         #endregion
+
+        private void MainFrame_ContentRendered(object sender, EventArgs e)
+        {
+            MainFrame.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
+        }
+
+        private void Logout(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 
     #region Converter

@@ -5,7 +5,7 @@ namespace PFM
 {
     class ResetCommand : ICommand
     {
-        private MainViewModel viewModel;
+        private ReportViewModel viewModel;
 
         public event EventHandler CanExecuteChanged
         {
@@ -13,7 +13,7 @@ namespace PFM
             remove { CommandManager.RequerySuggested += value; }
         }
 
-        public ResetCommand(MainViewModel vm)
+        public ResetCommand(ReportViewModel vm)
         {
             viewModel = vm;
         }

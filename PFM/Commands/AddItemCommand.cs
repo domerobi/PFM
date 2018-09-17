@@ -6,7 +6,7 @@ namespace PFM
     class AddItemCommand : ICommand
     {
         // The parent viewmodel, which holds the data we need
-        private MainViewModel viewModel;
+        private ReportViewModel viewModel;
 
         public event EventHandler CanExecuteChanged
         {
@@ -19,7 +19,7 @@ namespace PFM
         /// Constructor
         /// </summary>
         /// <param name="vm">parent viewmodel</param>
-        public AddItemCommand(MainViewModel vm)
+        public AddItemCommand(ReportViewModel vm)
         {
             viewModel = vm;
         }
