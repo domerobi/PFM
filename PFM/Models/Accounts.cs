@@ -1,4 +1,4 @@
-namespace PFM
+namespace PFM.Models
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,6 @@ namespace PFM
         public Accounts()
         {
             Transactions = new HashSet<Transactions>();
-            Transactions1 = new HashSet<Transactions>();
         }
 
         [Key]
@@ -22,7 +21,8 @@ namespace PFM
 
         public int Outdated { get; set; }
 
-        public int Balance { get; set; }
+        [Column(TypeName = "money")]
+        public decimal StartBalance { get; set; }
 
         [Required]
         [StringLength(3)]
@@ -36,12 +36,11 @@ namespace PFM
 
         public DateTime CreateDate { get; set; }
 
+        public bool Default { get; set; }
+
         public virtual Users Users { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transactions> Transactions { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transactions> Transactions1 { get; set; }
     }
 }

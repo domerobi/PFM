@@ -2,13 +2,19 @@
 using System.Windows.Input;
 using System.Linq;
 using System;
+using System.Collections.ObjectModel;
+using System.Data.Entity;
+using PFM.Models;
+using PFM.Pages;
 
-namespace PFM
+namespace PFM.ViewModels
 {
     class LoginViewModel : StartUpViewModel
     {
         public ICommand LoginCommand { get; set; }
         public ICommand RegisterCommand { get; set; }
+
+        public ObservableCollection<Users> Users { get; set; }
 
         public Users CurrentUser { get; set; }
         //public string UserName { get; set; }
@@ -17,17 +23,24 @@ namespace PFM
         
         public IDataBase DataBase { get; set; }
 
-        public LoginViewModel(LoginPage loginPage)
+        public LoginViewModel()
         {
-            //DataBase = new CloudDatabase();
-            CurrentUser = new Users();
-            CurrentUser.Username = loginPage.UserNameTB.Text;
-            mPage = loginPage;
-            this.loginPage = loginPage;
-            ActualPage = Pages.Login;
+            ActualPage = PageList.Login;
             LoginCommand = new LoginCommand(this);
             RegisterCommand = new NavigateCommand(this);
-            
+            using (var db = new DataModel())
+            {
+                db.Users.Load();
+                var cat = db.CategoryDirections.ToList();
+                foreach (var catdir in cat)
+                {
+                    Console.WriteLine(catdir.DirectionName + ":");
+                    foreach (var category in catdir.Categories)
+                    {
+                        Console.WriteLine("\t" + category.CategoryName);
+                    }
+                }
+            }
         }
 
         public string GetPassword()
@@ -61,6 +74,16 @@ namespace PFM
                 }
                 return false;
             }
+        }
+
+        public void SetLoginPage(LoginPage loginPage)
+        {
+            this.loginPage = loginPage;
+            mPage = loginPage;
+            CurrentUser = new Users
+            {
+                Username = loginPage.UserNameTB.Text
+            };
         }
         
     }

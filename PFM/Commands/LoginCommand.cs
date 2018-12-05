@@ -1,6 +1,9 @@
 ﻿using System;
-using System.Windows;
+
+using System.Windows.Forms;
 using System.Windows.Input;
+using PFM.ViewModels;
+using PFM.Views;
 
 namespace PFM
 {
@@ -9,12 +12,10 @@ namespace PFM
         public event EventHandler CanExecuteChanged;
         private LoginViewModel mLoginViewModel;
         private MainWindowView mainWindowView;
-        private LoginPage loginPage;
-
+        
         public LoginCommand(LoginViewModel wvm)
         {
             mLoginViewModel = wvm;
-            loginPage = (LoginPage)mLoginViewModel.mPage;
         }
 
         public bool CanExecute(object parameter)
@@ -34,22 +35,27 @@ namespace PFM
                     if (mLoginViewModel.CurrentUser.Accounts.Count == 0)
                     {
                         MessageBox.Show("Jelenleg nincs számlája, kérem hozzon létre egyet!", "Hiányzó számla");
-                        CreateAccountView createAccountView = new CreateAccountView(mLoginViewModel.CurrentUser);
-                        createAccountView.Show();
-
+                        var newAccount = new AccountViewModel(mLoginViewModel.CurrentUser);
+                        if (newAccount.CreateInteractive() == false)
+                        {
+                            return;
+                        }
+                        /*
+                        CreateAccountView createAccountView = new CreateAccountView
+                        {
+                            DataContext = new AccountViewModel(null, mLoginViewModel.CurrentUser)
+                        };
+                        if (createAccountView.ShowDialog() == false)
+                            return;
+                            */
                     }
 
                     mainWindowView = new MainWindowView(mLoginViewModel.CurrentUser.UserID);
-                    mainWindowView.DataContext = new MainViewModel(mLoginViewModel.CurrentUser.UserID);
-                    mainWindowView.Show();
-                        
-                    
-                    
-                }
+                    mainWindowView.Show();}
                 else
                 {
                     MessageBox.Show("Rossz felhasználónév vagy jelszó!");
-                    loginPage.clearPassword();
+                    mLoginViewModel.loginPage.clearPassword();
                 }
             }
         }

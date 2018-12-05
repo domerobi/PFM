@@ -1,13 +1,16 @@
-﻿<Page x:Class="PFM.LoginPage"
+﻿<Page x:Class="PFM.Pages.LoginPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PFM"
+      xmlns:viewmodel="clr-namespace:PFM.ViewModels"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="500"
       Title="LoginPage">
-    
+    <Page.Resources>
+        <viewmodel:LoginViewModel x:Key="viewModel" />
+    </Page.Resources>
     <Grid>
         
         <!-- Panel for login -->
@@ -16,7 +19,7 @@
             <Border Background="White"
                     CornerRadius="10"
                     Padding="25">
-                <StackPanel>
+                <StackPanel DataContext="{StaticResource viewModel}">
 
                     <!-- Header of the page -->
                     <StackPanel Orientation="Horizontal"

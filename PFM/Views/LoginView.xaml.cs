@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PFM
+
+namespace PFM.Views
 {
     /// <summary>
     /// Interaction logic for LoginView.xaml
@@ -13,7 +14,7 @@ namespace PFM
         public LoginView()
         {
             InitializeComponent();
-            DataContext = new WindowViewModel();
+            DataContext = FindResource("viewModel") as ViewModels.WindowViewModel;
         }
 
         private void LoginFrame_ContentRendered(object sender, EventArgs e)
@@ -69,6 +70,7 @@ namespace PFM
         }
 
         static void PasswordChanged(object sender, RoutedEventArgs e)
+
         {
             var pb = sender as PasswordBox;
             if (pb == null)

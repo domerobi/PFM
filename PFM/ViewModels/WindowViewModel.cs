@@ -1,10 +1,10 @@
 ﻿using System.Windows.Input;
 
-namespace PFM
+namespace PFM.ViewModels
 {
     class WindowViewModel : BaseViewModel
     {
-        public Pages ActualPage { get; set; } = Pages.Login;
+        public PageList ActualPage { get; set; } = PageList.Login;
         public ICommand RegisterCommand { get; set; }
         
         public WindowViewModel()
@@ -13,7 +13,7 @@ namespace PFM
         }
     }
 
-    public enum Pages
+    public enum PageList
     {
         /// <summary>
         /// Login page
@@ -22,6 +22,7 @@ namespace PFM
         SignUp = 1,
         Reports = 2,
         NewAccount = 3,
-        Properties = 4
+        Properties = 4,
+        Transactions = 5
     }
 }

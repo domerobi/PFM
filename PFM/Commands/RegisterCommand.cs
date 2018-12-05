@@ -2,6 +2,9 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using PFM.ViewModels;
+using PFM.Models;
+using PFM.Pages;
 
 namespace PFM
 {
@@ -28,13 +31,16 @@ namespace PFM
                 {
                     if(mSignUpViewModel.GetPassword() == mSignUpViewModel.GetChkPassword())
                     {
-                        Users user = new Users();
-                        user.Username = mSignUpViewModel.UserName;
-                        user.FirstName = mSignUpViewModel.FirstName;
-                        user.LastName = mSignUpViewModel.LastName;
-                        user.Email = mSignUpViewModel.Email;
-                        user.Password = SHA.GenerateSHA256String(mSignUpViewModel.GetPassword());
-                        if(mSignUpViewModel.Register(user) > 0)
+                        Users user = new Users
+                        {
+                            Username = mSignUpViewModel.UserName,
+                            FirstName = mSignUpViewModel.FirstName,
+                            LastName = mSignUpViewModel.LastName,
+                            Email = mSignUpViewModel.Email,
+                            Password = SHA.GenerateSHA256String(mSignUpViewModel.GetPassword()),
+                            CreateDate = DateTime.Now
+                        };
+                        if (mSignUpViewModel.Register(user) > 0)
                         {
                             MessageBox.Show("Sikeres regisztráció!");
                             mSignUpViewModel.mPage.NavigationService.Navigate(new LoginPage(user.Username));

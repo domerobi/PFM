@@ -1,6 +1,6 @@
-﻿using System.Data.SqlClient;
+﻿using PFM.Models;
 
-namespace PFM
+namespace PFM.ViewModels
 {
     class PropertiesViewModel : BaseViewModel
     {
@@ -8,12 +8,9 @@ namespace PFM
         public string FirstName { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-
-        public IDataBase DataBase { get; set; }
-
+        
         public PropertiesViewModel()
         {
-            DataBase = new CloudDatabase();
             DataModel dataModel = new DataModel();
              
         }

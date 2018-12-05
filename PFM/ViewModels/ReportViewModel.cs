@@ -1,181 +1,190 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
-using System.Data.SqlClient;
+using System.Data.Entity;
 using System.Windows;
 using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using PFM.Models;
+using System.Collections.ObjectModel;
 
-namespace PFM
+namespace PFM.ViewModels
 {
-    class ReportViewModel
+    class ReportViewModel : BaseViewModel
     {
         #region ViewModels
 
-        public CategoryChartViewModel CategoryChart { get; set; }
-        public ChartesianChartViewModel ColumnChart { get; set; }
-        public ChartesianChartViewModel LineChart { get; set; }
-        public InventoryViewModel DBInventory { get; set; }
+        public ObservableCollection<IChartModel> ReportViewModels { get; set; }
+        public IChartModel CurrentViewModel { get; set; }
+        public MainViewModel MainViewModel { get; set; }
+
+        public CategoryChartViewModel ExpendCategories { get; set; }
+        public CategoryChartViewModel IncomeCategories { get; set; }
+        public ChartesianChartViewModel StackedSixMonths { get; set; }
+        public BalanceViewModel BalanceViewModel { get; set; }
 
         #endregion
 
-        public DataModel entities { get; set; }
-        public IDataBase DataBase { get; set; }
-
-        public ReportViewModel()
+        public ReportViewModel(MainViewModel mainViewModel)
         {
-            //DataBase = new CloudDatabase();
+            Name = "Kimutatások";
 
-            // Create new instance of InventoryViewModel
-            DBInventory = new InventoryViewModel(this);
+            MainViewModel = mainViewModel;
 
-            // Create PieChart
-            CategoryChart = new CategoryChartViewModel();
-            SetPieChart();
+            ExpendCategories = new CategoryChartViewModel();
+            ExpendCategories.Name = "Kiadások";
+            ExpendCategories.Title = ExpendCategories.Name;
 
-            // Create a ColumnChart
-            ColumnChart = new ChartesianChartViewModel();
-            //SetColumnChart();
+            IncomeCategories = new CategoryChartViewModel();
+            IncomeCategories.Name = "Bevételek";
+            IncomeCategories.Title = IncomeCategories.Name;
 
-            // Create LineChart 
-            LineChart = new ChartesianChartViewModel();
-            SetLineChart();
-            
+            StackedSixMonths = new ChartesianChartViewModel();
+            StackedSixMonths.Name = "Féléves kiadások";
+            StackedSixMonths.Title = StackedSixMonths.Name;
+            StackedSixMonths.Formatter = value => value.ToString("C0");
+            StackedSixMonths.XTitle = "Hónapok";
+            StackedSixMonths.YTitle = "Összeg";
+
+            BalanceViewModel = new BalanceViewModel(MainViewModel);
+
+            // Initialize all of the report categories to be displayed
+            ReportViewModels = new ObservableCollection<IChartModel>
+            {
+                ExpendCategories,
+                IncomeCategories,
+                StackedSixMonths,
+                BalanceViewModel
+            };
+            CurrentViewModel = ReportViewModels[0];
+
+            SetCategoryPieCharts();
+            SetStackedColumnChart();
+            BalanceViewModel.SetLineChart();
         }
 
-        #region Methods
-
-        public void SetPieChart()
+        public void SetCategoryPieCharts()
         {
-            //DataBase.Open();
-            using (entities = new DataModel())
+            using (var db = new DataModel())
             {
-                DateTime firstDayOfLastMonth = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-1).Month, 1);
-                DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
-                // Set up datas for pie chart
-                var pieChartQuery =
-                    from item in entities.Inventory
-                    where item.Type == "Kiadás" && item.Date <= lastDayOfLastMonth && item.Date >= firstDayOfLastMonth
-                    group item by item.Category into l
-                    select new { Category = l.Key, Total = -l.Sum(records => records.Sum) };
+                // let's clear the series first
+                IncomeCategories.Series = new List<Series>();
+                ExpendCategories.Series = new List<Series>();
+                IncomeCategories.PieSeries = new SeriesCollection();
+                ExpendCategories.PieSeries = new SeriesCollection();
 
-                SeriesCollection sc = new SeriesCollection();
-                foreach (var line in pieChartQuery)
+                // Set the time interval for the chart
+                DateTime lastMonth = DateTime.Today.AddMonths(-1);
+                DateTime firstDayOfLastMonth = new DateTime(lastMonth.Year, lastMonth.Month, 1);
+                DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
+
+                // Get the sum of all categories of the last month
+                var groupbyCategories = db.Transactions
+                                            .Include(t => t.Categories.CategoryDirections)
+                                            .Where(t => t.TransactionDate >= firstDayOfLastMonth &&
+                                                        t.TransactionDate <= lastDayOfLastMonth &&
+                                                        t.AccountID == MainViewModel.CurrentAccount.AccountID)
+                                            .GroupBy(t => t.Categories.CategoryName)
+                                            .Select(t => new
+                                            {
+                                                Category = t.Key,
+                                                CategoryDirection = t.FirstOrDefault().Categories.CategoryDirections.DirectionName,
+                                                Amount = t.Sum(c => c.Amount)
+                                            }).ToList();
+
+
+                foreach (var cat in groupbyCategories)
                 {
                     PieSeries ps = new PieSeries
                     {
-                        Title = line.Category,
-                        Values = new ChartValues<int> { line.Total },
+                        Title = cat.Category,
+                        Values = new ChartValues<int> { (int)cat.Amount },
                         DataLabels = true,
                         LabelPoint = chartPoint =>
                                             string.Format("{0:C0}", chartPoint.Y)
                     };
-                    sc.Add(ps);
-
+                    if (cat.CategoryDirection == "Kiadás")
+                        ExpendCategories.Series.Add(ps);
+                    if (cat.CategoryDirection == "Bevétel")
+                        IncomeCategories.Series.Add(ps);
                 }
-                CategoryChart.PieSeries = sc;
+                ExpendCategories.PieSeries.AddRange(ExpendCategories.Series);
+                IncomeCategories.PieSeries.AddRange(IncomeCategories.Series);
             }
-            //DataBase.Close();
         }
 
-        public void SetColumnChart()
+        public void SetStackedColumnChart()
         {
-            DateTime firstDayOfFirstMonth = DateTime.Today.AddDays(-(DateTime.Today.Day - 1)).AddMonths(-6);
-            DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
+            // let's clear the series first
+            StackedSixMonths.Series = new List<Series>();
+            StackedSixMonths.SeriesCollection = new SeriesCollection();
 
+            // set the default filter dates
+            DateTime sixBefore = DateTime.Today.AddMonths(-6);
+            DateTime firstDay = new DateTime(sixBefore.Year, sixBefore.Month, 1);
+            DateTime lastDay = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddDays(-1);
 
-            //DataBase.Open();
-            using (entities = new DataModel())
+            List<int> months = new List<int>();
+            for (var i = new DateTime(firstDay.Year, firstDay.Month, firstDay.Day); i < lastDay; i = i.AddMonths(1))
             {
-                var allItemMonthly =
-                    from item in entities.Inventory
-                    where item.Date >= firstDayOfFirstMonth && item.Date <= lastDayOfLastMonth
-                    orderby item.Date descending
-                    group item by item.Date.Month into l
-                    select new { Month = l.Key, TotalIncome = l.Where(records => records.Type == "Bevétel").Sum(records => records.Sum), TotalExpenditure = -l.Where(records => records.Type == "Kiadás").Sum(records => records.Sum) };
+                months.Add(i.Month);
+            }
 
-
-                ChartValues<int> cvIncomes = new ChartValues<int>();
-                ChartValues<int> cvExpenditures = new ChartValues<int>();
-                string[] labels = new string[allItemMonthly.Count()];
-                int i = 0;
-                foreach (var line in allItemMonthly)
+            using (var db = new DataModel())
+            {
+                var allTransactions = db.Transactions
+                                        .Include(t => t.Categories.CategoryDirections)
+                                        .Where(t => t.AccountID == MainViewModel.CurrentAccount.AccountID &&
+                                                    t.TransactionDate >= firstDay &&
+                                                    t.TransactionDate <= lastDay &&
+                                                    t.Categories.CategoryDirections.DirectionName == "Kiadás")
+                                        .GroupBy(t => new { t.TransactionDate.Year, t.TransactionDate.Month, t.Categories.CategoryName })
+                                        .Select(t => new
+                                        {
+                                            Year = t.Key.Year,
+                                            Month = t.Key.Month,
+                                            Category = t.Key.CategoryName,
+                                            Amount = t.Sum(s => s.Amount)
+                                        })
+                                        .OrderBy(t => new { t.Year, t.Month, t.Category })
+                                        .ToList();
+                var categoryList = allTransactions.Select(t => t.Category).Distinct().ToList();
+                foreach (var category in categoryList)
                 {
-                    cvIncomes.Add(line.TotalIncome);
-                    cvExpenditures.Add(line.TotalExpenditure);
-                    labels[i] = DateTimeFormatInfo.CurrentInfo.GetMonthName(line.Month);
-                    i++;
+                    ChartValues<double> values = new ChartValues<double>();
+                    var currentCategory = allTransactions.Where(t => t.Category == category).ToList();
+                    foreach (var month in months)
+                    {
+                        var currentAmount = currentCategory.FirstOrDefault(c => c.Month == month);
+                        if (currentAmount != null)
+                            values.Add((double)currentAmount.Amount);
+                        else
+                            values.Add(0);
+                    }
+                    StackedSixMonths.Series
+                    .Add(new StackedColumnSeries
+                    {
+                        Title = category,
+                        Values = values,
+                        DataLabels = false
+                    });
                 }
-                ColumnChart.SeriesCollection = new SeriesCollection
-                    {
-                        new ColumnSeries
-                        {
-                            Title = "Bevétel",
-                            Values = cvIncomes
-                        },
-                        new ColumnSeries
-                        {
-                            Title = "Kiadás",
-                            Values = cvExpenditures
-                        }
-                    };
-                ColumnChart.Labels = labels;
-                ColumnChart.Formatter = value => value.ToString("C0");
+
+                StackedSixMonths.SeriesCollection.AddRange(StackedSixMonths.Series);
+
+                StackedSixMonths.Labels = new string[6];
+                foreach (var month in months)
+                {
+                    StackedSixMonths.Labels[months.IndexOf(month)] = DateTimeFormatInfo.CurrentInfo.GetMonthName(month);
+                }
             }
-
-            //DataBase.Close();
         }
 
-        public void SetLineChart()
+        public void RefreshCharts()
         {
-            DateTime firstDayOfFirstMonth = DateTime.Today.AddDays(-(DateTime.Today.Day - 1)).AddMonths(-6);
-            DateTime today = DateTime.Today;
-
-            //DataBase.Open();
-            using (entities = new DataModel())
-            {
-                var getSumQuery =
-                    from item in entities.Inventory
-                    where item.Date >= firstDayOfFirstMonth && item.Date <= today
-                    orderby item.Date
-                    select new { Id = item.Id, Date = item.Date, Sum = item.Sum, Type = item.Type, Category = item.Category, Comment = item.Comment };
-
-                var resultSumQuery = getSumQuery.ToList();
-                int cumSum = 0;
-                int actualBalance;
-
-                int[] b = resultSumQuery.Select(x => (cumSum += x.Sum)).ToArray();
-                if (b.Length == 0)
-                    actualBalance = 0;
-                else
-                    actualBalance = b.Last();
-                ChartValues<int> cv = new ChartValues<int>();
-                cv.AddRange(b);
-                string[] stringArray = new string[resultSumQuery.Count()];
-
-                LineChart.SeriesCollection = new SeriesCollection()
-                    {
-                        new LineSeries
-                        {
-                            Title = "Egyenleg",
-                            Values = cv
-                        }
-                    };
-                LineChart.Labels = stringArray;
-                LineChart.Formatter = value => value.ToString("C0");
-                LineChart.ActualBalance = actualBalance.ToString("C0");
-            }
-            //DataBase.Close();
+            SetCategoryPieCharts();
+            SetStackedColumnChart();
         }
-
-        public void UpdateCharts()
-        {
-            SetPieChart();
-            SetColumnChart();
-            SetLineChart();
-        }
-
-        #endregion
     }
 }

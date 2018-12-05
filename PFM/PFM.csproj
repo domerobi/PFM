@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -52,14 +53,16 @@
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="PropertyChanged, Version=2.5.4.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyChanged.Fody.2.5.4\lib\net452\PropertyChanged.dll</HintPath>
+    <Reference Include="PropertyChanged, Version=2.5.13.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyChanged.Fody.2.5.13\lib\net452\PropertyChanged.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -78,57 +81,75 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Migrations\201809171001489_InitialCreate.cs" />
-    <Compile Include="Migrations\201809171001489_InitialCreate.Designer.cs">
-      <DependentUpon>201809171001489_InitialCreate.cs</DependentUpon>
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Migrations\201810141501571_InitialState.cs" />
+    <Compile Include="Migrations\201810141501571_InitialState.Designer.cs">
+      <DependentUpon>201810141501571_InitialState.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201809171058229_DeleteView.cs" />
-    <Compile Include="Migrations\201809171058229_DeleteView.Designer.cs">
-      <DependentUpon>201809171058229_DeleteView.cs</DependentUpon>
+    <Compile Include="Migrations\201810141508038_TransactionComment.cs" />
+    <Compile Include="Migrations\201810141508038_TransactionComment.Designer.cs">
+      <DependentUpon>201810141508038_TransactionComment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811142225208_DefaultAccount.cs" />
+    <Compile Include="Migrations\201811142225208_DefaultAccount.Designer.cs">
+      <DependentUpon>201811142225208_DefaultAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811212117164_DeleteInventory.cs" />
+    <Compile Include="Migrations\201811212117164_DeleteInventory.Designer.cs">
+      <DependentUpon>201811212117164_DeleteInventory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811212250559_TrCreateDate.cs" />
+    <Compile Include="Migrations\201811212250559_TrCreateDate.Designer.cs">
+      <DependentUpon>201811212250559_TrCreateDate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountBalance.cs" />
+    <Compile Include="Models\AccountFunctions.cs" />
     <Compile Include="Models\Accounts.cs" />
+    <Compile Include="Models\CategoriesFunctions.cs" />
     <Compile Include="Models\Categories.cs" />
-    <Compile Include="Commands\CreateAccountCommand.cs" />
+    <Compile Include="Models\CategoryDirectionsFunctions.cs" />
+    <Compile Include="Models\CategoryDirections.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\ExchangeRate.cs" />
     <Compile Include="Models\ExchangeRateHist.cs" />
-    <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\Transactions.cs" />
+    <Compile Include="Models\TransactionsFunctions.cs" />
     <Compile Include="Models\Users.cs" />
+    <Compile Include="Services\IWindowService.cs" />
+    <Compile Include="Services\WindowService.cs" />
+    <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
+    <Compile Include="ViewModels\BalanceViewModel.cs" />
+    <Compile Include="ViewModels\BaseTransactionViewModel.cs" />
+    <Compile Include="ViewModels\CategoryViewModel.cs" />
+    <Compile Include="ViewModels\IBaseViewModel.cs" />
+    <Compile Include="ViewModels\IChartModel.cs" />
+    <Compile Include="ViewModels\ModifyTransactionViewModel.cs" />
+    <Compile Include="ViewModels\TransactionViewModel.cs" />
+    <Compile Include="Views\AccountControl.xaml.cs">
+      <DependentUpon>AccountControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CategoryChartControl.xaml.cs">
+      <DependentUpon>CategoryChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChartesianChartControl.xaml.cs">
+      <DependentUpon>ChartesianChartControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateAccountView.xaml.cs">
       <DependentUpon>CreateAccountView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\DatabaseModel.cs" />
-    <Compile Include="Commands\MenuCommand.cs" />
-    <Compile Include="Commands\CancelCommand.cs" />
-    <Compile Include="Commands\DeleteCommand.cs" />
-    <Compile Include="Commands\ImportCommand.cs" />
-    <Compile Include="Commands\AddItemCommand.cs" />
-    <Compile Include="Commands\ModifyCommand.cs" />
-    <Compile Include="Commands\ResetCommand.cs" />
-    <Compile Include="Commands\SearchCommand.cs" />
-    <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Commands\RegisterCommand.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
-    <Compile Include="Models\UsersPart.cs" />
-    <Compile Include="Pages\NewAccountPage.xaml.cs">
-      <DependentUpon>NewAccountPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ReportPage.xaml.cs">
-      <DependentUpon>ReportPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PropertiesPage.xaml.cs">
-      <DependentUpon>PropertiesPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\PropertiesViewModel.cs" />
     <Compile Include="ViewModels\ReportViewModel.cs" />
     <Compile Include="SHA.cs" />
     <Compile Include="ViewModels\SignUpViewModel.cs" />
     <Compile Include="ViewModels\StartUpViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="Services\IClosable.cs" />
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -143,27 +164,49 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CategoryChartViewModel.cs" />
     <Compile Include="ViewModels\ChartesianChartViewModel.cs" />
-    <Compile Include="ViewModels\InventoryViewModel.cs" />
-    <Compile Include="ViewModels\ItemTypeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
-    <Compile Include="Views\ModifyItemView.xaml.cs">
-      <DependentUpon>ModifyItemView.xaml</DependentUpon>
+    <Compile Include="Views\MaintainAccountControl.xaml.cs">
+      <DependentUpon>MaintainAccountControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ModifyTransactionView.xaml.cs">
+      <DependentUpon>ModifyTransactionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportBalanceControl.xaml.cs">
+      <DependentUpon>ReportBalanceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportCategoryControl.xaml.cs">
+      <DependentUpon>ReportCategoryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportViewControl.xaml.cs">
+      <DependentUpon>ReportViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TransactionControl.xaml.cs">
+      <DependentUpon>TransactionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TransactionViewControl.xaml.cs">
+      <DependentUpon>TransactionViewControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Styles\ViewModels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AccountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CategoryChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChartesianChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CreateAccountView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\NewAccountPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ReportPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\PropertiesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,6 +234,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MaintainAccountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -199,12 +246,35 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ItemTypeModel.cs" />
     <Compile Include="Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\ModifyItemView.xaml">
+    <Page Include="Views\ModifyTransactionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportBalanceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportCategoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransactionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransactionViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -223,11 +293,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201809171001489_InitialCreate.resx">
-      <DependentUpon>201809171001489_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201810141501571_InitialState.resx">
+      <DependentUpon>201810141501571_InitialState.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809171058229_DeleteView.resx">
-      <DependentUpon>201809171058229_DeleteView.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201810141508038_TransactionComment.resx">
+      <DependentUpon>201810141508038_TransactionComment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811142225208_DefaultAccount.resx">
+      <DependentUpon>201811142225208_DefaultAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811212117164_DeleteInventory.resx">
+      <DependentUpon>201811212117164_DeleteInventory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811212250559_TrCreateDate.resx">
+      <DependentUpon>201811212250559_TrCreateDate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -256,11 +335,12 @@
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Fody.3.0.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.0.3\build\Fody.targets')" />
+  <Import Project="..\packages\Fody.3.2.16\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.16\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.3.0.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.0.3\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.3.2.16\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.2.16\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props'))" />
   </Target>
 </Project>

@@ -1,4 +1,4 @@
-namespace PFM
+namespace PFM.Models
 {
     using System;
     using System.Collections.Generic;

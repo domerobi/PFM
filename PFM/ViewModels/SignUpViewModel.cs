@@ -1,9 +1,9 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
 using System.Windows.Input;
 using System.Linq;
+using PFM.Models;
 
-namespace PFM
+namespace PFM.ViewModels
 {
     class SignUpViewModel : StartUpViewModel
     {
@@ -22,7 +22,7 @@ namespace PFM
             //LoginCommand = new LoginCommand(this);
             mPage = signUpPage;
             SignUpPage = (SignUpPage)mPage;
-            ActualPage = Pages.SignUp;
+            ActualPage = PageList.SignUp;
             RegisterCommand = new RegisterCommand(this);
             BackCommand = new NavigateCommand(this);
 

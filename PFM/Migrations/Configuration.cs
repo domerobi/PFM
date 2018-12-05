@@ -5,15 +5,14 @@ namespace PFM.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<PFM.DataModel>
+    internal sealed class Configuration : DbMigrationsConfiguration<PFM.Models.DataModel>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "PFM.DataModel";
         }
 
-        protected override void Seed(PFM.DataModel context)
+        protected override void Seed(PFM.Models.DataModel context)
         {
             //  This method will be called after migrating to the latest version.
 

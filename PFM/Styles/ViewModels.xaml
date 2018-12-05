@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:view="clr-namespace:PFM.Views"
+                    xmlns:viewmodel="clr-namespace:PFM.ViewModels">
+    <DataTemplate DataType="{x:Type viewmodel:TransactionViewModel}">
+        <view:TransactionViewControl />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type viewmodel:ReportViewModel}">
+        <view:ReportViewControl />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:CategoryViewModel}">
+        <view:ReportCategoryControl />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:BalanceViewModel}">
+        <view:ReportBalanceControl />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:AccountViewModel}">
+        <view:MaintainAccountControl />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:ChartesianChartViewModel}">
+        <view:ChartesianChartControl />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodel:CategoryChartViewModel}">
+        <view:CategoryChartControl />
+    </DataTemplate>
+    
+</ResourceDictionary>

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Navigation;
+using PFM.ViewModels;
+using PFM.Pages;
 
 namespace PFM
 {

@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="PFM.Views.TransactionViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+             xmlns:view="clr-namespace:PFM.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" 
+             d:DesignWidth="800" FontSize="16">
+    <UserControl.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="Padding" Value="3,3,3,3" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid Background="#FFE5E5E5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid
+            ItemsSource="{Binding Transactions}"
+            SelectedItem="{Binding SelectedTransaction}"
+            Grid.RowSpan="6" 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            AutoGenerateColumns="False" 
+            IsReadOnly="True" 
+            ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+            ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn 
+                    Width="auto" 
+                    Binding="{Binding TransactionDate, StringFormat=\{0:yyyy.MM.dd\}}" 
+                    Header="Dátum" />
+                <DataGridTextColumn 
+                    Width="auto" 
+                    Binding="{Binding Categories.CategoryDirections.DirectionName}" 
+                    Header="Típus"/>
+                <DataGridTextColumn 
+                    Width="auto" 
+                    Binding="{Binding Categories.CategoryName}" 
+                    Header="Kategória"/>
+                <DataGridTextColumn 
+                    Width="auto" 
+                    Binding="{Binding Amount, StringFormat={}{0:C0}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+                    Header="Összeg" 
+                    ElementStyle="{StaticResource RightAligned}"/>
+                <DataGridTextColumn 
+                    Width="auto" 
+                    Binding="{Binding CurrentBalance, StringFormat={}{0:C0}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+                    Header="Aktuális egyenleg" 
+                    ElementStyle="{StaticResource RightAligned}"/>
+                <DataGridTextColumn 
+                    Width="*" 
+                    Binding="{Binding Comment}" 
+                    Header="Megjegyzés"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <GroupBox 
+            Header="Keresés" 
+            Grid.Column="1" Margin="10,0,0,0">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border>
+                    <Label Content="Kezdő dátum:" />
+                </Border>
+                <Border Grid.Column="1">
+                    <DatePicker 
+                        Width="140"
+                        SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </Border>
+                <Border Grid.Row="1">
+                    <Label Content="Végső dátum:" />
+                </Border>
+                <Border 
+                    Grid.Row="1" 
+                    Grid.Column="1">
+
+                    <DatePicker 
+                        Width="140"
+                        SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </Border>
+                <Border Grid.Row="2">
+                    <Label Content="Típus:" />
+                </Border>
+                <Border 
+                    Grid.Row="2" 
+                    Grid.Column="1">
+
+                    <ComboBox 
+                        Width="140"
+                        ItemsSource="{Binding CategoryDirections}"
+                        SelectedItem="{Binding SearchCategoryDirection, Mode=TwoWay}"/>
+                </Border>
+                <Border Grid.Row="3">
+                    <Label Content="Kategória:" />
+                </Border>
+                <Border 
+                    Grid.Row="3" 
+                    Grid.Column="1">
+
+                    <ComboBox 
+                        Width="140"
+                        ItemsSource="{Binding SearchCategoryDirection.Categories, Mode=TwoWay}"
+                        SelectedItem="{Binding SearchCategory, Mode=TwoWay}"/>
+                </Border>
+                <Border 
+                    Grid.Row="4" 
+                    Grid.ColumnSpan="2">
+
+                    <Button 
+                        Content="Keresés"
+                        Command="{Binding SearchCommand}"/>
+                </Border>
+                <Border 
+                    Grid.Row="5" 
+                    Grid.ColumnSpan="2">
+
+                    <Button 
+                        Content="Visszaállítás"
+                        Command="{Binding ResetCommand}"/>
+                </Border>
+            </Grid>
+        </GroupBox>
+        <GroupBox 
+            Header="Új tranzakció hozzáadása" 
+            Grid.Column="1" 
+            Grid.Row="1" 
+            Margin="10,0,0,0">
+
+            <StackPanel>
+                <view:TransactionControl DataContext="{Binding}" Width="Auto" Margin="3,0" />
+                <Button 
+                    x:Name="btnSubmit" 
+                    Content="Hozzáad"
+                    Command="{Binding AddItemCommand}" Margin="3,3,3,3"/>
+            </StackPanel>
+        </GroupBox>
+        <Button 
+            x:Name="btnModify" 
+            Content="Tranzakció módosítása..." 
+            Grid.Row="2" 
+            Grid.Column="1" 
+            Command="{Binding ModifyCommand}"
+            Margin="19,10,9,0" />
+        <Button 
+            x:Name="btnDelete" 
+            Content="Tranzakció törlése" 
+            Grid.Row="3" 
+            Grid.Column="1" 
+            Command="{Binding DeleteCommand}"
+            Margin="19,10,9,0" />
+        <Button 
+            x:Name="btnImport" 
+            Content="Import..." 
+            Grid.Row="4" 
+            Grid.Column="1" 
+            Command="{Binding ImportCommand}"
+            Margin="19,10,9,10" />
+    </Grid>
+</UserControl>

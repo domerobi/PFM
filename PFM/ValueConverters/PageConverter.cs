@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Globalization;
+using PFM.ViewModels;
+using PFM.Pages;
 
-namespace PFM
+namespace PFM.ValueConverters
 {
     public class PageConverter : BaseValueConverter<PageConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((Pages)value)
+            switch ((PageList)value)
             {
-                case Pages.Login:
+                case PageList.Login:
                     return new LoginPage();
-                case Pages.SignUp:
+                case PageList.SignUp:
                     return new SignUpPage();
-                case Pages.Reports:
-                    return new ReportPage();
-                case Pages.NewAccount:
-                    return new NewAccountPage();
-                case Pages.Properties:
-                    return new PropertiesPage();
                 default:
                     return null;
             }

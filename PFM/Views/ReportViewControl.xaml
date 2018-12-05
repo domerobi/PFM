@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="PFM.Views.ReportViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:view="clr-namespace:PFM.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="627" d:DesignWidth="665" FontSize="16">
+    <TabControl ItemsSource="{Binding ReportViewModels}"
+                SelectedItem="{Binding CurrentViewModel}"
+                SelectionChanged="TabControl_SelectionChanged">
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Name}"
+                           HorizontalAlignment="Left"
+                           FontSize="16" />
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <ContentControl Content="{Binding}" FontSize="16" />
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+        <!--<TabItem Header="Kategóriák" HorizontalAlignment="Left" Height="20" Margin="0" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5">
+                <view:ReportCategoryControl />
+            </Grid>
+        </TabItem>
+        <TabItem Header="Egyenlegek" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>-->
+
+    </TabControl>
+</UserControl>

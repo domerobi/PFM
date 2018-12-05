@@ -1,4 +1,4 @@
-namespace PFM
+namespace PFM.Models
 {
     using System;
     using System.Collections.Generic;
@@ -19,13 +19,17 @@ namespace PFM
         [Column(TypeName = "date")]
         public DateTime TransactionDate { get; set; }
 
-        public int AccountFrom { get; set; }
+        [StringLength(100)]
+        public string Comment { get; set; }
 
-        public int AccountTo { get; set; }
+        public int AccountID { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
+        [NotMapped]
+        public decimal CurrentBalance { get; set; }
 
         public virtual Accounts Accounts { get; set; }
-
-        public virtual Accounts Accounts1 { get; set; }
 
         public virtual Categories Categories { get; set; }
     }
