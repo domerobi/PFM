@@ -7,5 +7,6 @@ namespace PFM.ViewModels
         string Name { get; set; }
         Accounts CurrentAccount { get; set; }
         Users CurrentUser { get; set; }
+        bool Selected { get; set; }
     }
 }

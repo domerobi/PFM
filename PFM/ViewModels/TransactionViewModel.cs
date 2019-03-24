@@ -21,17 +21,18 @@ namespace PFM.ViewModels
         #region public Properties
 
         public ObservableCollection<Transactions> Transactions { get; set; }
+        public ObservableCollection<Transactions> AllTransaction { get; set; }
         public Transactions CurrentTransaction { get; set; }
         public Transactions SelectedTransaction { get; set; }
-        
+
         public MainViewModel MainViewModel { get; set; }
-        
-        
+
+
         public ICommand AddItemCommand { get; set; }
         public ICommand ModifyCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand ImportCommand { get; set; }
-        
+
         #endregion
 
         #region public Properties for filter
@@ -50,7 +51,7 @@ namespace PFM.ViewModels
         public Categories SearchCategory { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ResetCommand { get; set; }
-        
+
         #endregion
 
         /// <summary>
@@ -72,13 +73,13 @@ namespace PFM.ViewModels
                     p => Create(),
                     p => CanCreate());
             ModifyCommand = new RelayCommand(
-                    p => windowService.OpenModifyTransactionWindow(new ModifyTransactionViewModel(SelectedTransaction)),
-                    p => SelectedTransaction != null);
+                    p => Modify(),
+                    p => CanModify());
             DeleteCommand = new RelayCommand(
                     p => Delete(),
-                    p => SelectedTransaction != null);
+                    p => CanModify());
             SearchCommand = new RelayCommand(
-                    p => Search(),
+                    p => Search(null),
                     p => CanSearch());
             ResetCommand = new RelayCommand(
                     p => ResetSearchFilter());
@@ -93,7 +94,7 @@ namespace PFM.ViewModels
 
             // Set the filters to basic state and get the related transactions
             ResetSearchFilter();
-            Search();
+            Search(null);
         }
 
         private void Delete()
@@ -108,13 +109,14 @@ namespace PFM.ViewModels
                     Transactions.Remove(SelectedTransaction);
                     SelectedTransaction = null;
                 }
+                Search(null);
             }
         }
 
         public bool CanCreate()
         {
-            if (SelectedCategoryDirection.DirectionID < 1 || SelectedCategory.CategoryID < 1 || CurrentTransaction.Amount <= 0 
-                || CurrentTransaction.TransactionDate == null )
+            if (SelectedCategoryDirection.DirectionID < 1 || SelectedCategory.CategoryID < 1 || CurrentTransaction.Amount <= 0
+                || CurrentTransaction.TransactionDate == null)
             {
                 return false;
             }
@@ -136,21 +138,28 @@ namespace PFM.ViewModels
                 db.SaveChanges();
             }
             InitializeNewTransaction();
+            Search(null);
         }
 
         public bool CanModify()
         {
-            if (CurrentTransaction == null)
+            if (SelectedTransaction == null)
                 return false;
             return true;
+        }
+
+        public void Modify()
+        {
+            windowService.OpenModifyTransactionWindow(new ModifyTransactionViewModel(SelectedTransaction));
+            Search(SelectedTransaction);
         }
 
         public void InitializeNewTransaction()
         {
             DateTime transactionDate = DateTime.Today;
-            if(CurrentTransaction != null)
+            if (CurrentTransaction != null)
             {
-                transactionDate = CurrentTransaction.TransactionDate;   
+                transactionDate = CurrentTransaction.TransactionDate;
             }
             CurrentTransaction = new Transactions
             {
@@ -167,38 +176,55 @@ namespace PFM.ViewModels
             SearchCategoryDirection = CategoryDirections.First(cd => cd.DirectionID == 0);
         }
 
-        private void Search()
+        private bool CanSearch()
         {
+            if (StartDate == null && EndDate == null && SearchCategoryDirection.DirectionID == 0 && SearchCategory.CategoryID < 1)
+                return false;
+            return true;
+        }
+
+        private void Search(Transactions selected)
+        {
+            // calculate the balance after each transaction without filtering the categories
+            CalculateCumulativeBalance(StartDate, EndDate);
             using (var db = new DataModel())
             {
-                db.Transactions.Include(t => t.Categories)
-                    .Include(c => c.Categories.CategoryDirections)
-                    .Where(td => td.TransactionDate >= StartDate && 
-                                 td.TransactionDate <= EndDate   && 
-                                 (SearchCategoryDirection.DirectionID == 0 || 
-                                  td.Categories.CategoryDirections.DirectionID == SearchCategoryDirection.DirectionID) && 
-                                 (SearchCategory.CategoryID < 1 || td.CategoryID == SearchCategory.CategoryID)         && 
-                                 td.AccountID == MainViewModel.CurrentAccount.AccountID)
-                    .Load();
-                Transactions = new ObservableCollection<Transactions>(db.Transactions.Local.OrderBy(t => t.TransactionDate)
-                                                                                           .ThenBy(t => t.CreateDate)
-                                                                                           .ThenBy(t => t.TransactionID));
+                Transactions = new ObservableCollection<Transactions>(
+                                     AllTransaction
+                                       .Where(t => (SearchCategoryDirection.DirectionID == 0 ||
+                                                    t.Categories.CategoryDirections.DirectionID == SearchCategoryDirection.DirectionID) &&
+                                                   (SearchCategory.CategoryID < 1 || t.CategoryID == SearchCategory.CategoryID)));
             }
 
-            // calculate the balances after transactions
-            CalculateCumulativeBalance(StartDate);
+            if (selected != null)
+            {
+                SelectedTransaction = Transactions.FirstOrDefault(t => t.TransactionID == selected.TransactionID);
+            }
         }
 
         /// <summary>
         /// Calculates the balance after each transaction
         /// </summary>
         /// <param name="startDate">The first date to calculate from</param>
-        private void CalculateCumulativeBalance(DateTime startDate)
+        private void CalculateCumulativeBalance(DateTime startDate, DateTime endDate)
         {
             // calculate the balance on StartDate
             decimal cumBalance = GetBalanceOnDate(startDate);
 
-            foreach (var transaction in Transactions)
+            using (var db = new DataModel())
+            {
+                db.Transactions.Include(t => t.Categories)
+                    .Include(c => c.Categories.CategoryDirections)
+                    .Where(td => td.TransactionDate >= startDate &&
+                                 td.TransactionDate <= endDate &&
+                                 td.AccountID == MainViewModel.CurrentAccount.AccountID)
+                    .Load();
+                AllTransaction = new ObservableCollection<Transactions>(db.Transactions.Local.OrderBy(t => t.TransactionDate)
+                                                                                             .ThenBy(t => t.CreateDate)
+                                                                                             .ThenBy(t => t.TransactionID));
+            }
+
+            foreach (var transaction in AllTransaction)
             {
                 if (transaction.Categories.CategoryDirections.DirectionName == "Kiadás")
                     cumBalance -= transaction.Amount;
@@ -222,7 +248,7 @@ namespace PFM.ViewModels
             {
                 var transactionsBeforeRef = db.Transactions
                                               .Include(t => t.Categories.CategoryDirections)
-                                              .Where(t => t.TransactionDate < refDate && 
+                                              .Where(t => t.TransactionDate < refDate &&
                                                           t.AccountID == MainViewModel.CurrentAccount.AccountID)
                                               .ToList();
 
@@ -242,13 +268,6 @@ namespace PFM.ViewModels
             }
         }
 
-        private bool CanSearch()
-        {
-            if (StartDate == null && EndDate == null && SearchCategoryDirection.DirectionID == 0 && SearchCategory.CategoryID < 1)
-                return false;
-            return true;
-        }
-
         public void ImportFromExcel()
         {
             var fileName = windowService.GetImportFileName();
@@ -265,7 +284,7 @@ namespace PFM.ViewModels
                 using (var db = new DataModel())
                 {
                     int rowCnt = 0;
-                    
+
                     for (rowCnt = 2; rowCnt <= excelRange.Rows.Count; rowCnt++)
                     {
                         Transactions newTransaction = new Transactions();
@@ -285,7 +304,7 @@ namespace PFM.ViewModels
                         var newCategory = db.Categories.Include(c => c.CategoryDirections).FirstOrDefault(c => c.CategoryName == categoryName);
 
                         // if we don't find it in the database, then create it
-                        if(newCategory == null)
+                        if (newCategory == null)
                         {
                             var newCategoryDirection = db.CategoryDirections.FirstOrDefault(cd => cd.DirectionName == categoryDirection);
 
@@ -303,9 +322,9 @@ namespace PFM.ViewModels
                     }
                     Transactions = new ObservableCollection<Transactions>(Transactions.OrderBy(t => t.TransactionDate));
                     db.SaveChanges();
-                    
+
                 }
-                
+
                 excelBook.Close(true, null, null);
                 excelApp.Quit();
             }

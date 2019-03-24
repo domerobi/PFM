@@ -6,8 +6,8 @@
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:view="clr-namespace:PFM.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="600" 
-             d:DesignWidth="800" FontSize="16">
+             d:DesignHeight="741.643" 
+             d:DesignWidth="1009.058" FontSize="16">
     <UserControl.Resources>
         <Style TargetType="GroupBox">
             <Setter Property="BorderBrush" Value="Black"/>
@@ -15,13 +15,9 @@
         <Style TargetType="Border">
             <Setter Property="Padding" Value="3,3,3,3" />
         </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
-            <Setter Property="Padding" Value="5"/>
-        </Style>
     </UserControl.Resources>
-    
-    <Grid Background="#FFE5E5E5">
+
+    <Grid Background="#D3EAF1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
@@ -44,7 +40,7 @@
             AutoGenerateColumns="False" 
             IsReadOnly="True" 
             ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-            ScrollViewer.VerticalScrollBarVisibility="Auto">
+            ScrollViewer.VerticalScrollBarVisibility="Auto" >
 
             <DataGrid.Columns>
                 <DataGridTextColumn 
@@ -141,7 +137,7 @@
 
                     <Button 
                         Content="Keresés"
-                        Command="{Binding SearchCommand}"/>
+                        Command="{Binding SearchCommand}" Width="110" Margin="0,5,0,0" />
                 </Border>
                 <Border 
                     Grid.Row="5" 
@@ -149,7 +145,7 @@
 
                     <Button 
                         Content="Visszaállítás"
-                        Command="{Binding ResetCommand}"/>
+                        Command="{Binding ResetCommand}" Width="110" Margin="0,5,0,0"/>
                 </Border>
             </Grid>
         </GroupBox>
@@ -164,29 +160,29 @@
                 <Button 
                     x:Name="btnSubmit" 
                     Content="Hozzáad"
-                    Command="{Binding AddItemCommand}" Margin="3,3,3,3"/>
+                    Command="{Binding AddItemCommand}" Margin="3,3,3,3" Width="110"/>
             </StackPanel>
         </GroupBox>
         <Button 
             x:Name="btnModify" 
-            Content="Tranzakció módosítása..." 
+            Content="Módosítás..." 
             Grid.Row="2" 
             Grid.Column="1" 
             Command="{Binding ModifyCommand}"
-            Margin="19,10,9,0" />
+            Margin="19,10,9,0" Width="110" />
         <Button 
             x:Name="btnDelete" 
-            Content="Tranzakció törlése" 
+            Content="Törlés" 
             Grid.Row="3" 
             Grid.Column="1" 
             Command="{Binding DeleteCommand}"
-            Margin="19,10,9,0" />
+            Margin="19,10,9,0" Width="110" />
         <Button 
             x:Name="btnImport" 
             Content="Import..." 
             Grid.Row="4" 
             Grid.Column="1" 
             Command="{Binding ImportCommand}"
-            Margin="19,10,9,10" />
+            Margin="19,10,9,10" Width="110" />
     </Grid>
 </UserControl>

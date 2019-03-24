@@ -53,6 +53,7 @@
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="PropertyChanged, Version=2.5.13.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.2.5.13\lib\net452\PropertyChanged.dll</HintPath>
     </Reference>
@@ -118,6 +119,7 @@
     <Compile Include="Models\Users.cs" />
     <Compile Include="Services\IWindowService.cs" />
     <Compile Include="Services\WindowService.cs" />
+    <Compile Include="ValueConverters\Bool2ColorConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\BalanceViewModel.cs" />
@@ -172,6 +174,9 @@
     <Compile Include="Views\ModifyTransactionView.xaml.cs">
       <DependentUpon>ModifyTransactionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PropertiesViewControl.xaml.cs">
+      <DependentUpon>PropertiesViewControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportBalanceControl.xaml.cs">
       <DependentUpon>ReportBalanceControl.xaml</DependentUpon>
     </Compile>
@@ -189,6 +194,9 @@
     </Compile>
     <Compile Include="Views\TransactionViewControl.xaml.cs">
       <DependentUpon>TransactionViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserDataControl.xaml.cs">
+      <DependentUpon>UserDataControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\ViewModels.xaml">
       <SubType>Designer</SubType>
@@ -254,6 +262,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PropertiesViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReportBalanceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -275,6 +287,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TransactionViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

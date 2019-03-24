@@ -37,10 +37,6 @@
                     Orientation="Vertical" 
                     HorizontalAlignment="Center" Grid.Column="1">
             <Button Content="Módosítások mentése" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    VerticalContentAlignment="Center" 
-                    HorizontalContentAlignment="Center" 
                     Padding="5"
                     Command="{Binding ModifyCommand}"
                     />

@@ -8,7 +8,7 @@
              d:DesignHeight="627" d:DesignWidth="665" FontSize="16">
     <TabControl ItemsSource="{Binding ReportViewModels}"
                 SelectedItem="{Binding CurrentViewModel}"
-                SelectionChanged="TabControl_SelectionChanged">
+                SelectionChanged="TabControl_SelectionChanged" Background="#FFD3EAF1">
         <TabControl.ItemTemplate>
             <DataTemplate>
                 <TextBlock Text="{Binding Name}"

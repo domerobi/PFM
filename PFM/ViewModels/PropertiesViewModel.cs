@@ -1,18 +1,37 @@
-﻿using PFM.Models;
+﻿using PFM.Commands;
+using System.Windows.Input;
 
 namespace PFM.ViewModels
 {
     class PropertiesViewModel : BaseViewModel
     {
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public MainViewModel MainViewModel { get; set; }
+
+        public ICommand ModifyCommand { get; set; }
         
-        public PropertiesViewModel()
+        public PropertiesViewModel(MainViewModel mainViewModel)
         {
-            DataModel dataModel = new DataModel();
-             
+            MainViewModel = mainViewModel;
+            Initialize();
+        }
+
+        public void Initialize()
+        {
+            Name = "Beállítások";
+
+            ModifyCommand = new RelayCommand(
+                    p => Modify(),
+                    p => CanModify());
+        }
+
+        public bool CanModify()
+        {
+            return true;
+        }
+
+        public void Modify()
+        {
+
         }
     }
 }

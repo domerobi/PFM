@@ -45,7 +45,7 @@ namespace PFM.ViewModels
                 ReportViewModel,
                 AccountViewModel
             };
-            CurrentViewModel = MainViewModels[0];
+            ChangeMenu(MainViewModels[0]);
             //TransactionViewModel.Transactions.CollectionChanged += Transactions_CollectionChanged;
         }
 
@@ -68,8 +68,10 @@ namespace PFM.ViewModels
         {
             if (!MainViewModels.Contains(newVM))
                 MainViewModels.Add(newVM);
-
+            if(CurrentViewModel != null)
+                CurrentViewModel.Selected = false;
             CurrentViewModel = MainViewModels.FirstOrDefault(vm => vm == newVM);
+            CurrentViewModel.Selected = true;
         }
 
         #endregion

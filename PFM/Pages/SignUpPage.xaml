@@ -79,13 +79,13 @@
 
                     <!-- Sign up button -->
                     <Button Content="Regisztráció"
-                            Style="{StaticResource LoginButtons}"
+                            Style="{StaticResource CurvedButtons}"
                             Command="{Binding RegisterCommand}"
                             IsDefault="True" />
                     
                     <!-- Back to login button -->
                     <Button Content="Vissza"
-                            Style="{StaticResource LoginButtons}"
+                            Style="{StaticResource CurvedButtons}"
                             Command="{Binding BackCommand}"
                             CommandParameter="back"/>
                 </StackPanel>

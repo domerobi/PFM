@@ -4,30 +4,41 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:converter="clr-namespace:PFM.ValueConverters"
         xmlns:viewmodel="clr-namespace:PFM.ViewModels"
         
         mc:Ignorable="d"
         Title="Személyi pénzügyek" WindowStartupLocation="CenterScreen" HorizontalAlignment="Stretch" Width="1400" Height="800" FontSize="16">
     <Window.Resources>
         <viewmodel:MainViewModel x:Key="mainViewModel" />
-        
+        <converter:Bool2ColorConverter x:Key="bool2ColorConverter" />
     </Window.Resources>
-    <Grid DataContext="{StaticResource ResourceKey=mainViewModel}">
+    <Grid DataContext="{StaticResource ResourceKey=mainViewModel}" Background="#FFD3EAF1">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <DockPanel DataContext="{StaticResource ResourceKey=mainViewModel}">
-            <Border DockPanel.Dock="Left" BorderBrush="Black" BorderThickness="0,0,2,0">
+            <Border DockPanel.Dock="Left" BorderThickness="0,0,6,0" CornerRadius="10" Padding="5,5,5,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#FF729CD4"/>
+                </Border.Effect>
+                <Border.BorderBrush>
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                        <GradientStop Color="#FF729CD4" Offset="0"/>
+                        <GradientStop Color="#11729CD4" Offset="1"/>
+                        <GradientStop Color="#FF729CD4" Offset="0.413"/>
+                        <GradientStop Color="#FB729CD4" Offset="0.835"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
                 <ItemsControl ItemsSource="{Binding MainViewModels}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Content="{Binding Name}"
                                     Command="{Binding DataContext.MenuCommand, RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}}"
                                     CommandParameter="{Binding}"
+                                    Background="{Binding Selected, Converter={StaticResource ResourceKey=bool2ColorConverter}}"
                                     FontSize="16"
-                                    BorderBrush="Black"
-                                    BorderThickness="0 2 0 2"
                                     Margin="2,5"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

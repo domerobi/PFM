@@ -11,9 +11,6 @@
             <Setter Property="Padding" Value="0,3" />
             <Style.Triggers>
                 <Trigger Property="Grid.Column" Value="1">
-                    <Setter Property="HorizontalAlignment" Value="Left" />
-                </Trigger>
-                <Trigger Property="Grid.Column" Value="1">
                     <Setter Property="HorizontalAlignment" Value="Right" />
                 </Trigger>
             </Style.Triggers>

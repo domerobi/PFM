@@ -14,7 +14,7 @@ namespace PFM.Services
                 DataContext = viewModel
             };
 
-            view.Show();
+            view.ShowDialog();
         }
 
         public void CloseWindow(IClosable window)

@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace PFM.Views
 {
     /// <summary>
-    /// Interaction logic for TransactionViewControl.xaml
+    /// Interaction logic for PropertiesViewControl.xaml
     /// </summary>
-    public partial class TransactionViewControl : UserControl
+    public partial class PropertiesViewControl : UserControl
     {
-        public TransactionViewControl()
+        public PropertiesViewControl()
         {
             InitializeComponent();
         }
-        
     }
 }

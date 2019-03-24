@@ -52,13 +52,13 @@
                     <!-- Login button -->
                     <Button Content="Belépés"
                             Command="{Binding LoginCommand}"
-                            Style="{StaticResource LoginButtons}"
+                            Style="{StaticResource CurvedButtons}"
                             IsDefault="True" />
                     
                     <!-- Sign up button -->
                     <Button Content="Regisztráció"
                             Command="{Binding RegisterCommand}"
-                            Style="{StaticResource LoginButtons}"
+                            Style="{StaticResource CurvedButtons}"
                             />
                 </StackPanel>
 
