@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="PFM.Views.CategoryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:PFM.ValueConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="168.157" d:DesignWidth="492">
+    <UserControl.Resources>
+        <converters:InvertBooleanConverter x:Key="invertBoolConverter" />
+        <converters:Double2PercentageConverter x:Key="double2PercentageConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Label Content="Kategória megnevezése:" />
+        <TextBox Grid.Column="1"
+                 Text="{Binding SelectedCategory.Category.CategoryName}"
+                 IsEnabled="{Binding SelectedCategory.Category.Default, Converter={StaticResource ResourceKey=invertBoolConverter}}"/>
+        <Label Content="Kategória típusa:"
+               Grid.Row="1"/>
+        <ComboBox Grid.Row="1"
+                  Grid.Column="1"
+                  Margin="0,5"
+                  ItemsSource="{Binding CategoryDirections}"
+                  SelectedItem="{Binding SelectedCategory.Category.CategoryDirections, Mode=TwoWay}"
+                  IsEnabled="{Binding SelectedCategory.Category.Default, Converter={StaticResource ResourceKey=invertBoolConverter}}"/>
+        <Label Content="Megtakarítás optimalizálásból kizárva:"
+               Grid.Row="2"/>
+        <CheckBox Grid.Row="2"
+                  Grid.Column="1"
+                  IsChecked="{Binding SelectedCategory.ExcludeFromCalculation}"/>
+        <Label Content="Optimalizálási sorrend:"
+               Grid.Row="3"/>
+        <ComboBox Grid.Row="3"
+                  Grid.Column="1"
+                  ItemsSource="{Binding PriorityLevels}"
+                  SelectedItem="{Binding SelectedCategory.Priority}"
+                  IsEnabled="{Binding SelectedCategory.ExcludeFromCalculation, Converter={StaticResource ResourceKey=invertBoolConverter}}" Margin="0,5"/>
+        <Label Content="Havi összeg optimalizálható százaléka:"
+               Grid.Row="4" />
+        <Grid Grid.Row="4"
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+        <TextBox Text="{Binding SelectedCategory.Limit, Converter={StaticResource ResourceKey=double2PercentageConverter}}"
+                 IsEnabled="{Binding SelectedCategory.ExcludeFromCalculation, Converter={StaticResource ResourceKey=invertBoolConverter}}" Margin="0,5,5,5"/>
+            <Label Grid.Column="1"
+                   Content="%" />
+        </Grid>
+
+    </Grid>
+</UserControl>

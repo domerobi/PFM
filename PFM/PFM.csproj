@@ -103,10 +103,37 @@
     <Compile Include="Migrations\201811212250559_TrCreateDate.Designer.cs">
       <DependentUpon>201811212250559_TrCreateDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904042006341_Calculation.cs" />
+    <Compile Include="Migrations\201904042006341_Calculation.Designer.cs">
+      <DependentUpon>201904042006341_Calculation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904042249507_UserCategories.cs" />
+    <Compile Include="Migrations\201904042249507_UserCategories.Designer.cs">
+      <DependentUpon>201904042249507_UserCategories.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904061356285_CategoryLimit.cs" />
+    <Compile Include="Migrations\201904061356285_CategoryLimit.Designer.cs">
+      <DependentUpon>201904061356285_CategoryLimit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904061936293_CalculationWithBalance.cs" />
+    <Compile Include="Migrations\201904061936293_CalculationWithBalance.Designer.cs">
+      <DependentUpon>201904061936293_CalculationWithBalance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904141552494_UserCategoriesDates.cs" />
+    <Compile Include="Migrations\201904141552494_UserCategoriesDates.Designer.cs">
+      <DependentUpon>201904141552494_UserCategoriesDates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904142128583_LimitDouble.cs" />
+    <Compile Include="Migrations\201904142128583_LimitDouble.Designer.cs">
+      <DependentUpon>201904142128583_LimitDouble.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBalance.cs" />
     <Compile Include="Models\AccountFunctions.cs" />
     <Compile Include="Models\Accounts.cs" />
+    <Compile Include="Models\Calculation.cs" />
+    <Compile Include="Models\CalculationData.cs" />
+    <Compile Include="Models\CalculationFunctions.cs" />
     <Compile Include="Models\CategoriesFunctions.cs" />
     <Compile Include="Models\Categories.cs" />
     <Compile Include="Models\CategoryDirectionsFunctions.cs" />
@@ -116,14 +143,19 @@
     <Compile Include="Models\ExchangeRateHist.cs" />
     <Compile Include="Models\Transactions.cs" />
     <Compile Include="Models\TransactionsFunctions.cs" />
+    <Compile Include="Models\UserCategory.cs" />
+    <Compile Include="Models\UserCategoryFunctions.cs" />
     <Compile Include="Models\Users.cs" />
     <Compile Include="Services\IWindowService.cs" />
     <Compile Include="Services\WindowService.cs" />
     <Compile Include="ValueConverters\Bool2ColorConverter.cs" />
+    <Compile Include="ValueConverters\Double2PercentageConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
+    <Compile Include="ValueConverters\VisibilityConverter.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\BalanceViewModel.cs" />
     <Compile Include="ViewModels\BaseTransactionViewModel.cs" />
+    <Compile Include="ViewModels\CalculationViewModel.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\IBaseViewModel.cs" />
     <Compile Include="ViewModels\IChartModel.cs" />
@@ -132,8 +164,20 @@
     <Compile Include="Views\AccountControl.xaml.cs">
       <DependentUpon>AccountControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CalculationControl.xaml.cs">
+      <DependentUpon>CalculationControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CategoryChartControl.xaml.cs">
       <DependentUpon>CategoryChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CategoryControl.xaml.cs">
+      <DependentUpon>CategoryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaintainCalculationControl.xaml.cs">
+      <DependentUpon>MaintainCalculationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaintainCategoryControl.xaml.cs">
+      <DependentUpon>MaintainCategoryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ChartesianChartControl.xaml.cs">
       <DependentUpon>ChartesianChartControl.xaml</DependentUpon>
@@ -152,6 +196,9 @@
     <Compile Include="ViewModels\StartUpViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Services\IClosable.cs" />
+    <Compile Include="Views\CategoryView.xaml.cs">
+      <DependentUpon>CategoryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -206,7 +253,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CalculationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CategoryChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CategoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MaintainCalculationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MaintainCategoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,6 +282,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Navigation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CategoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -323,6 +390,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811212250559_TrCreateDate.resx">
       <DependentUpon>201811212250559_TrCreateDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904042006341_Calculation.resx">
+      <DependentUpon>201904042006341_Calculation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904042249507_UserCategories.resx">
+      <DependentUpon>201904042249507_UserCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904061356285_CategoryLimit.resx">
+      <DependentUpon>201904061356285_CategoryLimit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904061936293_CalculationWithBalance.resx">
+      <DependentUpon>201904061936293_CalculationWithBalance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904141552494_UserCategoriesDates.resx">
+      <DependentUpon>201904141552494_UserCategoriesDates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904142128583_LimitDouble.resx">
+      <DependentUpon>201904142128583_LimitDouble.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

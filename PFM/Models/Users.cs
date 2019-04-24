@@ -12,6 +12,7 @@ namespace PFM.Models
         public Users()
         {
             Accounts = new HashSet<Accounts>();
+            UserCategories = new HashSet<UserCategory>();
         }
 
         [Key]
@@ -43,5 +44,8 @@ namespace PFM.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Accounts> Accounts { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserCategory> UserCategories { get; set; }
     }
 }

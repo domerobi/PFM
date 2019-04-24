@@ -61,5 +61,23 @@ namespace PFM.Services
         {
             MessageBox.Show(message);
         }
+
+        public void OpenCategoryWindow(CategoryViewModel viewModel)
+        {
+            CategoryView view = new CategoryView()
+            {
+                DataContext = viewModel
+            };
+
+            view.ShowDialog();
+        }
+
+        public bool UserQuestion(string question, string title)
+        {
+            var res = MessageBox.Show(question, "Tranzakció törlése",
+                                     MessageBoxButton.YesNo, MessageBoxImage.Asterisk);
+
+            return res == MessageBoxResult.Yes ? true : false;
+        }
     }
 }

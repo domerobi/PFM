@@ -1,4 +1,4 @@
-﻿<Window x:Class="PFM.Views.CreateAccountView"
+﻿<Window x:Class="PFM.Views.CategoryView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,30 +6,26 @@
         xmlns:view="clr-namespace:PFM.Views"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
-        Title="Számla létrehozása" 
-        Height="214.887"
-        Width="370"
-        ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen" >
+        Title="{Binding Name}" Height="239.722" Width="507.412" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <view:AccountControl Margin="10,0"
-                             DataContext="{Binding}"/>
-        <StackPanel Grid.Row="1" 
-                    HorizontalAlignment="Right" 
-                    VerticalAlignment="Bottom" 
-                    Orientation="Horizontal" 
-                    Margin="0,5,10,5">
-            <Button Content="OK" 
+        <view:CategoryControl DataContext="{Binding}"
+                              Margin="10,0"/>
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Orientation="Horizontal"
+                    Margin="0,5,10,15">
+            <Button Content="OK"
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top"
                     Padding="5,2"
                     Margin="0"
-                    Command="{Binding CreateCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, diag:PresentationTraceSources.TraceLevel=High}" />
+                    Command="{Binding OKCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
             <Button Content="Mégse" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 

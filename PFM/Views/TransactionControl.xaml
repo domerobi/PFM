@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="165.101" Width="227.516">
+             d:DesignHeight="187.101" Width="227.516">
     <UserControl.Resources>
         <Style TargetType="Border" >
             <Setter Property="Padding" Value="0,3" />
@@ -15,7 +15,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -64,7 +63,7 @@
                 
                 <TextBox 
                     Text="{Binding CurrentTransaction.Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n0}}" Width="105" VerticalContentAlignment="Center" />
-                <Label Content="HUF" />    
+                <Label Content="HUF" Margin="5,0,0,0"/>    
             </StackPanel>
         </Border>
         <Border Grid.Row="3">

@@ -133,15 +133,21 @@ namespace PFM.ViewModels
             {
                 using (var db = new DataModel())
                 {
+                    // check if default account flah has been changed
                     var defaultAccount = Accounts.GetDefaultAccount(MainViewModel.CurrentUser);
                     if (MainViewModel.CurrentAccount.Default && defaultAccount.AccountID != MainViewModel.CurrentAccount.AccountID)
                     {
                         defaultAccount.Default = false;
                         db.Entry(defaultAccount).State = EntityState.Modified;
                     }
+
+                    // save the new values
                     var refAccount = db.Accounts.First(a => a.AccountID == MainViewModel.CurrentAccount.AccountID);
+                    MainViewModel.CurrentAccount.LastModify = DateTime.Now;
                     db.Entry(refAccount).CurrentValues.SetValues(MainViewModel.CurrentAccount);
                     db.SaveChanges();
+
+                    // refresh the account collection, and the selected account
                     MainViewModel.Accounts = new ObservableCollection<Accounts>(
                                                 db.Accounts.Where(a => a.UserID == MainViewModel.CurrentUser.UserID)
                                                            .ToList().OrderBy(a => a.AccountName));

@@ -31,7 +31,7 @@
                         <GradientStop Color="#FB729CD4" Offset="0.835"/>
                     </LinearGradientBrush>
                 </Border.BorderBrush>
-                <ItemsControl ItemsSource="{Binding MainViewModels}">
+                <!--<ItemsControl ItemsSource="{Binding MainViewModels}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Content="{Binding Name}"
@@ -42,7 +42,52 @@
                                     Margin="2,5"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ItemsControl>-->
+                <StackPanel>
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding MainViewModels}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding Name}"
+                                    Command="{Binding DataContext.MenuCommand, RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}}"
+                                    CommandParameter="{Binding}"
+                                    Background="{Binding Selected, Converter={StaticResource ResourceKey=bool2ColorConverter}}"
+                                    FontSize="16"
+                                    Margin="2,5"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <!--<Button DataContext="{Binding TransactionViewModel}"
+                                Content="{Binding Name}"
+                                Command="{Binding DataContext.MenuCommand, RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}}"
+                                CommandParameter="{Binding}"
+                                Background="{Binding Selected, Converter={StaticResource ResourceKey=bool2ColorConverter}}"
+                                FontSize="16"
+                                Margin="2,5"/>
+
+                        <Button DataContext="{Binding ReportViewModel}"
+                                Content="{Binding Name}"
+                                Command="{Binding DataContext.MenuCommand, RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}}"
+                                CommandParameter="{Binding}"
+                                Background="{Binding Selected, Converter={StaticResource ResourceKey=bool2ColorConverter}}"
+                                FontSize="16"
+                                Margin="2,5"/>
+
+                        <Button DataContext="{Binding AccountViewModel}"
+                                Content="{Binding Name}"
+                                Command="{Binding DataContext.MenuCommand, RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}}"
+                                CommandParameter="{Binding}"
+                                Background="{Binding Selected, Converter={StaticResource ResourceKey=bool2ColorConverter}}"
+                                FontSize="16"
+                                Margin="2,5"/>-->
+                    </StackPanel>
+                    <StackPanel Margin="0,30,0,0">
+                        <Label Content="Kiválasztott számla:" Margin="0,0,0,5" />
+                        <ComboBox ItemsSource="{Binding Accounts}"
+                                  SelectedItem="{Binding CurrentAccount, Mode=TwoWay}"/>
+                    </StackPanel>
+                    
+                </StackPanel>
             </Border>
             <ContentControl Content="{Binding CurrentViewModel}" />
         </DockPanel>

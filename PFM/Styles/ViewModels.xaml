@@ -11,7 +11,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodel:CategoryViewModel}">
-        <view:ReportCategoryControl />
+        <view:MaintainCategoryControl />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodel:BalanceViewModel}">
@@ -29,5 +29,9 @@
     <DataTemplate DataType="{x:Type viewmodel:CategoryChartViewModel}">
         <view:CategoryChartControl />
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type viewmodel:CalculationViewModel}">
+        <view:CalculationControl />
+    </DataTemplate>
+
 </ResourceDictionary>

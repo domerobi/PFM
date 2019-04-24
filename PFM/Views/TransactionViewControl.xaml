@@ -46,15 +46,18 @@
                 <DataGridTextColumn 
                     Width="auto" 
                     Binding="{Binding TransactionDate, StringFormat=\{0:yyyy.MM.dd\}}" 
-                    Header="Dátum" />
+                    Header="Dátum"
+                    ElementStyle="{StaticResource LeftAligned}"/>
                 <DataGridTextColumn 
                     Width="auto" 
                     Binding="{Binding Categories.CategoryDirections.DirectionName}" 
-                    Header="Típus"/>
+                    Header="Típus"
+                    ElementStyle="{StaticResource LeftAligned}"/>
                 <DataGridTextColumn 
                     Width="auto" 
                     Binding="{Binding Categories.CategoryName}" 
-                    Header="Kategória"/>
+                    Header="Kategória"
+                    ElementStyle="{StaticResource LeftAligned}"/>
                 <DataGridTextColumn 
                     Width="auto" 
                     Binding="{Binding Amount, StringFormat={}{0:C0}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
@@ -68,7 +71,8 @@
                 <DataGridTextColumn 
                     Width="*" 
                     Binding="{Binding Comment}" 
-                    Header="Megjegyzés"/>
+                    Header="Megjegyzés"
+                    ElementStyle="{StaticResource LeftAligned}"/>
             </DataGrid.Columns>
         </DataGrid>
         <GroupBox 

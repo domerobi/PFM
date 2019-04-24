@@ -16,24 +16,13 @@ using System.Windows.Shapes;
 namespace PFM.Views
 {
     /// <summary>
-    /// Interaction logic for ReportCategoryControl.xaml
+    /// Interaction logic for CategoryControl.xaml
     /// </summary>
-    public partial class ReportCategoryControl : UserControl
+    public partial class CategoryControl : UserControl
     {
-        public ReportCategoryControl()
+        public CategoryControl()
         {
             InitializeComponent();
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            //ViewModels.CategoryViewModel categoryViewModel = DataContext as ViewModels.CategoryViewModel;
-            //categoryViewModel.SetCategoryPieCharts();
-
-            //App.Current.Dispatcher.Invoke(() =>
-            //{
-
-            //});
         }
     }
 }

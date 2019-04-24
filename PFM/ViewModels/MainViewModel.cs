@@ -12,12 +12,30 @@ namespace PFM.ViewModels
     /// </summary>
     class MainViewModel : BaseViewModel
     {
+        private Accounts currentAccount;
+        public Accounts CurrentAccount
+        {
+            get { return currentAccount; }
+            set
+            {
+                if (TransactionViewModel != null)
+                {
+                    TransactionViewModel.Transactions.Clear();
+                }
+                currentAccount = value;
+            }
+        }
+
         public ObservableCollection<BaseViewModel> MainViewModels { get; set; }
         public TransactionViewModel TransactionViewModel { get; set; }
         public ReportViewModel ReportViewModel { get; set; }
         public AccountViewModel AccountViewModel { get; set; }
+        public CalculationViewModel CalculationViewModel { get; set; }
+        public CategoryViewModel CategoryViewModel { get; set; }
 
         public ObservableCollection<Accounts> Accounts { get; set; }
+
+        
 
         public ICommand MenuCommand
         {
@@ -39,11 +57,15 @@ namespace PFM.ViewModels
             TransactionViewModel = new TransactionViewModel(this);
             ReportViewModel = new ReportViewModel(this);
             AccountViewModel = new AccountViewModel(this);
+            CalculationViewModel = new CalculationViewModel(this);
+            CategoryViewModel = new CategoryViewModel(this, CategoryViewModel.InteractionMode.Menu);
             MainViewModels = new ObservableCollection<BaseViewModel>
             {
                 TransactionViewModel,
                 ReportViewModel,
-                AccountViewModel
+                AccountViewModel,
+                CalculationViewModel,
+                CategoryViewModel
             };
             ChangeMenu(MainViewModels[0]);
             //TransactionViewModel.Transactions.CollectionChanged += Transactions_CollectionChanged;

@@ -7,5 +7,11 @@ namespace PFM.Models
         {
             return this.DirectionName;
         }
+
+        public void Copy(CategoryDirections original)
+        {
+            DirectionID = original.DirectionID;
+            DirectionName = original.DirectionName;
+        }
     }
 }

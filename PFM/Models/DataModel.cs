@@ -20,6 +20,9 @@ namespace PFM.Models
         public virtual DbSet<Transactions> Transactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<AccountBalance> AccountBalance { get; set; }
+        public virtual DbSet<Calculation> Calculation { get; set; }
+        public virtual DbSet<CalculationData> CalculationData { get; set; }
+        public virtual DbSet<UserCategory> UserCategory { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -87,6 +90,22 @@ namespace PFM.Models
             modelBuilder.Entity<AccountBalance>()
                 .Property(e => e.Balance)
                 .HasPrecision(19, 4);
+
+            modelBuilder.Entity<Calculation>()
+                .HasMany(e => e.CalculationData)
+                .WithRequired(e => e.Calculation)
+                .HasForeignKey(e => e.CalculationID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserCategory>()
+                .HasRequired(e => e.User)
+                .WithMany(e => e.UserCategories)
+                .HasForeignKey(e => e.UserID);
+
+            modelBuilder.Entity<UserCategory>()
+                .HasRequired(e => e.Category)
+                .WithMany(e => e.UserCategories)
+                .HasForeignKey(e => e.CategoryID);
         }
     }
 }
