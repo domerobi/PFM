@@ -34,8 +34,9 @@
         </GroupBox>
         <StackPanel Grid.ColumnSpan="2" 
                     Grid.Row="2" 
+                    Grid.Column="1"
                     Orientation="Vertical" 
-                    HorizontalAlignment="Center" Grid.Column="1">
+                    HorizontalAlignment="Center" >
             <Button Content="Módosítások mentése" 
                     Padding="5"
                     Command="{Binding ModifyCommand}"

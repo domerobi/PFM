@@ -49,10 +49,11 @@
                   Grid.Column="1"
                   IsChecked="{Binding SaveCalculation, Mode=TwoWay}" />
         <Label Grid.Row="4"
-               Content="Kalkuláció neve:" />
+               Content="Kalkuláció neve:"
+               Visibility="{Binding SaveCalculation, Converter={StaticResource ResourceKey=VisibilityConverter}}"/>
         <TextBox Grid.Row="4"
                  Grid.Column="1"
-                 Text="{Binding CalculationFilter.CalculationName}"
+                 Text="{Binding CalculationFilter.CalculationName, UpdateSourceTrigger=PropertyChanged}"
                  Visibility="{Binding SaveCalculation, Converter={StaticResource ResourceKey=VisibilityConverter}}"/>
     </Grid>
 </UserControl>

@@ -15,7 +15,15 @@ namespace PFM.ViewModels
 
         public ChartesianChartViewModel LineChart { get; set; }
         public MainViewModel MainViewModel { get; private set; }
-        
+
+        public bool HasCalculation
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         public BalanceViewModel(MainViewModel mainViewModel)
@@ -23,8 +31,6 @@ namespace PFM.ViewModels
             Name = "Egyenleg";
 
             MainViewModel = mainViewModel;
-
-            SetLineChart();
         }
 
 
@@ -34,6 +40,7 @@ namespace PFM.ViewModels
             DateTime today = DateTime.Today;
 
             LineChart = new ChartesianChartViewModel();
+            LineChart.Title = "Egyenleg változása";
             LineChart.Formatter = value => value.ToString("C0");
 
             using (var db = new DataModel())
@@ -42,7 +49,8 @@ namespace PFM.ViewModels
                                                 .Include(t => t.Categories.CategoryDirections)
                                                 .Where(t => t.TransactionDate <= today && t.AccountID == MainViewModel.CurrentAccount.AccountID)
                                                 .ToList();
-                var startingTransactions = allTransaction.Where(t => t.TransactionDate < firstDayOfFirstMonth).ToList();
+                var startingTransactions = allTransaction.Where(t => t.TransactionDate < firstDayOfFirstMonth && t.AccountID == MainViewModel.CurrentAccount.AccountID)
+                                                         .ToList();
                 int balance = (int)MainViewModel.CurrentAccount.StartBalance;
                 foreach (var transaction in startingTransactions)
                 {

@@ -31,7 +31,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodel:CalculationViewModel}">
-        <view:CalculationControl />
+        <view:MaintainCalculationControl />
     </DataTemplate>
 
 </ResourceDictionary>

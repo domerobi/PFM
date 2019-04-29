@@ -4,16 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:converters="clr-namespace:PFM.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="316.525" d:DesignWidth="535.169" Loaded="UserControl_Loaded" FontSize="18">
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Content="Egyenleg változása" 
-                        FontWeight="Bold" 
-                        FontSize="18" HorizontalAlignment="Center"/>
+        <Label Content="{Binding LineChart.Title}" 
+               FontWeight="Bold" 
+               FontSize="18" 
+               HorizontalAlignment="Center"/>
         <lvc:CartesianChart Series="{Binding LineChart.SeriesCollection}" 
                             LegendLocation="Left" 
                             Grid.Row="1" 
@@ -29,6 +34,15 @@
                         <lvc:AxisSection Value="0" 
                                          StrokeThickness="3" 
                                          Stroke="Red" >
+                            <lvc:AxisSection.Fill>
+                                <SolidColorBrush Color="Azure" Opacity=".4" />
+                            </lvc:AxisSection.Fill>
+                        </lvc:AxisSection>
+                        <lvc:AxisSection Value="{Binding CurrentBalance}" 
+                                         StrokeThickness="3" 
+                                         Stroke="Purple"
+                                         Label="Aktuális egyenleg"
+                                         Visibility="{Binding HasCalculation, Converter={StaticResource ResourceKey=VisibilityConverter}}">
                             <lvc:AxisSection.Fill>
                                 <SolidColorBrush Color="Azure" Opacity=".4" />
                             </lvc:AxisSection.Fill>

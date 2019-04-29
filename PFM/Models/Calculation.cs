@@ -45,8 +45,14 @@
         /// </summary>
         public bool BalanceIncluded { get; set; }
 
+        /// <summary>
+        /// Navigation property to Account
+        /// </summary>
         public virtual Accounts Accounts { get; set; }
 
+        /// <summary>
+        /// List of related CalculationDatas
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CalculationData> CalculationData { get; set; }
 

@@ -32,20 +32,26 @@ namespace PFM.ViewModels
 
             MainViewModel = mainViewModel;
 
-            ExpendCategories = new CategoryChartViewModel();
-            ExpendCategories.Name = "Kiadások";
+            ExpendCategories = new CategoryChartViewModel
+            {
+                Name = "Kiadások"
+            };
             ExpendCategories.Title = ExpendCategories.Name;
 
-            IncomeCategories = new CategoryChartViewModel();
-            IncomeCategories.Name = "Bevételek";
+            IncomeCategories = new CategoryChartViewModel
+            {
+                Name = "Bevételek"
+            };
             IncomeCategories.Title = IncomeCategories.Name;
 
-            StackedSixMonths = new ChartesianChartViewModel();
-            StackedSixMonths.Name = "Féléves kiadások";
+            StackedSixMonths = new ChartesianChartViewModel
+            {
+                Name = "Féléves kiadások",
+                Formatter = value => value.ToString("C0"),
+                XTitle = "Hónapok",
+                YTitle = "Összeg"
+            };
             StackedSixMonths.Title = StackedSixMonths.Name;
-            StackedSixMonths.Formatter = value => value.ToString("C0");
-            StackedSixMonths.XTitle = "Hónapok";
-            StackedSixMonths.YTitle = "Összeg";
 
             BalanceViewModel = new BalanceViewModel(MainViewModel);
 

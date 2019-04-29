@@ -29,8 +29,16 @@ namespace PFM.Views
         {
             App.Current.Dispatcher.Invoke(() =>
             {
-                ViewModels.BalanceViewModel balanceViewModel = DataContext as ViewModels.BalanceViewModel;
-                balanceViewModel.SetLineChart();
+                if(DataContext is ViewModels.BalanceViewModel)
+                {
+                    ViewModels.BalanceViewModel balanceViewModel = DataContext as ViewModels.BalanceViewModel;
+                    balanceViewModel.SetLineChart();
+                }
+                //if (DataContext is ViewModels.CalculationViewModel)
+                //{
+                //    ViewModels.CalculationViewModel calcViewModel = DataContext as ViewModels.CalculationViewModel;
+                //    calcViewModel.
+                //}
             });
         }
     }

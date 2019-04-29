@@ -37,7 +37,7 @@
                                         ElementStyle="{StaticResource Centered}"
                                         />
                 <DataGridTextColumn Width="auto"
-                                    Header="Optimalizálási sorrend"
+                                    Header="Optimalizálási szint"
                                     Binding="{Binding Priority, StringFormat={}{0:##}}"
                                     ElementStyle="{StaticResource RightAligned}" />
                 <DataGridTextColumn Width="*"

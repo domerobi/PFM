@@ -3,14 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
              xmlns:local="clr-namespace:PFM.Views"
+             xmlns:converters="clr-namespace:PFM.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="376.907">
+             d:DesignHeight="478.193" d:DesignWidth="746.635">
     <UserControl.Resources>
         <local:CalculationControl x:Key="CalculationControl" />
+        <converters:VisibilityConverter x:Key="VisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -18,11 +22,67 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <local:CalculationControl Grid.Column="1"
-                                  DataContext="{Binding}"/>
-        <Button Grid.Row="1"
-                Grid.Column="1"
-                Content="Kalkulál" Margin="0" HorizontalAlignment="Right" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,2" />
+        <GroupBox Grid.Column="1"
+                  Header="Kalkuláció adatai"
+                  BorderBrush="Black"
+                  Margin="0,5">
+        <local:CalculationControl DataContext="{Binding}"/>
+            
+        </GroupBox>
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Alaphelyzet" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Top"
+                    Padding="5,2" 
+                    Margin="0,0,5,0"
+                    Command="{Binding ResetCommand}"/>
+            <Button Content="Kalkulál" 
+                    Margin="0" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Top" 
+                    HorizontalContentAlignment="Center" 
+                    VerticalContentAlignment="Center" 
+                    Padding="5,2"
+                    Command="{Binding CalculateCommand}"/>
+        </StackPanel>
+        <DataGrid Grid.Column="3"
+                  Grid.RowSpan="2"
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                  ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                  Margin="0,5"
+                  ItemsSource="{Binding CalculationResult}"
+                  Visibility="{Binding HasCalculation, Converter={StaticResource ResourceKey=VisibilityConverter}, Mode=TwoWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Kategória"
+                                    Binding="{Binding CategoryName}"/>
+                <DataGridTextColumn Width="auto" 
+                                    Binding="{Binding Average, StringFormat={}{0:C0}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+                                    Header="Havi átlag kiadás" 
+                                    ElementStyle="{StaticResource RightAligned}"/>
+                <DataGridTextColumn Width="auto" 
+                                    Binding="{Binding Limit, StringFormat={}{0:C0}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+                                    Header="Havi kiadás limit" 
+                                    ElementStyle="{StaticResource RightAligned}"/>
+                <DataGridTextColumn Width="auto" 
+                                    Binding="{Binding Saved, StringFormat={}{0:C0}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" 
+                                    Header="Megspórolandó összeg" 
+                                    ElementStyle="{StaticResource RightAligned}"/>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+        <local:ReportBalanceControl DataContext="{Binding}"
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Grid.ColumnSpan="3"
+                                    Visibility="{Binding HasCalculation, Converter={StaticResource ResourceKey=VisibilityConverter}, Mode=TwoWay}"/>
     </Grid>
 </UserControl>
