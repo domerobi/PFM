@@ -38,6 +38,9 @@ namespace PFM.ViewModels
 
         #region Display
 
+        /// <summary>
+        /// The class for displaying the calculation datas
+        /// </summary>
         public class CalcDataDisplay
         {
             public string CategoryName { get; set; }
@@ -85,15 +88,13 @@ namespace PFM.ViewModels
             ResetCommand = new RelayCommand(
                     p => Reset() );
 
-            LineChart = new ChartesianChartViewModel
-            {
-                Title = "A kalkuláció hatása az egyenlegre",
-                Formatter = value => value.ToString("C0")
-            };
-            
             Reset();
         }
 
+        /// <summary>
+        /// Checks if every mandatory property is filled for calculation
+        /// </summary>
+        /// <returns></returns>
         public bool CanCalculate()
         {
             return CalculationFilter.Amount > 0 &&
@@ -149,6 +150,13 @@ namespace PFM.ViewModels
                                   .Where(uc => uc.UserID == MainViewModel.CurrentUser.UserID)
                                   .ToList<UserCategory>();
 
+            }
+
+            //if there is no previous transaction then we can't calculate
+            if (transactionsLastSixMonths.Count == 0)
+            {
+                windowService.UserMessage("Nincs korábbi tranzakció, ami alapján kalkulálni lehetne!");
+                return;
             }
 
             // get the create date of the first transaction
@@ -329,6 +337,11 @@ namespace PFM.ViewModels
 
         }
 
+        /// <summary>
+        /// Creates a chart where the result of the calculation is displayed
+        /// </summary>
+        /// <param name="averageIncomes">Average of income per month</param>
+        /// <param name="averageExpenses">Average of expense per month</param>
         public void CreateCalculationReport(decimal averageIncomes, decimal averageExpenses)
         {
             decimal balance;
@@ -363,16 +376,13 @@ namespace PFM.ViewModels
             ChartValues<double> calculatedBalance = new ChartValues<double>();
             List<string> labels = new List<string>();
 
-            int cycleCounter = 0;
             for (var i = startDate; i <= CalculationFilter.DueDate; i = i.AddMonths(1))
             {
-                //LineChart.Labels[cycleCounter] = i.ToString("yyyy MMMM");
                 labels.Add(i.ToString("yyyy MMMM"));
                 normalBalance.Add((double)balance);
                 calculatedBalance.Add((double)calcBalance);
                 balance += averageIncomes - averageExpenses;
                 calcBalance += averageIncomes - averageCalcExpenses;
-                cycleCounter++;
             }
 
             LineChart.Labels = labels.ToArray();
@@ -412,6 +422,12 @@ namespace PFM.ViewModels
             SaveCalculation = false;
             CalculationResult = new ObservableCollection<CalcDataDisplay>();
             HasCalculation = false;
+
+            LineChart = new ChartesianChartViewModel
+            {
+                Title = "A kalkuláció hatása az egyenlegre",
+                Formatter = value => value.ToString("C0")
+            };
         }
     }
 }

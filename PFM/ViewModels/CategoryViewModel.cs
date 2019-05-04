@@ -11,6 +11,9 @@ using PFM.Commands;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// View model for maintaining categories
+    /// </summary>
     class CategoryViewModel : BaseViewModel
     {
 
@@ -58,11 +61,20 @@ namespace PFM.ViewModels
             }
         }
 
+        #region Maintain
+
         public ICommand AddCategoryCommand { get; set; }
         public ICommand DeleteCategoryCommand { get; set; }
         public ICommand ModifyCategoryCommand { get; set; }
+
+        #endregion
+
+        #region Create/Modify
+
         public ICommand OKCommand { get; set; }
         public ICommand CloseCommand { get; set; }
+
+        #endregion
         
         #endregion
 
@@ -178,6 +190,9 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Deletes the selected category
+        /// </summary>
         private void Delete()
         {
             if (windowService.UserQuestion("Biztosan törölni szeretné a kijelölt kategóriát?", "Kategória törlése"))
@@ -233,36 +248,14 @@ namespace PFM.ViewModels
         /// <returns>Returns true, if the new category is saved to the database.</returns>
         public bool Create()
         {
-
-            //using (var db = new DataModel())
-            //{
-            //    //var aaa = new Categories
-            //    //{
-            //    //    CategoryDirectionID = 1,
-            //    //    CategoryName = "proba",
-            //    //    Default = false
-            //    //};
-            //    // first create the category
-
-            //    if (db.SaveChanges() <= 0)
-            //        return false;
-
-            //    var newCategory = db.Categories.First(c => c.CategoryName == SelectedCategory.Category.CategoryName);
-
-            //    newCategory.UserCategories.Add(SelectedCategory);
-            //    SelectedCategory.User.UserCategories.Add(SelectedCategory);
-            //    //db.Categories.Attach(newCategory);
-            //    //db.Entry<Users>(SelectedCategory.User).State = EntityState.Modified;
-            //    //db.Entry<CategoryDirections>(SelectedCategory.Category.CategoryDirections).State = EntityState.Modified;
-            //    //db.UserCategory.Add(SelectedCategory);
-            //    return db.SaveChanges() > 0;
-            //}
-
             SelectedCategory.Category.Create(SelectedCategory.Category.CategoryDirections);
-
             return SelectedCategory.Create(MainViewModel.CurrentUser, SelectedCategory.Category);
         }
 
+        /// <summary>
+        /// Creates a new category from a window
+        /// </summary>
+        /// <param name="window"></param>
         public void Create(IClosable window)
         {
             if (CategoryExists(SelectedCategory.Category.CategoryName))
@@ -294,7 +287,10 @@ namespace PFM.ViewModels
                 SelectedCategory.Copy(modifyCategory.SelectedCategory);
         }
 
-        // Modify the selected category, and save it to the database
+        /// <summary>
+        /// Modify the selected category, and save it to the database
+        /// </summary>
+        /// <returns></returns>
         public bool Modify()
         {
             SelectedCategory.LastModify = DateTime.Now;
@@ -317,11 +313,6 @@ namespace PFM.ViewModels
 
                 // copy the new values
                 db.Entry(tmp).CurrentValues.SetValues(SelectedCategory);
-
-                // attach the unmodified records, and set the modified state which needs to be modified
-                //db.Categories.Attach(tmp.Category);
-                //db.CategoryDirections.Attach(tmp.Category.CategoryDirections);
-                //db.Users.Attach(tmp.User);
 
                 // save everything to the database
                 return db.SaveChanges() > 0;
@@ -389,56 +380,5 @@ namespace PFM.ViewModels
                 return db.UserCategory.FirstOrDefault(uc => uc.User.UserID == MainViewModel.CurrentUser.UserID && String.Compare(uc.Category.CategoryName, name, true) == 0 ) != null;
             }
         }
-
-
-
-
-
-        //public void SetCategoryPieCharts()
-        //{
-        //    IncomeCategories = new SeriesCollection();
-        //    ExpendCategories = new SeriesCollection();
-        //    using (var db = new DataModel())
-        //    {
-        //        // Set the time interval for the chart
-        //        DateTime lastMonth = DateTime.Today.AddMonths(-1);
-        //        DateTime firstDayOfLastMonth = new DateTime(lastMonth.Year, lastMonth.Month, 1);
-        //        DateTime lastDayOfLastMonth = DateTime.Today.AddDays(-(DateTime.Today.Day));
-
-        //        // Get the sum of all categories of the last month
-        //        var groupbyCategories = db.Transactions
-        //                                    .Include(t => t.Categories.CategoryDirections)
-        //                                    .Where(t => t.TransactionDate >= firstDayOfLastMonth && 
-        //                                                t.TransactionDate <= lastDayOfLastMonth  &&
-        //                                                t.AccountID == MainViewModel.CurrentAccount.AccountID)
-        //                                    .GroupBy(t => t.Categories.CategoryName)
-        //                                    .Select(t => new
-        //                                    {
-        //                                        Category = t.Key,
-        //                                        CategoryDirection = t.FirstOrDefault().Categories.CategoryDirections.DirectionName,
-        //                                        Amount = t.Sum(c => c.Amount)
-        //                                    }).ToList();
-
-
-        //        foreach (var cat in groupbyCategories)
-        //        {
-        //            PieSeries ps = new PieSeries
-        //            {
-        //                Title = cat.Category,
-        //                Values = new ChartValues<int> { (int)cat.Amount },
-        //                DataLabels = true,
-        //                LabelPoint = chartPoint =>
-        //                                    string.Format("{0:C0}", chartPoint.Y)
-        //            };
-        //            if (cat.CategoryDirection == "Kiadás")
-        //                ExpendCategories.Add(ps);
-        //            if (cat.CategoryDirection == "Bevétel")
-        //                IncomeCategories.Add(ps);
-        //        }
-        //    }
-        //}
-
-        
-
     }
 }

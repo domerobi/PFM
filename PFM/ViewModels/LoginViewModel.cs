@@ -9,6 +9,9 @@ using PFM.Pages;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// View model for handling the login procedure
+    /// </summary>
     class LoginViewModel : StartUpViewModel
     {
         public ICommand LoginCommand { get; set; }
@@ -17,12 +20,13 @@ namespace PFM.ViewModels
         public ObservableCollection<Users> Users { get; set; }
 
         public Users CurrentUser { get; set; }
-        //public string UserName { get; set; }
+        
 
         public LoginPage loginPage { get; set; }
-        
-        public IDataBase DataBase { get; set; }
 
+        /// <summary>
+        /// Initialize properties
+        /// </summary>
         public LoginViewModel()
         {
             ActualPage = PageList.Login;
@@ -43,11 +47,19 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the typed in password
+        /// </summary>
+        /// <returns></returns>
         public string GetPassword()
         {
             return loginPage.getPassword();
         }
 
+        /// <summary>
+        /// Decides if each property is filled correctly to login
+        /// </summary>
+        /// <returns></returns>
         public bool CanLogin()
         {
             if (CurrentUser.Username == "")
@@ -57,6 +69,10 @@ namespace PFM.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Logging in with the given credentials
+        /// </summary>
+        /// <returns></returns>
         public bool Login()
         {
             using (var db = new DataModel())
@@ -76,6 +92,10 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Sets the login page
+        /// </summary>
+        /// <param name="loginPage"></param>
         public void SetLoginPage(LoginPage loginPage)
         {
             this.loginPage = loginPage;

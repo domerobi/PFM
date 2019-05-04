@@ -21,10 +21,13 @@ namespace PFM.ViewModels
                 if (TransactionViewModel != null)
                 {
                     TransactionViewModel.Transactions.Clear();
+                    ReportViewModel.RefreshCharts();
                 }
                 currentAccount = value;
             }
         }
+
+        #region ViewModels
 
         public ObservableCollection<BaseViewModel> MainViewModels { get; set; }
         public TransactionViewModel TransactionViewModel { get; set; }
@@ -33,10 +36,10 @@ namespace PFM.ViewModels
         public CalculationViewModel CalculationViewModel { get; set; }
         public CategoryViewModel CategoryViewModel { get; set; }
 
+        #endregion
+
         public ObservableCollection<Accounts> Accounts { get; set; }
-
         
-
         public ICommand MenuCommand
         {
             get
@@ -52,6 +55,9 @@ namespace PFM.ViewModels
 
         #region Methods
         
+        /// <summary>
+        /// Initialize all view models for the application
+        /// </summary>
         public void InitializeViewModels()
         {
             TransactionViewModel = new TransactionViewModel(this);
@@ -68,7 +74,6 @@ namespace PFM.ViewModels
                 CategoryViewModel
             };
             ChangeMenu(MainViewModels[0]);
-            //TransactionViewModel.Transactions.CollectionChanged += Transactions_CollectionChanged;
         }
 
         /// <summary>
@@ -86,6 +91,10 @@ namespace PFM.ViewModels
             InitializeViewModels();
         }
 
+        /// <summary>
+        /// Registers the change between view models
+        /// </summary>
+        /// <param name="newVM"></param>
         public void ChangeMenu(BaseViewModel newVM)
         {
             if (!MainViewModels.Contains(newVM))

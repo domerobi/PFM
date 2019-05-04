@@ -4,6 +4,9 @@ using PFM.Models;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// Base view model for all view models in the application
+    /// </summary>
     class BaseViewModel : INotifyPropertyChanged, IBaseViewModel
     {
         public string Name { get; set; }

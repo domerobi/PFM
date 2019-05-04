@@ -5,25 +5,78 @@ namespace PFM.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
+    /// <summary>
+    /// The context of the database
+    /// </summary>
     public partial class DataModel : DbContext
     {
+        /// <summary>
+        /// Initialize the name
+        /// </summary>
         public DataModel()
             : base("name=DataModel")
         {
         }
 
+        /// <summary>
+        /// Set of accounts
+        /// </summary>
         public virtual DbSet<Accounts> Accounts { get; set; }
+
+        /// <summary>
+        /// Set of Categories
+        /// </summary>
         public virtual DbSet<Categories> Categories { get; set; }
+
+        /// <summary>
+        /// Set of category directions
+        /// </summary>
         public virtual DbSet<CategoryDirections> CategoryDirections { get; set; }
+
+        /// <summary>
+        /// Set of exchange rates
+        /// </summary>
         public virtual DbSet<ExchangeRate> ExchangeRate { get; set; }
+
+        /// <summary>
+        /// Set of exchange rate histories
+        /// </summary>
         public virtual DbSet<ExchangeRateHist> ExchangeRateHist { get; set; }
+
+        /// <summary>
+        /// Set of transactions
+        /// </summary>
         public virtual DbSet<Transactions> Transactions { get; set; }
+
+        /// <summary>
+        /// Set of users
+        /// </summary>
         public virtual DbSet<Users> Users { get; set; }
+
+        /// <summary>
+        /// Set of accounts with their actual balances
+        /// </summary>
         public virtual DbSet<AccountBalance> AccountBalance { get; set; }
+
+        /// <summary>
+        /// Set of calculations
+        /// </summary>
         public virtual DbSet<Calculation> Calculation { get; set; }
+
+        /// <summary>
+        /// Set of calculation datas
+        /// </summary>
         public virtual DbSet<CalculationData> CalculationData { get; set; }
+
+        /// <summary>
+        /// Set of the cross reference between users and categories
+        /// </summary>
         public virtual DbSet<UserCategory> UserCategory { get; set; }
 
+        /// <summary>
+        /// Initializing relationships between tables
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Accounts>()

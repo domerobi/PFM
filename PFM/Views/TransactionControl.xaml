@@ -18,8 +18,8 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -35,7 +35,7 @@
             Grid.Column="1">
 
             <ComboBox 
-                Width="140" 
+                Width="180" 
                 ItemsSource="{Binding CategoryDirections}" 
                 SelectedItem="{Binding SelectedCategoryDirection, Mode=TwoWay}" VerticalContentAlignment="Center"/>
         </Border>
@@ -47,7 +47,7 @@
             Grid.Column="1">
 
             <ComboBox
-                Width="140" 
+                Width="180" 
                 ItemsSource="{Binding SelectedCategoryDirection.Categories, Mode=TwoWay}" 
                 SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" VerticalContentAlignment="Center"/>
         </Border>
@@ -59,10 +59,11 @@
             Grid.Column="1">
             <StackPanel 
                 Orientation="Horizontal" 
-                Width="140">
+                Width="180">
                 
                 <TextBox 
-                    Text="{Binding CurrentTransaction.Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n0}}" Width="105" VerticalContentAlignment="Center" />
+                    Text="{Binding CurrentTransaction.Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:n0}}" 
+                    Width="130" VerticalContentAlignment="Center" />
                 <Label Content="HUF" Margin="5,0,0,0"/>    
             </StackPanel>
         </Border>
@@ -74,7 +75,7 @@
             Grid.Column="1">
 
             <DatePicker 
-                Width="140" 
+                Width="180" 
                 FirstDayOfWeek="Monday" 
                 SelectedDate="{Binding CurrentTransaction.TransactionDate, Mode=TwoWay}" VerticalContentAlignment="Center" />
         </Border>
@@ -86,7 +87,7 @@
             Grid.Column="1">
 
             <TextBox 
-                Width="140" 
+                Width="180" 
                 Text="{Binding CurrentTransaction.Comment, Mode=TwoWay}" VerticalContentAlignment="Center" />
         </Border>
     </Grid>

@@ -152,6 +152,7 @@
     <Compile Include="Services\WindowService.cs" />
     <Compile Include="ValueConverters\Bool2ColorConverter.cs" />
     <Compile Include="ValueConverters\Double2PercentageConverter.cs" />
+    <Compile Include="ValueConverters\EnumNameConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\VisibilityConverter.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
@@ -187,11 +188,9 @@
     <Compile Include="Views\CreateAccountView.xaml.cs">
       <DependentUpon>CreateAccountView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\DatabaseModel.cs" />
     <Compile Include="Commands\RegisterCommand.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
-    <Compile Include="ViewModels\PropertiesViewModel.cs" />
     <Compile Include="ViewModels\ReportViewModel.cs" />
     <Compile Include="SHA.cs" />
     <Compile Include="ViewModels\SignUpViewModel.cs" />
@@ -248,6 +247,10 @@
       <DependentUpon>UserDataControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\ViewModels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\WpfDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

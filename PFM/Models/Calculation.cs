@@ -5,17 +5,29 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    /// <summary>
+    /// Class for calculating a future transaction
+    /// </summary>
     public partial class Calculation
     {
+        /// <summary>
+        /// Initializes the Calculation data collection of the calculation
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Calculation()
         {
             CalculationData = new HashSet<CalculationData>();
         }
 
+        /// <summary>
+        /// The identifier of the calculation
+        /// </summary>
         [Key]
         public int CalculationID { get; set; }
 
+        /// <summary>
+        /// The identifier of the account for which the calculation was made
+        /// </summary>
         public int AccountID { get; set; }
 
         /// <summary>

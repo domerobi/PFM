@@ -177,5 +177,7 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-
+    <Style TargetType="GroupBox">
+        <Setter Property="BorderBrush" Value="Black"/>
+    </Style>
 </ResourceDictionary>

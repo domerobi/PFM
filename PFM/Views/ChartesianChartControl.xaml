@@ -13,21 +13,21 @@
         </Grid.RowDefinitions>
         <Label Content="{Binding Title}"
                FontWeight="Bold" 
-               FontSize="18" 
+               FontSize="32" 
                HorizontalAlignment="Center" />
         <lvc:CartesianChart Grid.Row="1"
                             Series="{Binding SeriesCollection}"
                             LegendLocation="Bottom" 
-                            FontSize="18">
+                            FontSize="24">
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="{Binding XTitle }"
                           Labels="{Binding Labels}"
-                          FontSize="18"/>
+                          FontSize="24"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="{Binding YTitle}"
                           LabelFormatter="{Binding Formatter}"
-                          FontSize="18"/>
+                          FontSize="24"/>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
     </Grid>

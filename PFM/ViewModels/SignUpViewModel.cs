@@ -5,6 +5,9 @@ using PFM.Models;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// View model for signup procedure
+    /// </summary>
     class SignUpViewModel : StartUpViewModel
     {
         public ICommand BackCommand { get; set; }
@@ -17,6 +20,10 @@ namespace PFM.ViewModels
         public SignUpPage SignUpPage { get; set; }
 
         
+        /// <summary>
+        /// Initializing properties
+        /// </summary>
+        /// <param name="signUpPage">Page for signup</param>
         public SignUpViewModel(SignUpPage signUpPage)
         {
             //LoginCommand = new LoginCommand(this);
@@ -28,21 +35,36 @@ namespace PFM.ViewModels
 
         }
 
+        /// <summary>
+        /// Gets the password from the field on the window
+        /// </summary>
+        /// <returns></returns>
         public string GetPassword()
         {
             return SignUpPage.getPassword();
         }
 
+        /// <summary>
+        /// Gets the password check from the field on the window
+        /// </summary>
+        /// <returns></returns>
         public string GetChkPassword()
         {
             return SignUpPage.getChkPassword();
         }
 
+        /// <summary>
+        /// Clears the password field
+        /// </summary>
         public void ClearPasswords()
         {
             SignUpPage.clearPasswords();
         }
 
+        /// <summary>
+        /// Decides if each property is well filled to register
+        /// </summary>
+        /// <returns></returns>
         public bool CanRegister()
         {
             if (UserName == "")
@@ -60,6 +82,10 @@ namespace PFM.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Checks if the given username exists already
+        /// </summary>
+        /// <returns></returns>
         public bool UserAlreadyExists()
         {
             using (var dataModel = new DataModel())
@@ -74,6 +100,11 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Register the user
+        /// </summary>
+        /// <param name="user">User to register</param>
+        /// <returns></returns>
         public int Register(Users user)
         {
             // Add actual user to the database

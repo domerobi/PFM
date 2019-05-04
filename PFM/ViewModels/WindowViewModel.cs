@@ -13,16 +13,18 @@ namespace PFM.ViewModels
         }
     }
 
+    /// <summary>
+    /// Pages to navigate
+    /// </summary>
     public enum PageList
     {
         /// <summary>
         /// Login page
         /// </summary>
         Login = 0,
-        SignUp = 1,
-        Reports = 2,
-        NewAccount = 3,
-        Properties = 4,
-        Transactions = 5
+        /// <summary>
+        /// Signup page
+        /// </summary>
+        SignUp = 1
     }
 }

@@ -29,9 +29,6 @@ namespace PFM
             {
                 if(mLoginViewModel.Login())
                 {
-                    //loginPage.clearPassword();
-                    //loginPage.clearUserName();
-
                     if (mLoginViewModel.CurrentUser.Accounts.Count == 0)
                     {
                         MessageBox.Show("Jelenleg nincs számlája, kérem hozzon létre egyet!", "Hiányzó számla");
@@ -40,14 +37,6 @@ namespace PFM
                         {
                             return;
                         }
-                        /*
-                        CreateAccountView createAccountView = new CreateAccountView
-                        {
-                            DataContext = new AccountViewModel(null, mLoginViewModel.CurrentUser)
-                        };
-                        if (createAccountView.ShowDialog() == false)
-                            return;
-                            */
                     }
 
                     mainWindowView = new MainWindowView(mLoginViewModel.CurrentUser.UserID);

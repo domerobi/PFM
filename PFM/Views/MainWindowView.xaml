@@ -6,9 +6,14 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:converter="clr-namespace:PFM.ValueConverters"
         xmlns:viewmodel="clr-namespace:PFM.ViewModels"
-        
         mc:Ignorable="d"
-        Title="Személyi pénzügyek" WindowStartupLocation="CenterScreen" HorizontalAlignment="Stretch" Width="1400" Height="800" FontSize="16">
+        Title="Személyi pénzügyek" 
+        WindowStartupLocation="CenterScreen" 
+        HorizontalAlignment="Stretch" 
+        Width="1500" 
+        Height="900"
+        FontSize="20" 
+        WindowState="Maximized">
     <Window.Resources>
         <viewmodel:MainViewModel x:Key="mainViewModel" />
         <converter:Bool2ColorConverter x:Key="bool2ColorConverter" />
@@ -52,7 +57,7 @@
                                     Command="{Binding DataContext.MenuCommand, RelativeSource={RelativeSource AncestorType={x:Type DockPanel}}}"
                                     CommandParameter="{Binding}"
                                     Background="{Binding Selected, Converter={StaticResource ResourceKey=bool2ColorConverter}}"
-                                    FontSize="16"
+                                    FontSize="20"
                                     Margin="2,5"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

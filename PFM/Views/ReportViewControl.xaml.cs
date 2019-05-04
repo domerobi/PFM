@@ -32,7 +32,10 @@ namespace PFM.Views
             {
                 ReportViewModel reportViewModel = DataContext as ReportViewModel;
                 if(reportViewModel != null)
+                {
+                    reportViewModel.ResetFilter(reportViewModel.CurrentFilter);
                     reportViewModel.RefreshCharts();
+                }
             });
         }
     }

@@ -33,7 +33,7 @@
         <ComboBox Grid.Column="1" 
                   Grid.Row="2" 
                   Margin="0,5" 
-                  Width="60"
+                  Width="80"
                   ItemsSource="{Binding Currencies}"
                   DisplayMemberPath="Currency"
                   SelectedValuePath="Currency"

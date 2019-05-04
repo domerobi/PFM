@@ -4,31 +4,103 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:view="clr-namespace:PFM.Views"
+             xmlns:converters="clr-namespace:PFM.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignHeight="627" d:DesignWidth="665" FontSize="16">
-    <TabControl ItemsSource="{Binding ReportViewModels}"
-                SelectedItem="{Binding CurrentViewModel}"
-                SelectionChanged="TabControl_SelectionChanged" Background="#FFD3EAF1">
-        <TabControl.ItemTemplate>
-            <DataTemplate>
-                <TextBlock Text="{Binding Name}"
-                           HorizontalAlignment="Left"
-                           FontSize="16" />
-            </DataTemplate>
-        </TabControl.ItemTemplate>
-        <TabControl.ContentTemplate>
-            <DataTemplate>
-                <ContentControl Content="{Binding}" FontSize="16" />
-            </DataTemplate>
-        </TabControl.ContentTemplate>
-        <!--<TabItem Header="Kategóriák" HorizontalAlignment="Left" Height="20" Margin="0" VerticalAlignment="Top">
-            <Grid Background="#FFE5E5E5">
-                <view:ReportCategoryControl />
+             d:DesignHeight="627" 
+             d:DesignWidth="665" 
+             FontSize="20"
+             Background="#FFD3EAF1">
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TabControl ItemsSource="{Binding ReportViewModels}"
+                    SelectedItem="{Binding CurrentViewModel}"
+                    SelectionChanged="TabControl_SelectionChanged" 
+                    Background="#FFD3EAF1"
+                    Grid.RowSpan="2">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"
+                               HorizontalAlignment="Left"
+                               FontSize="20" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding}" FontSize="16" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        <GroupBox Grid.Column="1"
+                  Header="Szűrő"
+                  Margin="5,15,10,0"
+                  Padding="5">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Időszak:" />
+                <ComboBox Grid.Column="1" 
+                          Margin="5,5,0,5"
+                          ItemsSource="{Binding ReportFilters}"
+                          SelectedItem="{Binding CurrentFilter, Mode=TwoWay}"/>
+                <Label Grid.Row="1" 
+                       Content="Kezdő dátum:" />
+                <DatePicker Grid.Row="1" 
+                            Grid.Column="1" 
+                            Margin="5,5,0,5"
+                            SelectedDate="{Binding CurrentFilter.StartDate}"
+                            IsEnabled="{Binding CurrentFilter.CanEditDates}"/>
+                <Label Grid.Row="2" 
+                       Content="Végső dátum:" />
+                <DatePicker Grid.Row="2" 
+                            Grid.Column="2" 
+                            Margin="5,5,0,5"
+                            SelectedDate="{Binding CurrentFilter.EndDate}"
+                            IsEnabled="{Binding CurrentFilter.CanEditDates}"/>
+                <Label Content="Csoportosítás:" Grid.Row="3"
+                       Visibility="{Binding CurrentFilter.ShowFilterGroups, Converter={StaticResource ResourceKey=VisibilityConverter}}"/>
+                <ComboBox Grid.Column="1" 
+                          Margin="5,5,0,5" Grid.Row="3"
+                          ItemsSource="{Binding CurrentFilter.FilterGroups}"
+                          SelectedItem="{Binding CurrentFilter.CurrentFilterGroup}"
+                          Visibility="{Binding CurrentFilter.ShowFilterGroups, Converter={StaticResource ResourceKey=VisibilityConverter}}"/>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="4"
+                            Grid.ColumnSpan="2" 
+                            Margin="0,5,0,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button Content="Alaphelyzet" 
+                            Padding="5" 
+                            Margin="0,0,10,0" 
+                            FontSize="20"
+                            Command="{Binding ResetCommand}"
+                            />
+                    <Button Content="Szűrés" 
+                            Padding="5" 
+                            Margin="0"
+                            FontSize="20"
+                            Command="{Binding FilterCommand}"
+                            />
+                </StackPanel>
             </Grid>
-        </TabItem>
-        <TabItem Header="Egyenlegek" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
-            <Grid Background="#FFE5E5E5"/>
-        </TabItem>-->
-
-    </TabControl>
+            
+        </GroupBox>
+    </Grid>
 </UserControl>

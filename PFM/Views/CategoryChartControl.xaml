@@ -13,12 +13,14 @@
         </Grid.RowDefinitions>
         <Label Content="{Binding Title}" 
                FontWeight="Bold" 
-               FontSize="18" 
+               FontSize="32" 
                HorizontalAlignment="Center"/>
         <lvc:PieChart Series="{Binding PieSeries}" 
                       LegendLocation="Bottom" 
                       Hoverable="True" 
-                      Grid.Row="1" FontSize="18">
+                      Grid.Row="1" 
+                      FontSize="18"
+                      >
         </lvc:PieChart>
     </Grid>
 </UserControl>

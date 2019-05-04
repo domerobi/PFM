@@ -5,14 +5,15 @@ using System.Collections.ObjectModel;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// Base view model for transaction view models
+    /// </summary>
     class BaseTransactionViewModel : BaseViewModel
     {
         #region protected Attributes
-
         
         protected CategoryDirections selectedCategoryDirections;
         
-
         #endregion
 
         #region public Attributes
@@ -33,6 +34,9 @@ namespace PFM.ViewModels
 
         #region public Methods
 
+        /// <summary>
+        /// Initializes the categories
+        /// </summary>
         public void InitializeCategories()
         {
             using (var db = new DataModel())

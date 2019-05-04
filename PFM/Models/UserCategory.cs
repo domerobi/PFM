@@ -8,15 +8,31 @@ using System.Threading.Tasks;
 
 namespace PFM.Models
 {
+    /// <summary>
+    /// The cross reference between the users and the categories
+    /// </summary>
     public partial class UserCategory
     {
+        /// <summary>
+        /// Identifier of the connecting user
+        /// </summary>
         [Key, Column(Order = 0)]
         public int UserID { get; set; }
 
+        /// <summary>
+        /// Identifier of the connecting category
+        /// </summary>
         [Key, Column(Order = 1)]
         public int CategoryID { get; set; }
 
+        /// <summary>
+        /// Connecting user
+        /// </summary>
         public virtual Users User { get; set; }
+
+        /// <summary>
+        /// Connecting category
+        /// </summary>
         public virtual Categories Category { get; set; }
 
         /// <summary>

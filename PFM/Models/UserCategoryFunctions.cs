@@ -82,6 +82,13 @@ namespace PFM.Models
             }
         }
 
+
+        /// <summary>
+        /// Create a cross reference record between user and category
+        /// </summary>
+        /// <param name="user">The connecting user</param>
+        /// <param name="category">The connecting category</param>
+        /// <returns></returns>
         public bool Create(Users user, Categories category)
         {
             CreateDate = DateTime.Now;

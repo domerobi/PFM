@@ -6,6 +6,10 @@ namespace PFM.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Copy only the attributes from an other transaction
+        /// </summary>
+        /// <param name="original">The transaction to copy from</param>
         public void Copy(Transactions original)
         {
             AccountID = original.AccountID;

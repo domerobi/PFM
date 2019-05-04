@@ -9,6 +9,9 @@ using PFM.Services;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// View model for displaying transactions
+    /// </summary>
     class TransactionViewModel : BaseTransactionViewModel
     {
         #region private Attributes
@@ -63,6 +66,9 @@ namespace PFM.ViewModels
             Initialize();
         }
 
+        /// <summary>
+        /// Initialize properties
+        /// </summary>
         public void Initialize()
         {
             Name = "Tranzakciók";
@@ -97,6 +103,9 @@ namespace PFM.ViewModels
             Search(null);
         }
 
+        /// <summary>
+        /// Delete the selected transaction
+        /// </summary>
         private void Delete()
         {
             if (windowService.ConfirmDelete())
@@ -113,6 +122,10 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Decides if the properties are well filled to create a transaction
+        /// </summary>
+        /// <returns></returns>
         public bool CanCreate()
         {
             if (SelectedCategoryDirection.DirectionID < 1 || SelectedCategory.CategoryID < 1 || CurrentTransaction.Amount <= 0
@@ -123,6 +136,9 @@ namespace PFM.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Creates a new transaction
+        /// </summary>
         public void Create()
         {
             using (var db = new DataModel())
@@ -131,8 +147,6 @@ namespace PFM.ViewModels
                 CurrentTransaction.CategoryID = category.CategoryID;
                 CurrentTransaction.AccountID = MainViewModel.CurrentAccount.AccountID;
                 CurrentTransaction.CreateDate = DateTime.Now;
-                //db.Entry(CurrentAccount).State = EntityState.Unchanged;
-                //db.Entry(category).State = EntityState.Unchanged;
                 db.Transactions.Add(CurrentTransaction);
                 Transactions.Add(CurrentTransaction);
                 db.SaveChanges();
@@ -141,6 +155,10 @@ namespace PFM.ViewModels
             Search(null);
         }
 
+        /// <summary>
+        /// If no transaction is selected then it cannot be modified...
+        /// </summary>
+        /// <returns></returns>
         public bool CanModify()
         {
             if (SelectedTransaction == null)
@@ -148,12 +166,18 @@ namespace PFM.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Modify the selected transaction
+        /// </summary>
         public void Modify()
         {
             windowService.OpenModifyTransactionWindow(new ModifyTransactionViewModel(SelectedTransaction));
             Search(SelectedTransaction);
         }
 
+        /// <summary>
+        /// Set the default values for the new transaction
+        /// </summary>
         public void InitializeNewTransaction()
         {
             DateTime transactionDate = DateTime.Today;
@@ -169,6 +193,9 @@ namespace PFM.ViewModels
             SelectedCategoryDirection = CategoryDirections.First(cd => cd.DirectionID < 1);
         }
 
+        /// <summary>
+        /// Reset the search filter to the default values
+        /// </summary>
         private void ResetSearchFilter()
         {
             StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.AddMonths(-1).Month, 1);
@@ -176,6 +203,10 @@ namespace PFM.ViewModels
             SearchCategoryDirection = CategoryDirections.First(cd => cd.DirectionID == 0);
         }
 
+        /// <summary>
+        /// Decides if the search filters are well filled to make a search for transactions
+        /// </summary>
+        /// <returns></returns>
         private bool CanSearch()
         {
             if (StartDate == null && EndDate == null && SearchCategoryDirection.DirectionID == 0 && SearchCategory.CategoryID < 1)
@@ -183,6 +214,10 @@ namespace PFM.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Search for transactions filtered by the given parameters
+        /// </summary>
+        /// <param name="selected">If it is given, then after search set the selected transaction to this parameter</param>
         private void Search(Transactions selected)
         {
             // calculate the balance after each transaction without filtering the categories
@@ -268,15 +303,22 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Imports transactions from an excel workbook which has the following structure:
+        /// A    B    C        D   E
+        /// Date Type Category Sum Comment
+        /// Date     -> TransactionDate
+        /// Type     -> Category.CategoryDirections.DirectionName
+        /// Category -> Category.CategoryName
+        /// Sum      -> Amount
+        /// Comment  -> Comment
+        /// </summary>
         public void ImportFromExcel()
         {
             var fileName = windowService.GetImportFileName();
             if (fileName != "")
             {
                 Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
-                //Static File From Base Path...........
-                //Microsoft.Office.Interop.Excel.Workbook excelBook = excelApp.Workbooks.Open(AppDomain.CurrentDomain.BaseDirectory + "TestExcel.xlsx", 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-                //Dynamic File Using Uploader...........
                 Microsoft.Office.Interop.Excel.Workbook excelBook = excelApp.Workbooks.Open(fileName.ToString(), 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
                 Microsoft.Office.Interop.Excel.Worksheet excelSheet = (Microsoft.Office.Interop.Excel.Worksheet)excelBook.Worksheets.get_Item(1); ;
                 Microsoft.Office.Interop.Excel.Range excelRange = excelSheet.UsedRange;

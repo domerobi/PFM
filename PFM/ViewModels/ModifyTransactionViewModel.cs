@@ -7,6 +7,9 @@ using PFM.Services;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// View model for modifying a transaction
+    /// </summary>
     class ModifyTransactionViewModel : BaseTransactionViewModel
     {
         #region public Attributes
@@ -25,6 +28,10 @@ namespace PFM.ViewModels
 
         IWindowService windowService;
 
+        /// <summary>
+        /// Initialize properties
+        /// </summary>
+        /// <param name="transaction">Transaction to modify</param>
         public ModifyTransactionViewModel(Transactions transaction)
         {
             InitializeCategories();
@@ -48,6 +55,10 @@ namespace PFM.ViewModels
                     p => windowService.CloseWindow(p as IClosable));
         }
 
+        /// <summary>
+        /// Decides if the transactions properties are well filled for modify
+        /// </summary>
+        /// <returns></returns>
         private bool CanModify()
         {
             if (CurrentTransaction.Amount <= 0 || CurrentTransaction.TransactionDate == null || SelectedCategory.CategoryID < 1 
@@ -58,12 +69,19 @@ namespace PFM.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Modify the selected transaction from a window
+        /// </summary>
+        /// <param name="window"></param>
         public void ModifyTransaction(IClosable window)
         {
             ModifyTransaction();
             window.Close();
         }
 
+        /// <summary>
+        /// Make the modifications to the transaction
+        /// </summary>
         public void ModifyTransaction()
         {
             using (var db = new DataModel())

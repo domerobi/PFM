@@ -9,6 +9,8 @@
                 <ResourceDictionary Source="Styles/Buttons.xaml" />
                 <ResourceDictionary Source="Styles/Navigation.xaml" />
                 <ResourceDictionary Source="Styles/ViewModels.xaml" />
+                <ResourceDictionary Source="Styles/WpfDictionary.xaml" />
+                
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

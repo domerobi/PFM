@@ -7,11 +7,8 @@
              xmlns:view="clr-namespace:PFM.Views"
              mc:Ignorable="d" 
              d:DesignHeight="741.643" 
-             d:DesignWidth="1009.058" FontSize="16">
+             d:DesignWidth="1009.058" FontSize="20">
     <UserControl.Resources>
-        <Style TargetType="GroupBox">
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
         <Style TargetType="Border">
             <Setter Property="Padding" Value="3,3,3,3" />
         </Style>
@@ -77,16 +74,17 @@
         </DataGrid>
         <GroupBox 
             Header="Keresés" 
-            Grid.Column="1" Margin="10,0,0,0">
+            Grid.Column="1" 
+            Margin="10,0,10,0"
+            Padding="5">
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -97,7 +95,7 @@
                 </Border>
                 <Border Grid.Column="1">
                     <DatePicker 
-                        Width="140"
+                        Width="180"
                         SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Border>
                 <Border Grid.Row="1">
@@ -108,7 +106,7 @@
                     Grid.Column="1">
 
                     <DatePicker 
-                        Width="140"
+                        Width="180"
                         SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Border>
                 <Border Grid.Row="2">
@@ -119,7 +117,7 @@
                     Grid.Column="1">
 
                     <ComboBox 
-                        Width="140"
+                        Width="180"
                         ItemsSource="{Binding CategoryDirections}"
                         SelectedItem="{Binding SearchCategoryDirection, Mode=TwoWay}"/>
                 </Border>
@@ -131,25 +129,24 @@
                     Grid.Column="1">
 
                     <ComboBox 
-                        Width="140"
+                        Width="180"
                         ItemsSource="{Binding SearchCategoryDirection.Categories, Mode=TwoWay}"
                         SelectedItem="{Binding SearchCategory, Mode=TwoWay}"/>
                 </Border>
                 <Border 
                     Grid.Row="4" 
                     Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Button 
+                            Content="Alaphelyzet"
+                            FontSize="20"
+                            Command="{Binding ResetCommand}" Margin="0,0,10,0" Padding="5,5"/>
+                        <Button 
+                            Content="Keresés"
+                            FontSize="20"
+                            Command="{Binding SearchCommand}" Margin="0" Padding="5,5" />
 
-                    <Button 
-                        Content="Keresés"
-                        Command="{Binding SearchCommand}" Width="110" Margin="0,5,0,0" />
-                </Border>
-                <Border 
-                    Grid.Row="5" 
-                    Grid.ColumnSpan="2">
-
-                    <Button 
-                        Content="Visszaállítás"
-                        Command="{Binding ResetCommand}" Width="110" Margin="0,5,0,0"/>
+                    </StackPanel>
                 </Border>
             </Grid>
         </GroupBox>
@@ -157,14 +154,19 @@
             Header="Új tranzakció hozzáadása" 
             Grid.Column="1" 
             Grid.Row="1" 
-            Margin="10,0,0,0">
+            Margin="10,0,10,0"
+            Padding="5">
 
             <StackPanel>
                 <view:TransactionControl DataContext="{Binding}" Width="Auto" Margin="3,0" />
                 <Button 
                     x:Name="btnSubmit" 
                     Content="Hozzáad"
-                    Command="{Binding AddItemCommand}" Margin="3,3,3,3" Width="110"/>
+                    Command="{Binding AddItemCommand}" 
+                    Margin="3,3,3,3" 
+                    Padding="5,5"
+                    Width="190"
+                    FontSize="20"/>
             </StackPanel>
         </GroupBox>
         <Button 
@@ -173,20 +175,29 @@
             Grid.Row="2" 
             Grid.Column="1" 
             Command="{Binding ModifyCommand}"
-            Margin="19,10,9,0" Width="110" />
+            Margin="19,10,9,0" 
+            Padding="5,5"
+            Width="190"
+            FontSize="20"/>
         <Button 
             x:Name="btnDelete" 
             Content="Törlés" 
             Grid.Row="3" 
             Grid.Column="1" 
             Command="{Binding DeleteCommand}"
-            Margin="19,10,9,0" Width="110" />
+            Margin="19,10,9,0" 
+            Padding="5,5"
+            Width="190"
+            FontSize="20" />
         <Button 
             x:Name="btnImport" 
             Content="Import..." 
             Grid.Row="4" 
             Grid.Column="1" 
             Command="{Binding ImportCommand}"
-            Margin="19,10,9,10" Width="110" />
+            Margin="19,10,9,10" 
+            Padding="5,5"
+            Width="190"
+            FontSize="20" />
     </Grid>
 </UserControl>

@@ -9,6 +9,9 @@ using PFM.Commands;
 
 namespace PFM.ViewModels
 {
+    /// <summary>
+    /// View model that connect the account views to the account model
+    /// </summary>
     class AccountViewModel : BaseViewModel
     {
         IWindowService windowService;
@@ -25,12 +28,25 @@ namespace PFM.ViewModels
                 return false;
             }
         }
-        
+
+        #region Create
+
         public ICommand CreateCommand { get; set; }
         public ICommand CloseCommand { get; set; }
+        
+        #endregion
+
+        #region Maintain
+
         public ICommand NewAccountCommand { get; set; }
         public ICommand ModifyCommand { get; set; }
 
+        #endregion
+
+        /// <summary>
+        /// Maintaining the accounts
+        /// </summary>
+        /// <param name="mainViewModel">Main view model</param>
         public AccountViewModel(MainViewModel mainViewModel)
         {
             Initialize();
@@ -59,6 +75,9 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Initialize properties
+        /// </summary>
         public void Initialize()
         {
             Name = "Számlák kezelése";
@@ -87,7 +106,10 @@ namespace PFM.ViewModels
             }
         }
         
-
+        /// <summary>
+        /// Decides if every property is correct and account can be created
+        /// </summary>
+        /// <returns></returns>
         public bool CanCreate()
         {
             if (MainViewModel.CurrentAccount == null || String.IsNullOrEmpty(MainViewModel.CurrentAccount.AccountName) || 
@@ -96,6 +118,10 @@ namespace PFM.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Create a new account
+        /// </summary>
+        /// <returns></returns>
         public bool Create()
         {
             MainViewModel.CurrentAccount.CreateDate = DateTime.Now;
@@ -113,6 +139,10 @@ namespace PFM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Create a new account from a window
+        /// </summary>
+        /// <param name="window">The window where the account properties are filled</param>
         public void Create(IClosable window)
         {
             if(!MainViewModel.CurrentAccount.Default && Accounts.GetDefaultAccount(MainViewModel.CurrentUser) == null)
@@ -127,6 +157,9 @@ namespace PFM.ViewModels
             window.Close();
         }
 
+        /// <summary>
+        /// Modify the selected account
+        /// </summary>
         public void Modify()
         {
             if (MainViewModel.CurrentAccount.IsModified())
@@ -157,8 +190,10 @@ namespace PFM.ViewModels
             }
         }
         
-        
-
+        /// <summary>
+        /// Opens a new window to create a new account
+        /// </summary>
+        /// <returns></returns>
         public bool CreateInteractive()
         {
             var newAccount = new AccountViewModel(MainViewModel.CurrentUser);

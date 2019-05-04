@@ -20,18 +20,5 @@ namespace PFM.Models
                 return db.Calculation.Count(c => c.CalculationName == CalculationName) == 0;
             }
         }
-
-        /*
-        public List<CalculationData> Calculate()
-        {
-            List<CalculationData> calculationData;
-
-            using (var db = new DataModel())
-            {
-
-                return calculationData;
-            }
-
-        }*/
     }
 }

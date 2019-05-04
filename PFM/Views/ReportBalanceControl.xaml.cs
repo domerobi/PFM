@@ -27,19 +27,19 @@ namespace PFM.Views
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke(() =>
-            {
-                if(DataContext is ViewModels.BalanceViewModel)
-                {
-                    ViewModels.BalanceViewModel balanceViewModel = DataContext as ViewModels.BalanceViewModel;
-                    balanceViewModel.SetLineChart();
-                }
-                //if (DataContext is ViewModels.CalculationViewModel)
-                //{
-                //    ViewModels.CalculationViewModel calcViewModel = DataContext as ViewModels.CalculationViewModel;
-                //    calcViewModel.
-                //}
-            });
+            //App.Current.Dispatcher.Invoke(() =>
+            //{
+            //    if(DataContext is ViewModels.BalanceViewModel)
+            //    {
+            //        ViewModels.BalanceViewModel balanceViewModel = DataContext as ViewModels.BalanceViewModel;
+            //        balanceViewModel.SetLineChart();
+            //    }
+            //    //if (DataContext is ViewModels.CalculationViewModel)
+            //    //{
+            //    //    ViewModels.CalculationViewModel calcViewModel = DataContext as ViewModels.CalculationViewModel;
+            //    //    calcViewModel.
+            //    //}
+            //});
         }
     }
 }

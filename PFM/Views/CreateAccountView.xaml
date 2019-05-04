@@ -4,23 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:PFM.Views"
-        xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="Számla létrehozása" 
-        Height="214.887"
+        Height="226.887"
         Width="370"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <view:AccountControl Margin="10,0"
                              DataContext="{Binding}"/>
         <StackPanel Grid.Row="1" 
                     HorizontalAlignment="Right" 
-                    VerticalAlignment="Bottom" 
+                    VerticalAlignment="Top" 
                     Orientation="Horizontal" 
                     Margin="0,5,10,5">
             <Button Content="OK" 
@@ -29,7 +28,7 @@
                     Padding="5,2"
                     Margin="0"
                     Command="{Binding CreateCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, diag:PresentationTraceSources.TraceLevel=High}" />
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
             <Button Content="Mégse" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
