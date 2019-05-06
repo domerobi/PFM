@@ -43,7 +43,7 @@
         <CheckBox Grid.Row="2"
                   Grid.Column="1"
                   IsChecked="{Binding CalculationFilter.BalanceIncluded}" />
-        <Label Grid.Row="3"
+        <!--<Label Grid.Row="3"
                Content="Kalkuláció mentése:" Margin="0,5" />
         <CheckBox Grid.Row="3"
                   Grid.Column="1"
@@ -54,6 +54,6 @@
         <TextBox Grid.Row="4"
                  Grid.Column="1"
                  Text="{Binding CalculationFilter.CalculationName, UpdateSourceTrigger=PropertyChanged}"
-                 Visibility="{Binding SaveCalculation, Converter={StaticResource ResourceKey=VisibilityConverter}}"/>
+                 Visibility="{Binding SaveCalculation, Converter={StaticResource ResourceKey=VisibilityConverter}}"/>-->
     </Grid>
 </UserControl>

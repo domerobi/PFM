@@ -241,7 +241,7 @@ namespace PFM.ViewModels
 
             ExpenseIncomeColumn = new ChartesianChartViewModel
             {
-                Name = "Kiadás-Bevétel mérleg",
+                Name = "Bevétel-Kiadás mérleg",
                 Formatter = value => value.ToString("C0"),
                 XTitle = "Periódus",
                 YTitle = "Összeg"
@@ -621,8 +621,8 @@ namespace PFM.ViewModels
                         DataLabels = false
                     });
                     
-                    ExpenseIncomeColumn.SeriesCollection.AddRange(expenseSeries);
                     ExpenseIncomeColumn.SeriesCollection.AddRange(incomeSeries);
+                    ExpenseIncomeColumn.SeriesCollection.AddRange(expenseSeries);
                     ExpenseIncomeColumn.Labels = new string[labelData.Count];
                 }
                 

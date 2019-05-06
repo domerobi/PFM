@@ -39,7 +39,7 @@
         <CheckBox Grid.Row="2"
                   Grid.Column="1"
                   IsChecked="{Binding SelectedCategory.ExcludeFromCalculation}"/>
-        <Label Content="Optimalizálási sorrend:"
+        <Label Content="Optimalizálási szint:"
                Grid.Row="3"/>
         <ComboBox Grid.Row="3"
                   Grid.Column="1"
